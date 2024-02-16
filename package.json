@@ -1,0 +1,19 @@
+{
+	"name": "overlord",
+	"version": "1.0.0",
+	"description": "Community bot for Bald Bearded Builder",
+	"main": "dist/index.js",
+	"scripts": {
+		"build": "tsc",
+		"start": "node dist/index.js"
+	},
+	"keywords": [
+		"twitch",
+		"chatbot",
+		"discord"
+	],
+	"author": "Michael Jolley <mike@baldbeardedbuilder.com>",
+	"devDependencies": {
+		"typescript": "^5.3.3"
+	}
+}
