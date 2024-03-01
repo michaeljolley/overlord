@@ -1,30 +1,27 @@
 import { FastifyReply, FastifyRequest, RouteOptions } from "fastify";
-import z from "zod";
+import EventBus from "../eventBus";
 
-const FollowWebhookBody = z.object({
-	username: z.string(),
-});
+const FollowWebhookBodyType = {
+	username: { type: "string" },
+}
 
 export const followWebhook: RouteOptions = {
 	method: "POST",
-	url: "/webhooks/follow",
+	url: "/follow",
 	schema: {
 		body: {
-			type: FollowWebhookBody,
+			type: "object",
+			properties: FollowWebhookBodyType
 		},
 		response: {
 			200: {
-				type: "object",
-				properties: z.object({
-					username: z.string(),
-					message: z.string(),
-				}),
+				type: "boolean",
 			},
 		},
 	},
 	handler: (request: FastifyRequest, reply: FastifyReply) => {
-		const { username } = request.body as typeof FollowWebhookBody.shape;
-
-		reply.code(200).send({ username, message: "Thanks for following!" });
+		const { username } = request.body as typeof FollowWebhookBodyType;
+		EventBus.eventEmitter.emit("follow", { username });
+		reply.code(200).send(true);
 	},
 };

@@ -1,26 +1,21 @@
 import Fastify from "fastify";
 import FastifyStatic from "@fastify/static";
-import {
-	serializerCompiler,
-	validatorCompiler,
-	ZodTypeProvider,
-} from "fastify-type-provider-zod";
-
-import { followWebhook } from "./webhooks/follow.js";
+import FastifyWebSocket from "@fastify/websocket";
+import { registerWebhooks } from "./webhooks/index.js";
+import { registerWebsocket } from "./websocket/index.js";
 
 const fastify = Fastify({
 	logger: true,
 });
-//.withTypeProvider<ZodTypeProvider>();
 
-fastify.setValidatorCompiler(validatorCompiler);
-fastify.setSerializerCompiler(serializerCompiler);
+fastify.register(FastifyWebSocket);
+fastify.register(registerWebsocket);
 
 fastify.register(FastifyStatic, {
 	root: `${__dirname}/public`,
 });
 
-fastify.withTypeProvider<ZodTypeProvider>().route(followWebhook);
+fastify.register(registerWebhooks, { prefix: "/webhooks" });
 
 try {
 	fastify.listen({ port: 3000 });

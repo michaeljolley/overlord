@@ -6,6 +6,31 @@
     <title>Document</title>
   </head>
   <body>
-    Alertz go heer
+    <p>Alertz go heer</p>
+
+
+    <script type="text/javascript">
+
+      const p = document.querySelector('p');
+
+      let webSocket = new WebSocket(`ws://${window.location.host}/socket`);
+      webSocket.onmessage = function(e) {
+        const event = JSON.parse(e.data);
+
+        if (event.type === "follow") {
+          p.innerHTML = `You have a new follower: ${event.payload.username}`;
+        }
+        console.log(event);
+      }
+
+      webSocket.onopen = function(e) {
+        console.log('Connection opened');
+        webSocket.send('yo');
+      }
+
+      webSocket.onerror = function(e) {
+        console.log('Error: ', e);
+      }
+    </script>
   </body>
 </html>
