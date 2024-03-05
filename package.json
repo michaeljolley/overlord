@@ -5,7 +5,7 @@
 	"scripts": {
 		"build": "npm run build:compile && npm run build:public",
 		"build:compile": "esbuild src/index.ts --bundle --format=cjs --platform=node --outdir=dist",
-		"build:public": "copyfiles public/**/* dist/",
+		"build:public": "copyfiles \"public/**/*\" dist/",
 		"start": "node dist/index.js",
 		"lint": "eslint src --ext ts",
 		"format": "npx prettier --write \"src/**/*.ts\""
