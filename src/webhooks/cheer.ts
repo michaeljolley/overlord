@@ -1,17 +1,19 @@
 import { FastifyReply, FastifyRequest, RouteOptions } from "fastify";
 import EventBus from "../eventBus";
 
-const FollowWebhookBodyType = {
+const CheerWebhookBodyType = {
 	username: { type: "string" },
+	bits: { type: "number" },
+	message: { type: "string" },
 }
 
-export const followWebhook: RouteOptions = {
+export const cheerWebhook: RouteOptions = {
 	method: "POST",
-	url: "/follow",
+	url: "/cheer",
 	schema: {
 		body: {
 			type: "object",
-			properties: FollowWebhookBodyType
+			properties: CheerWebhookBodyType
 		},
 		response: {
 			200: {
@@ -20,7 +22,7 @@ export const followWebhook: RouteOptions = {
 		},
 	},
 	handler: (request: FastifyRequest, reply: FastifyReply) => {
-		EventBus.eventEmitter.emit("twitch:follow", request.body);
+		EventBus.eventEmitter.emit("twitch:cheer", request.body);
 		reply.code(200).send(true);
 	},
 };
