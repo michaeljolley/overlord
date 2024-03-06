@@ -3,12 +3,14 @@
 	"version": "1.0.0",
 	"main": "dist/index.js",
 	"scripts": {
-		"build": "npm run build:compile && npm run build:public",
+		"build": "pnpm run build:compile && pnpm run build:public",
 		"build:compile": "esbuild src/index.ts --bundle --format=cjs --platform=node --outdir=dist",
 		"build:public": "copyfiles \"public/**/*\" dist/",
 		"start": "node dist/index.js",
 		"lint": "eslint src --ext ts",
-		"format": "npx prettier --write \"src/**/*.ts\""
+		"format": "npx prettier --write \"src/**/*.ts\"",
+		"dev": "nodemon --watch src --watch public --exec \"pnpm run dev:start\"",
+		"dev:start": "pnpm run build && pnpm run start"
 	},
 	"author": "Michael Jolley <mike@baldbeardedbuilder.com>",
 	"devDependencies": {
@@ -20,6 +22,7 @@
 		"eslint": "^8.56.0",
 		"eslint-config-prettier": "^9.1.0",
 		"mocha": "^10.3.0",
+		"nodemon": "^3.1.0",
 		"typescript": "^5.3.3"
 	},
 	"dependencies": {
