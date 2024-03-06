@@ -9,7 +9,7 @@
 		"start": "node dist/index.js",
 		"lint": "eslint src --ext ts",
 		"format": "npx prettier --write \"src/**/*.ts\"",
-		"dev": "nodemon --watch src --watch public --exec \"pnpm run dev:start\"",
+		"dev": "nodemon -e js,htm,css,ts,mp3 --watch src --watch public --exec \"pnpm run dev:start\"",
 		"dev:start": "pnpm run build && pnpm run start"
 	},
 	"author": "Michael Jolley <mike@baldbeardedbuilder.com>",

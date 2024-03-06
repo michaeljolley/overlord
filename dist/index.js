@@ -50472,6 +50472,31 @@ var subWebhook = {
   }
 };
 
+// src/webhooks/mode.ts
+var ModeWebhookBodyType = {
+  "mode": { type: "string" },
+  "activity": { type: "string" }
+};
+var modeWebhook = {
+  method: "POST",
+  url: "/mode",
+  schema: {
+    body: {
+      type: "object",
+      properties: ModeWebhookBodyType
+    },
+    response: {
+      200: {
+        type: "boolean"
+      }
+    }
+  },
+  handler: (request, reply) => {
+    EventBus.eventEmitter.emit("stream:mode", request.body);
+    reply.code(200).send(true);
+  }
+};
+
 // src/webhooks/index.ts
 function registerWebhooks(fastify2, _, done) {
   fastify2.route(followWebhook);
@@ -50479,6 +50504,7 @@ function registerWebhooks(fastify2, _, done) {
   fastify2.route(giftedSubWebhook);
   fastify2.route(raidWebhook);
   fastify2.route(subWebhook);
+  fastify2.route(modeWebhook);
   done();
 }
 
@@ -50499,6 +50525,9 @@ function registerWebsocket(fastify2, _, done) {
     });
     EventBus.eventEmitter.on("twitch:cheer", (payload) => {
       connection.socket.send(JSON.stringify({ type: "twitch:cheer", payload }));
+    });
+    EventBus.eventEmitter.on("stream:mode", (payload) => {
+      connection.socket.send(JSON.stringify({ type: "stream:mode", payload }));
     });
   });
   done();

@@ -1,10 +1,16 @@
 
 const { createApp, onMounted, ref } = Vue
 
+const defaultMode = {
+	mode: "Focus Time",
+	activity: "Coding, Writing, or Designing"
+};
+
 const app = createApp({
 		setup() {
 			const activeAlert = ref(null)
 
+			const commode = ref(defaultMode);
 			const alerts = ref([]);
 			const muted = ref(false);
 			const audioPlayer = ref(null);
@@ -29,6 +35,14 @@ const app = createApp({
 			}
 
 			const addAlert = function (type, payload) {
+				if (type === "stream:mode") {
+					commode.value = null;
+					setTimeout(() => {
+						commode.value = {...defaultMode, ...payload};
+					}, 500);
+					
+					return;
+				}
 				alerts.value.push({
 					type,
 					payload
@@ -87,6 +101,7 @@ const app = createApp({
 							break;
 						case 'twitch:sub':
 							message = `Holy frijole! ${usernameText(payload.username)} just subscribed.`;
+							subtext = payload.message || "I gotta have this content!";
 							audio = alertsAudioSrc('hair');
 							break;
 						case 'twitch:giftsub':
@@ -94,7 +109,7 @@ const app = createApp({
 							subtext = `They hast bestowed ${payload.giftedTotal} peasants with a sub.`;
 							audio = alertsAudioSrc('hair');
 							break;
-						case 'twich:raid': 
+						case 'twitch:raid': 
 							message = `Welcome ${usernameText(payload.username)} and friends!`;
 							subtext = `${payload.viewers} just joined in the fun.`;
 							audio = alertsAudioSrc('goodbadugly');
@@ -106,7 +121,6 @@ const app = createApp({
 							break;
 					}
 
-					
 					activeAlert.value = {
 						message,
 						subtext,
@@ -134,7 +148,7 @@ const app = createApp({
 				audioPlayer.value?.addEventListener('ended', clearAudio, false);
 			});
 
-			return { activeAlert, audioPlayer }
+			return { activeAlert, commode, audioPlayer }
 		}
 	});
 	
@@ -144,7 +158,7 @@ app.component(
 			template: `<div class="alert" v-if="alert.message">
 			<h1 v-html="alert.message"></h1>
 			<p v-if="alert.subtext">{{alert.subtext}}</p>
-		</div>`,
+		</div>`, 
 			props: ['alert'],
 		}
 	)

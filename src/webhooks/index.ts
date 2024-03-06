@@ -4,6 +4,7 @@ import { cheerWebhook } from "./cheer.js";
 import { giftedSubWebhook } from "./giftsub.js";
 import { raidWebhook } from "./raid.js";
 import { subWebhook } from "./sub.js";
+import { modeWebhook } from "./mode.js";
 
 export function registerWebhooks(fastify: FastifyInstance, _: any, done: () => void) {
 
@@ -12,6 +13,7 @@ export function registerWebhooks(fastify: FastifyInstance, _: any, done: () => v
 	fastify.route(giftedSubWebhook);
 	fastify.route(raidWebhook);
 	fastify.route(subWebhook);
+	fastify.route(modeWebhook);
 
 	done();
 }
