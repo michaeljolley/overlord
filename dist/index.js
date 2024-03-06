@@ -2491,16 +2491,16 @@ var require_server = __commonJS({
             listenOptions.signal.addEventListener("abort", onAborted, { once: true });
           }
         }
-        let host;
+        let host2;
         if (listenOptions.path == null) {
-          host = listenOptions.host ?? "localhost";
+          host2 = listenOptions.host ?? "localhost";
         } else {
-          host = listenOptions.host;
+          host2 = listenOptions.host;
         }
         if (Object.prototype.hasOwnProperty.call(listenOptions, "host") === false) {
-          listenOptions.host = host;
+          listenOptions.host = host2;
         }
-        if (host === "localhost") {
+        if (host2 === "localhost") {
           listenOptions.cb = (err, address) => {
             if (err) {
               cb(err, address);
@@ -2527,7 +2527,7 @@ var require_server = __commonJS({
           const listening = listenPromise.call(this, server, listenOptions);
           return listening.then((address) => {
             return new Promise((resolve, reject) => {
-              if (host === "localhost") {
+              if (host2 === "localhost") {
                 multipleBindings.call(this, server, httpHandler, options, listenOptions, () => {
                   this[kState].listening = true;
                   resolve(address);
@@ -2726,8 +2726,8 @@ var require_server = __commonJS({
       return options;
     }
     function normalizePort(firstArg) {
-      const port = Number(firstArg);
-      return port >= 0 && !Number.isNaN(port) && Number.isInteger(port) ? port : 0;
+      const port2 = Number(firstArg);
+      return port2 >= 0 && !Number.isNaN(port2) && Number.isInteger(port2) ? port2 : 0;
     }
     function logServerAddress(server, listenTextResolver) {
       let address = server.address();
@@ -11642,17 +11642,17 @@ var require_uri_all = __commonJS({
       function _stripLeadingZeros(str) {
         return str.replace(/^0*(.*)/, "$1") || "0";
       }
-      function _normalizeIPv4(host, protocol) {
-        var matches = host.match(protocol.IPV4ADDRESS) || [];
+      function _normalizeIPv4(host2, protocol) {
+        var matches = host2.match(protocol.IPV4ADDRESS) || [];
         var _matches = slicedToArray(matches, 2), address = _matches[1];
         if (address) {
           return address.split(".").map(_stripLeadingZeros).join(".");
         } else {
-          return host;
+          return host2;
         }
       }
-      function _normalizeIPv6(host, protocol) {
-        var matches = host.match(protocol.IPV6ADDRESS) || [];
+      function _normalizeIPv6(host2, protocol) {
+        var matches = host2.match(protocol.IPV6ADDRESS) || [];
         var _matches2 = slicedToArray(matches, 3), address = _matches2[1], zone = _matches2[2];
         if (address) {
           var _address$toLowerCase$ = address.toLowerCase().split("::").reverse(), _address$toLowerCase$2 = slicedToArray(_address$toLowerCase$, 2), last = _address$toLowerCase$2[0], first = _address$toLowerCase$2[1];
@@ -11695,7 +11695,7 @@ var require_uri_all = __commonJS({
           }
           return newHost;
         } else {
-          return host;
+          return host2;
         }
       }
       var URI_PARSE = /^(?:([^:\/?#]+):)?(?:\/\/((?:([^\/?#@]*)@)?(\[[^\/?#\]]+\]|[^\/?#:]*)(?:\:(\d*))?))?([^?#]*)(?:\?([^#]*))?(?:#((?:.|\n|\r)*))?/i;
@@ -14883,16 +14883,16 @@ var require_utils = __commonJS({
   "node_modules/.pnpm/fast-uri@2.3.0/node_modules/fast-uri/lib/utils.js"(exports2, module2) {
     "use strict";
     var { HEX } = require_scopedChars();
-    function normalizeIPv4(host) {
-      if (findToken(host, ".") < 3) {
-        return { host, isIPV4: false };
+    function normalizeIPv4(host2) {
+      if (findToken(host2, ".") < 3) {
+        return { host: host2, isIPV4: false };
       }
-      const matches = host.match(/^(\b[01]?\d{1,2}|\b2[0-4]\d|\b25[0-5])(\.([01]?\d{1,2}|2[0-4]\d|25[0-5])){3}$/u) || [];
+      const matches = host2.match(/^(\b[01]?\d{1,2}|\b2[0-4]\d|\b25[0-5])(\.([01]?\d{1,2}|2[0-4]\d|25[0-5])){3}$/u) || [];
       const [address] = matches;
       if (address) {
         return { host: stripLeadingZeros(address, "."), isIPV4: true };
       } else {
-        return { host, isIPV4: false };
+        return { host: host2, isIPV4: false };
       }
     }
     function stringToHexStripped(input) {
@@ -14975,11 +14975,11 @@ var require_utils = __commonJS({
       output.address = address.join("");
       return output;
     }
-    function normalizeIPv6(host, opts = {}) {
-      if (findToken(host, ":") < 2) {
-        return { host, isIPV6: false };
+    function normalizeIPv6(host2, opts = {}) {
+      if (findToken(host2, ":") < 2) {
+        return { host: host2, isIPV6: false };
       }
-      const ipv6 = getIPV6(host);
+      const ipv6 = getIPV6(host2);
       if (!ipv6.error) {
         let newHost = ipv6.address;
         let escapedHost = ipv6.address;
@@ -14989,7 +14989,7 @@ var require_utils = __commonJS({
         }
         return { host: newHost, escapedHost, isIPV6: true };
       } else {
-        return { host, isIPV6: false };
+        return { host: host2, isIPV6: false };
       }
     }
     function stripLeadingZeros(str, token) {
@@ -15080,19 +15080,19 @@ var require_utils = __commonJS({
         uriTokens.push("@");
       }
       if (components.host !== void 0) {
-        let host = unescape(components.host);
-        const ipV4res = normalizeIPv4(host);
+        let host2 = unescape(components.host);
+        const ipV4res = normalizeIPv4(host2);
         if (ipV4res.isIPV4) {
-          host = ipV4res.host;
+          host2 = ipV4res.host;
         } else {
           const ipV6res = normalizeIPv6(ipV4res.host, { isIPV4: false });
           if (ipV6res.isIPV6 === true) {
-            host = `[${ipV6res.escapedHost}]`;
+            host2 = `[${ipV6res.escapedHost}]`;
           } else {
-            host = components.host;
+            host2 = components.host;
           }
         }
-        uriTokens.push(host);
+        uriTokens.push(host2);
       }
       if (typeof components.port === "number" || typeof components.port === "string") {
         uriTokens.push(":");
@@ -28672,22 +28672,22 @@ var require_accept_host = __commonJS({
       const hosts = {};
       const regexHosts = [];
       return {
-        get: (host) => {
-          const exact = hosts[host];
+        get: (host2) => {
+          const exact = hosts[host2];
           if (exact) {
             return exact;
           }
           for (const regex of regexHosts) {
-            if (regex.host.test(host)) {
+            if (regex.host.test(host2)) {
               return regex.value;
             }
           }
         },
-        set: (host, value) => {
-          if (host instanceof RegExp) {
-            regexHosts.push({ host, value });
+        set: (host2, value) => {
+          if (host2 instanceof RegExp) {
+            regexHosts.push({ host: host2, value });
           } else {
-            hosts[host] = value;
+            hosts[host2] = value;
           }
         }
       };
@@ -29542,7 +29542,7 @@ var require_find_my_way = __commonJS({
       options.buildPrettyMeta = this.buildPrettyMeta.bind(this);
       let tree = null;
       if (method === void 0) {
-        const { version, host, ...constraints } = this.constrainer.strategies;
+        const { version, host: host2, ...constraints } = this.constrainer.strategies;
         constraints[httpMethodStrategy.name] = httpMethodStrategy;
         const mergedRouter = new Router({ ...this._opts, constraints });
         const mergedRoutes = this.routes.map((route) => {
@@ -33492,8 +33492,8 @@ var require_fastify = __commonJS({
             if (typeof address === "string") {
               return address;
             }
-            const host = address.family === "IPv6" ? `[${address.address}]` : address.address;
-            return `${this[kOptions].https ? "https" : "http"}://${host}:${address.port}`;
+            const host2 = address.family === "IPv6" ? `[${address.address}]` : address.address;
+            return `${this[kOptions].https ? "https" : "http"}://${host2}:${address.port}`;
           }
         },
         pluginName: {
@@ -50534,6 +50534,8 @@ function registerWebsocket(fastify2, _, done) {
 }
 
 // src/index.ts
+var host = process.argv[2] || "Mac-Studio.bbq";
+var port = process.argv[3] ? parseInt(process.argv[3]) : 3e3;
 var fastify = (0, import_fastify.default)({
   logger: true
 });
@@ -50544,7 +50546,7 @@ fastify.register(import_static.default, {
 });
 fastify.register(registerWebhooks, { prefix: "/webhooks" });
 try {
-  fastify.listen({ port: 3e3 });
+  fastify.listen({ port, host });
 } catch (err) {
   fastify.log.error(err);
   process.exit(1);

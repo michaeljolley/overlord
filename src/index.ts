@@ -4,6 +4,9 @@ import FastifyWebSocket from "@fastify/websocket";
 import { registerWebhooks } from "./webhooks/index.js";
 import { registerWebsocket } from "./websocket/index.js";
 
+const host = process.argv[2] || "Mac-Studio.bbq";
+const port = process.argv[3] ? parseInt(process.argv[3]) : 3000;
+
 const fastify = Fastify({
 	logger: true,
 });
@@ -18,7 +21,7 @@ fastify.register(FastifyStatic, {
 fastify.register(registerWebhooks, { prefix: "/webhooks" });
 
 try {
-	fastify.listen({ port: 3000 });
+	fastify.listen({ port, host });
 } catch (err) {
 	fastify.log.error(err);
 	process.exit(1);
