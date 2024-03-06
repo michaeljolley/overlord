@@ -52,9 +52,11 @@ const app = createApp({
 			const playAudio = function() {
 				if (activeAlert.value?.audio) {
 					audioPlayer.value.src = activeAlert.value.audio;
-					audioPlayer.value.play().catch(error => {
-						console.log(error);
-					})
+					setTimeout(() => {
+						audioPlayer.value.play().catch(error => {
+							console.log(error);
+						});
+					}, 1500);
 				}
 			}
 
