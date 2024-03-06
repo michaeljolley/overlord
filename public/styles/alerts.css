@@ -19,10 +19,10 @@ h1 {
 	padding: 0;
 	color: #fff;
 	text-transform: uppercase;
+}
 
-	span {
-		color: #db2e7d;
-	}
+h1 span {
+	color: #db2e7d;
 }
 
 p {
