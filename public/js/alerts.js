@@ -1,12 +1,17 @@
 
-const { createApp, onMounted, ref } = Vue
+
 
 const defaultMode = {
 	mode: "Focus Time",
 	activity: "Coding, Writing, or Designing"
 };
 
-const app = createApp({
+const ignoredEvents = [
+	"stream:icon:reset",
+	"stream:icon:increment"
+]
+
+const alerts = createApp({
 		setup() {
 			const activeAlert = ref(null)
 
@@ -35,7 +40,9 @@ const app = createApp({
 			}
 
 			const addAlert = function (type, payload) {
-				if (type === "stream:mode") {
+				if (ignoredEvents.includes(type)) {
+					return;
+				} else if (type === "stream:mode") {
 					commode.value = null;
 					setTimeout(() => {
 						commode.value = {...defaultMode, ...payload};
@@ -154,7 +161,7 @@ const app = createApp({
 		}
 	});
 	
-app.component(
+	alerts.component(
 		'alert',
 		{
 			template: `<div class="alert" v-if="alert.message">
@@ -165,5 +172,5 @@ app.component(
 		}
 	)
 	
-app.mount('#app')
+	alerts.mount('#alerts')
 

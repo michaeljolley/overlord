@@ -50497,6 +50497,47 @@ var modeWebhook = {
   }
 };
 
+// src/webhooks/iconIncrement.ts
+var StreamIconIncrementWebhookBodyType = {
+  name: { type: "string" }
+};
+var iconIncrementWebhook = {
+  method: "POST",
+  url: "/icon/increment",
+  schema: {
+    body: {
+      type: "object",
+      properties: StreamIconIncrementWebhookBodyType
+    },
+    response: {
+      200: {
+        type: "boolean"
+      }
+    }
+  },
+  handler: (request, reply) => {
+    EventBus.eventEmitter.emit("stream:icon:increment", request.body);
+    reply.code(200).send(true);
+  }
+};
+
+// src/webhooks/iconReset.ts
+var iconResetWebhook = {
+  method: "POST",
+  url: "/icon/reset",
+  schema: {
+    response: {
+      200: {
+        type: "boolean"
+      }
+    }
+  },
+  handler: (request, reply) => {
+    EventBus.eventEmitter.emit("stream:icon:reset");
+    reply.code(200).send(true);
+  }
+};
+
 // src/webhooks/index.ts
 function registerWebhooks(fastify2, _, done) {
   fastify2.route(followWebhook);
@@ -50505,6 +50546,8 @@ function registerWebhooks(fastify2, _, done) {
   fastify2.route(raidWebhook);
   fastify2.route(subWebhook);
   fastify2.route(modeWebhook);
+  fastify2.route(iconIncrementWebhook);
+  fastify2.route(iconResetWebhook);
   done();
 }
 
@@ -50528,6 +50571,12 @@ function registerWebsocket(fastify2, _, done) {
     });
     EventBus.eventEmitter.on("stream:mode", (payload) => {
       connection.socket.send(JSON.stringify({ type: "stream:mode", payload }));
+    });
+    EventBus.eventEmitter.on("stream:icon:increment", (payload) => {
+      connection.socket.send(JSON.stringify({ type: "stream:icon:increment", payload }));
+    });
+    EventBus.eventEmitter.on("stream:icon:reset", (payload) => {
+      connection.socket.send(JSON.stringify({ type: "stream:icon:reset", payload }));
     });
   });
   done();

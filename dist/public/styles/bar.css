@@ -1,0 +1,125 @@
+:root {
+	--bg: rgba(0, 0, 0, .7); 
+	--border: rgba(255, 255, 255, 0.2);
+	--text: rgba(238, 238, 238, 1); 
+	--highlight: rgba(219, 46, 125, 1);
+}
+
+body {
+	margin: 0;
+	padding: 0;
+}
+
+#bar {
+	background-color: var(--bg);
+	padding: 2rem 2rem 1.5rem 2rem;
+	border-bottom: solid 2px var(--border);
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	box-shadow: 2px 6px 10px rgba(0, 0, 0, 0.5);
+}
+
+#alerts h1 {
+	font-family: 'Anton';
+	font-size: 3.5rem;
+	line-height: 1em;
+	margin: 0;
+	padding: 0;
+	color: var(--text);
+	text-transform: uppercase;
+}
+
+#alerts h1 span {
+	color: var(--highlight);
+}
+
+#alerts p {
+	font-family: 'Poppins';
+	font-size: 1.35rem;
+	color: var(--text);
+	margin: 0 0 0 0;
+}
+
+#alerts h1, p {
+	text-align: right;
+}
+
+#icons {
+	display: flex;
+	flex-direction: column;
+	gap: 2rem;
+}
+
+#icons .list {
+	display: flex;
+	flex-direction: row;
+	gap: 2rem;
+}
+
+#icons .icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 4rem;
+  width: 4rem;
+  position: relative;
+}
+
+#icons .icon.active {
+	background-color: red;
+}
+
+#icons img {
+  height: 2.5rem;
+}
+#icons .list p {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-family: Arial;
+  padding:0;
+  margin:0;
+}
+
+
+.v-enter-from,
+.v-leave-to {
+	opacity: 0;
+} 
+
+.v-enter-active {
+	opacity: 0;
+	animation: fadeIn 1.5s ease-in-out forwards;
+}
+
+.v-leave-active {
+	animation: fadeIn 1.5s ease-in-out reverse;
+}
+
+@keyframes fadeIn {
+	0% {
+		opacity: 0;
+		transform: scale(0.5);
+		filter: blur(10px);
+	}
+	50% {
+		opacity: 1;
+		transform: scale(1.1);
+		filter: blur(5px);
+	}
+	100% {
+		opacity: 1;
+		transform: scale(1);
+		filter: blur(0);
+	}
+}
+
+@keyframes slideIn {
+	0% {
+		transform: translateX(100%);
+	}
+	100% {
+		transform: translateY(0);
+	}
+}
