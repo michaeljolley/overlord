@@ -1,6 +1,3 @@
-
-
-
 const defaultMode = {
 	mode: "Focus Time",
 	activity: "Coding, Writing, or Designing"
