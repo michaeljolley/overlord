@@ -5,19 +5,19 @@ import { giftedSubWebhook } from "./giftsub.js";
 import { raidWebhook } from "./raid.js";
 import { subWebhook } from "./sub.js";
 import { modeWebhook } from "./mode.js";
-import { iconIncrementWebhook } from "./iconIncrement.js";
-import { iconResetWebhook } from "./iconReset.js";
+import { tipWebhook } from "./tip.js";
+import { audioWebhook } from "./audio.js";
 
 export function registerWebhooks(fastify: FastifyInstance, _: any, done: () => void) {
 
+	fastify.route(audioWebhook);
 	fastify.route(followWebhook);
 	fastify.route(cheerWebhook);
 	fastify.route(giftedSubWebhook);
 	fastify.route(raidWebhook);
 	fastify.route(subWebhook);
 	fastify.route(modeWebhook);
-	fastify.route(iconIncrementWebhook);
-	fastify.route(iconResetWebhook);
+	fastify.route(tipWebhook);
 
 	done();
 }

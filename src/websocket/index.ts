@@ -26,16 +26,16 @@ export function registerWebsocket(fastify: FastifyInstance, _: any, done: () => 
 			connection.socket.send(JSON.stringify({ type: "twitch:cheer", payload }));
 		});
 		
+		EventBus.eventEmitter.on("twitch:donation", (payload: any) => {
+			connection.socket.send(JSON.stringify({ type: "twitch:donation", payload }));
+		});
+		
 		EventBus.eventEmitter.on("stream:mode", (payload: any) => {
 			connection.socket.send(JSON.stringify({ type: "stream:mode", payload }));
 		});
 		
-		EventBus.eventEmitter.on("stream:icon:increment", (payload: any) => {
-			connection.socket.send(JSON.stringify({ type: "stream:icon:increment", payload }));
-		});
-		
-		EventBus.eventEmitter.on("stream:icon:reset", (payload: any) => {
-			connection.socket.send(JSON.stringify({ type: "stream:icon:reset", payload }));
+		EventBus.eventEmitter.on("stream:audio", (payload: any) => {
+			connection.socket.send(JSON.stringify({ type: "stream:audio", payload }));
 		});
 
 	});

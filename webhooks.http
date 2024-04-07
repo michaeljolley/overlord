@@ -1,0 +1,30 @@
+
+POST http://localhost:3000/webhooks/sub
+Content-Type: application/json
+
+{
+    "username": "cmjchrisjones",
+    "profileImageUrl": "https://static-cdn.jtvnw.net/jtv_user_pictures/6763a6c9-741d-404b-8da1-1303bafbab5f-profile_image-70x70.png"
+}
+
+###
+
+POST http://localhost:3000/webhooks/tip
+Content-Type: application/json
+
+{
+    "campaignTip": {
+      "id": "qz5h84iytlqm36oknc61zrhz",
+      "createdAt": "2024-04-02T23:09:35.651Z",
+      "updatedAt": "2024-04-02T23:09:35.651Z",
+      "campaignId": "ajw31cd51i0p1rc4tkxkffvz",
+      "displayName": "Inigo Montoya",
+      "grossAmountInCents": 1000,
+      "hiddenAt": null,
+      "invoiceId": "hs25q548s0stvju50ruuy27h",
+      "message": "You killed my father... prepare to die.",
+      "netAmountInCents": 1000,
+      "processingFeeInCents": 0,
+      "userAccountId": "y1l6jvmxssl1qmkj97z8wphn"
+    }
+  }

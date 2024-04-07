@@ -1,18 +1,17 @@
 import { FastifyReply, FastifyRequest, RouteOptions } from "fastify";
 import EventBus from "../eventBus";
 
-const FollowWebhookBodyType = {
-	username: { type: "string" },
-	profileImageUrl: { type: "string" },
+const AudioStateType = {
+	muted: { type: "boolean" },
 }
 
-export const followWebhook: RouteOptions = {
+export const audioWebhook: RouteOptions = {
 	method: "POST",
-	url: "/follow",
+	url: "/audio",
 	schema: {
 		body: {
 			type: "object",
-			properties: FollowWebhookBodyType
+			properties: AudioStateType
 		},
 		response: {
 			200: {
@@ -21,7 +20,7 @@ export const followWebhook: RouteOptions = {
 		},
 	},
 	handler: (request: FastifyRequest, reply: FastifyReply) => {
-		EventBus.eventEmitter.emit("twitch:follow", request.body);
+		EventBus.eventEmitter.emit("stream:audio", request.body);
 		reply.code(200).send(true);
 	},
 };
