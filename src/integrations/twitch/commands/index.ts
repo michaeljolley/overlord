@@ -5,6 +5,7 @@ export { instagram } from './instagram';
 export { mute } from './mute';
 export { shop } from './shop';
 export { tiktok } from './tiktok';
+export { tips } from './tips';
 export { twitter } from './twitter';
 export { unmute } from './unmute';
 export { uses } from './uses';

@@ -9,6 +9,7 @@ import {
 	mute,
 	shop,
 	tiktok,
+	tips,
 	twitter,
 	unmute,
 	uses,
@@ -31,6 +32,7 @@ export default function twitchChat() {
     commands.push(new Command('mute', mute as unknown as (onCommandEvent: OnCommandEvent) => void));
     commands.push(new Command('shop', shop as unknown as (onCommandEvent: OnCommandEvent) => void));
     commands.push(new Command('tiktok', tiktok as unknown as (onCommandEvent: OnCommandEvent) => void));
+    commands.push(new Command('tips', tips as unknown as (onCommandEvent: OnCommandEvent) => void));
     commands.push(new Command('twitter', twitter as unknown as (onCommandEvent: OnCommandEvent) => void));
     commands.push(new Command('unmute', unmute as unknown as (onCommandEvent: OnCommandEvent) => void));
     commands.push(new Command('uses', uses as unknown as (onCommandEvent: OnCommandEvent) => void));
