@@ -25,6 +25,7 @@ const onError = (err: any): void => {
 const onMessage = (data: any): void => {
 	const pallyData = JSON.parse(Buffer.from(data).toString());
 	if (pallyData.type === "campaigntip.notify") {
+		console.log("PallyGG Donation: ", pallyData.payload.campaignTip);
 		EventBus.eventEmitter.emit("twitch:donation", pallyData.payload.campaignTip);
 	}
 }
