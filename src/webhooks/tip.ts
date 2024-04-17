@@ -20,7 +20,7 @@ export const tipWebhook: RouteOptions = {
 		},
 	},
 	handler: (request: FastifyRequest, reply: FastifyReply) => {
-		EventBus.eventEmitter.emit("twitch:donation", request.body);
+		EventBus.eventEmitter.emit("twitch:donation", (request.body as { campaignTip: any }).campaignTip);
 		reply.code(200).send(true);
 	},
 };

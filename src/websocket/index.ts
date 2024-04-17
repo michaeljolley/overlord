@@ -26,8 +26,8 @@ export function registerWebsocket(fastify: FastifyInstance, _: any, done: () => 
 			connection.socket.send(JSON.stringify({ type: "twitch:cheer", payload }));
 		});
 		
-		EventBus.eventEmitter.on("twitch:donation", (payload: { campaignTip: any }) => {
-			connection.socket.send(JSON.stringify({ type: "twitch:donation", payload: payload.campaignTip }));
+		EventBus.eventEmitter.on("twitch:donation", (payload: any) => {
+			connection.socket.send(JSON.stringify({ type: "twitch:donation", payload }));
 		});
 		
 		EventBus.eventEmitter.on("stream:mode", (payload: any) => {
