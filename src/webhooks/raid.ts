@@ -1,5 +1,6 @@
 import { FastifyReply, FastifyRequest, RouteOptions } from "fastify";
 import EventBus from "../eventBus";
+import { BotEvents } from "../botEvents";
 
 const RaidWebhookBodyType = {
 	username: { type: "string" },
@@ -21,7 +22,7 @@ export const raidWebhook: RouteOptions = {
 		},
 	},
 	handler: (request: FastifyRequest, reply: FastifyReply) => {
-		EventBus.eventEmitter.emit("twitch:raid", request.body);
+		EventBus.eventEmitter.emit(BotEvents.OnRaid, request.body);
 		reply.code(200).send(true);
 	},
 };

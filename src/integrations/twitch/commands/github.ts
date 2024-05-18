@@ -1,6 +1,7 @@
 import EventBus from "../../../eventBus";
 import { ShouldThrottle } from "../shouldThrottle";
-import { OnCommandEvent } from "../types";
+import { OnCommandEvent } from '../../../types/onCommandEvent';
+import { BotEvents } from "../../../botEvents";
 
 /**
  * Sends a message to chat with a link to Michael's GitHub profile
@@ -21,5 +22,5 @@ export const github = (onCommandEvent: OnCommandEvent): void => {
   const message = `All of our code can be found at https://github.com/build-with-me`;
 
   // Send the message to Twitch chat
-  EventBus.eventEmitter.emit("stream:say", { message });
+  EventBus.eventEmitter.emit(BotEvents.OnSay, { message });
 }

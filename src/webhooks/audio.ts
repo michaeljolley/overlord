@@ -1,5 +1,6 @@
 import { FastifyReply, FastifyRequest, RouteOptions } from "fastify";
 import EventBus from "../eventBus";
+import { BotEvents } from "../botEvents";
 
 const AudioStateType = {
 	muted: { type: "boolean" },
@@ -20,7 +21,7 @@ export const audioWebhook: RouteOptions = {
 		},
 	},
 	handler: (request: FastifyRequest, reply: FastifyReply) => {
-		EventBus.eventEmitter.emit("stream:audio", request.body);
+		EventBus.eventEmitter.emit(BotEvents.OnSoundEffect, request.body);
 		reply.code(200).send(true);
 	},
 };

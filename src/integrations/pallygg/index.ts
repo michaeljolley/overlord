@@ -1,5 +1,6 @@
 import WebSocket from "ws";
 import EventBus from "../../eventBus";
+import { BotEvents } from "../../botEvents";
 
 const PALLYGG_API_KEY = process.env.PALLYGG_API_KEY;
 
@@ -26,7 +27,7 @@ const onMessage = (data: any): void => {
 	const pallyData = JSON.parse(Buffer.from(data).toString());
 	if (pallyData.type === "campaigntip.notify") {
 		console.log("PallyGG Donation: ", pallyData.payload.campaignTip);
-		EventBus.eventEmitter.emit("twitch:donation", pallyData.payload.campaignTip);
+		EventBus.eventEmitter.emit(BotEvents.OnDonation, pallyData.payload.campaignTip);
 	}
 }
 

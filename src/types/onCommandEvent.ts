@@ -1,12 +1,5 @@
 import { OnCommandExtra, OnMessageFlags } from "comfy.js";
 
-export class Command {
-  constructor(
-    public commandName: string,
-    public command: (onCommandEvent: OnCommandEvent) => void,
-  ) {}
-}
-
 export class OnCommandEvent {
   constructor(
     public user: string,

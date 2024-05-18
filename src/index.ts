@@ -5,6 +5,7 @@ import { registerWebhooks } from "./webhooks/index.js";
 import { registerWebsocket } from "./websocket/index.js";
 import pallygg from "./integrations/pallygg/index.js";
 import twitchChat from "./integrations/twitch/index.js";
+import { TwitchAPI } from "./integrations/twitchAPI/index.js";
 
 const host = process.argv[2] || "Mac-Studio.bbq";
 const port = process.argv[3] ? parseInt(process.argv[3]) : 3000;
@@ -29,5 +30,7 @@ try {
 	process.exit(1);
 }
 
-pallygg();
-twitchChat();
+TwitchAPI.init().then(() => {
+	pallygg();
+	twitchChat();
+});

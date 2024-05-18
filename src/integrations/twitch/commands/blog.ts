@@ -1,7 +1,8 @@
 
 import { ShouldThrottle } from '../shouldThrottle';
 import EventBus from "../../../eventBus";
-import { OnCommandEvent } from '../types';
+import { OnCommandEvent } from '../../../types/onCommandEvent';
+import { BotEvents } from '../../../botEvents';
 
 /**
  * Sends a message to chat with a link to Michael's blog
@@ -22,5 +23,5 @@ export const blog = (onCommandEvent: OnCommandEvent): void => {
   const message = `Mike's blog can be found at https://baldbeardedbuilder.com`;
 
   // Send the message to Twitch chat
-  EventBus.eventEmitter.emit("stream:say", { message });
+  EventBus.eventEmitter.emit(BotEvents.OnSay, { message });
 }

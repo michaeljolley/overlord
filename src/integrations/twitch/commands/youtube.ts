@@ -1,6 +1,7 @@
 import EventBus from "../../../eventBus";
 import { ShouldThrottle } from "../shouldThrottle";
-import { OnCommandEvent } from "../types";
+import { OnCommandEvent } from '../../../types/onCommandEvent';
+import { BotEvents } from "../../../botEvents";
 
 /**
  * Sends a message to chat with details about Michael's Youtube
@@ -21,5 +22,5 @@ export const youtube = (onCommandEvent: OnCommandEvent): void => {
   const message = `For more content, check out the Bald Bearded Builder on YouTube at https://www.youtube.com/baldbeardedbuilder`;
 
   // Send the message to Twitch chat
-  EventBus.eventEmitter.emit("stream:say", { message });
+  EventBus.eventEmitter.emit(BotEvents.OnSay, { message });
 }

@@ -1,6 +1,7 @@
 import EventBus from "../../../eventBus";
 import { ShouldThrottle } from "../shouldThrottle";
-import { OnCommandEvent } from "../types";
+import { OnCommandEvent } from '../../../types/onCommandEvent';
+import { BotEvents } from "../../../botEvents";
 
 /**
  * Sends a message to chat with specs for Michael's computer
@@ -21,5 +22,5 @@ export const uses = (onCommandEvent: OnCommandEvent): void => {
   const message = `You can find all the gear Michael uses on his website at http://bbb.dev/uses`;
 
   // Send the message to Twitch chat
-  EventBus.eventEmitter.emit("stream:say", { message });
+  EventBus.eventEmitter.emit(BotEvents.OnSay, { message });
 }

@@ -1,5 +1,6 @@
 import { FastifyReply, FastifyRequest, RouteOptions } from "fastify";
 import EventBus from "../eventBus";
+import { BotEvents } from "../botEvents";
 
 const TipWebhookBodyType = {
 	"campaignTip": {type: "object"}
@@ -20,7 +21,7 @@ export const tipWebhook: RouteOptions = {
 		},
 	},
 	handler: (request: FastifyRequest, reply: FastifyReply) => {
-		EventBus.eventEmitter.emit("twitch:donation", (request.body as { campaignTip: any }).campaignTip);
+		EventBus.eventEmitter.emit(BotEvents.OnDonation, (request.body as { campaignTip: any }).campaignTip);
 		reply.code(200).send(true);
 	},
 };

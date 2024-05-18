@@ -1,6 +1,7 @@
 import EventBus from "../../../eventBus";
 import { ShouldThrottle } from "../shouldThrottle";
-import { OnCommandEvent } from "../types";
+import { OnCommandEvent } from '../../../types/onCommandEvent';
+import { BotEvents } from "../../../botEvents";
 
 /**
  * Sends a message to chat with a link to the Pally.gg tip page
@@ -21,5 +22,5 @@ export const tips = (onCommandEvent: OnCommandEvent): void => {
   const message = `Toss a coin to your moderators, oh chat of plenty. All tips/donations go to our moderators. https://pally.gg/p/baldbeardedbuilder`;
 
   // Send the message to Twitch chat
-  EventBus.eventEmitter.emit("stream:say", { message });
+  EventBus.eventEmitter.emit(BotEvents.OnSay, { message });
 }

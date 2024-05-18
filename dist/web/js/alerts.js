@@ -41,10 +41,6 @@ const alerts = createApp({
 		const alertsAudioSrc = function(audioName) {
 			return `/assets/audio/${audioName}.mp3`;
 		}
-		
-		const usernameText = function(username) {
-			return `@${username}`
-		}
 
 		const clearAudio = function() {
 			audioPlayer.value.src = '';
@@ -73,7 +69,7 @@ const alerts = createApp({
 				const nextAlert = alerts.value.shift();
 				const { type, payload } = nextAlert;
 
-				const name = usernameText(payload.username);
+				const name = payload.username;
 				let line1;
 				let line2;
 				let line3;

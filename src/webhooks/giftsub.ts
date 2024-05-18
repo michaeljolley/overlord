@@ -1,5 +1,6 @@
 import { FastifyReply, FastifyRequest, RouteOptions } from "fastify";
 import EventBus from "../eventBus";
+import { BotEvents } from "../botEvents";
 
 const GiftSubWebhookBodyType = {
 	username: { type: "string" },
@@ -21,7 +22,7 @@ export const giftedSubWebhook: RouteOptions = {
 		},
 	},
 	handler: (request: FastifyRequest, reply: FastifyReply) => {
-		EventBus.eventEmitter.emit("twitch:giftsub",  request.body);
+		EventBus.eventEmitter.emit(BotEvents.OnGiftSub,  request.body);
 		reply.code(200).send(true);
 	},
 };

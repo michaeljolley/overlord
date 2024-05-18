@@ -1,5 +1,6 @@
+import { BotEvents } from "../../../botEvents";
 import EventBus from "../../../eventBus";
-import { OnCommandEvent } from "../types";
+import { OnCommandEvent } from '../../../types/onCommandEvent';
 
 /**
  * Sends command to unmute all audio effects
@@ -8,6 +9,6 @@ import { OnCommandEvent } from "../types";
 export const unmute = (onCommandEvent: OnCommandEvent): void => {
   // Only the broadcaster & mods should be able to unmute effects
   if (onCommandEvent.flags.broadcaster || onCommandEvent.flags.mod) {
-		EventBus.eventEmitter.emit("stream:audio", { muted: false });
+		EventBus.eventEmitter.emit(BotEvents.OnAudioControl, { muted: false });
   }
 }

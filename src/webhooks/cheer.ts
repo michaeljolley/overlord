@@ -1,5 +1,6 @@
 import { FastifyReply, FastifyRequest, RouteOptions } from "fastify";
 import EventBus from "../eventBus";
+import { BotEvents } from "../botEvents";
 
 const CheerWebhookBodyType = {
 	username: { type: "string" },
@@ -22,7 +23,7 @@ export const cheerWebhook: RouteOptions = {
 		},
 	},
 	handler: (request: FastifyRequest, reply: FastifyReply) => {
-		EventBus.eventEmitter.emit("twitch:cheer", request.body);
+		EventBus.eventEmitter.emit(BotEvents.OnCheer, request.body);
 		reply.code(200).send(true);
 	},
 };

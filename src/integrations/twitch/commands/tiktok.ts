@@ -1,6 +1,7 @@
 import EventBus from "../../../eventBus";
 import { ShouldThrottle } from "../shouldThrottle";
-import { OnCommandEvent } from "../types";
+import { OnCommandEvent } from '../../../types/onCommandEvent';
+import { BotEvents } from "../../../botEvents";
 
 /**
  * Sends a message to chat with info on BBB TikTok
@@ -21,5 +22,5 @@ export const tiktok = (onCommandEvent: OnCommandEvent): void => {
   const message = `Follow BBB on TikTok at https://www.tiktok.com/@baldbeardedbuilder`;
 
   // Send the message to Twitch chat
-  EventBus.eventEmitter.emit("stream:say", { message });
+  EventBus.eventEmitter.emit(BotEvents.OnSay, { message });
 }

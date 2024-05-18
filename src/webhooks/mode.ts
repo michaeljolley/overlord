@@ -1,5 +1,6 @@
 import { FastifyReply, FastifyRequest, RouteOptions } from "fastify";
 import EventBus from "../eventBus";
+import { BotEvents } from "../botEvents";
 
 const ModeWebhookBodyType = {
 	"mode": { type: "string" },
@@ -21,7 +22,7 @@ export const modeWebhook: RouteOptions = {
 		},
 	},
 	handler: (request: FastifyRequest, reply: FastifyReply) => {
-		EventBus.eventEmitter.emit("stream:mode", request.body);
+		EventBus.eventEmitter.emit(BotEvents.OnStreamMode, request.body);
 		reply.code(200).send(true);
 	},
 };

@@ -1,0 +1,235 @@
+@import "_global.css";
+
+.chat {
+  display: flex;
+  flex-direction: column-reverse;
+  height: 98vh;
+  position: absolute;
+  right: 30px;
+  width: 400px;
+	font-family: 'Inter';
+	font-size: 0.9rem;
+}
+.chat .list-move {
+  transition: transform 0.5s;
+}
+
+.message {
+	--angle: 90deg;
+	width: 100%;
+	margin-bottom: 25px;
+	position: relative;
+	display: flex;
+	align-items: center;
+	box-shadow: 0 1px 5px var(--black);
+	opacity: 0;
+	transition: 1s linear all;
+	animation: fade 1s forwards;
+}
+
+.hide {
+	box-shadow: none;
+	animation: hide 1s forwards;
+}
+
+.wrap {
+  opacity: 1;
+  animation: high 1s linear;
+  width: 400px;
+}
+
+.panel {
+  display: flex;
+	align-items: center;
+  border-top: 5px solid;
+  border-image-source: var(--transparent-black);
+  border-image-slice: 1;
+  animation: 10s rotate linear infinite;
+  width:100%;height:100%;
+}
+
+.bubble {
+	z-index: 1;
+	width: 100%;
+	height: 100%;
+  background-color: var(--transparent-black);
+	padding: 0.75rem;
+  word-wrap: break-word;
+  white-space: pre-line;
+  display: flex;
+  flex-direction: column;
+  font: 'PT Sans', sans-serif;
+  font-size: 1.2em;
+  color: var(--white);
+}
+
+span {
+  color: var(--neonblue);
+}
+
+.name {
+	display: flex;
+	align-items: center;
+  font-family: 'Kanit', sans-serif;
+  font-size: 1rem;
+	font-weight: bold;
+  margin-top: 10px;
+	background: var(--lightgray);
+	background-clip: text;
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
+
+.user {
+	height: 2rem;
+	width: 2rem;
+	margin-right: 1rem;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-color: #fff;
+	
+  border: 2px solid;
+  border-image-source: repeating-conic-gradient(from var(--angle), var(--gray) 0%, var(--white) 50%, var(--gray) 100%);
+  border-image-slice: 1;
+  animation: 10s rotate linear infinite;
+}
+
+.mod .panel {
+  border-image-source: repeating-conic-gradient(from var(--angle), var(--gray) 0%, var(--white) 50%, var(--gray) 100%);
+}
+
+.mod .name {
+	background: var(--gradient-silver);
+  background-size: 300%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: animated_text 10s ease-in-out infinite;
+}
+
+.mod .user {
+	border-image-source: repeating-conic-gradient(from var(--angle), var(--gray) 0%, var(--white) 50%, var(--gray) 100%);
+}
+
+.vip .panel {
+  border-image-source: repeating-conic-gradient(from var(--angle), var(--neonpink) 0%, var(--neonblue) 50%, var(--neonpink) 100%);
+}
+.vip .bubble {
+	background-color: var(--transparent-white);
+  color: var(--black);
+}
+.vip .name {
+	background: var(--gradient);
+  background-size: 300%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: animated_text 10s ease-in-out infinite;
+}
+
+.vip span {
+	color: var(--neonpink);
+}
+
+.vip .user {
+	border-image-source: repeating-conic-gradient(from var(--angle), var(--neonpink) 0%, var(--neonblue) 50%, var(--neonpink) 100%);
+}
+
+.highlighted .panel {
+  border: 5px solid;
+  border-image-source: repeating-conic-gradient(from var(--angle), var(--neonpink) 0%, var(--neonblue) 50%, var(--neonpink) 100%);
+  border-image-slice: 1;
+  animation: 10s rotate linear infinite;
+}
+.highlighted .panel:before {
+  content: "";
+  position: absolute;
+  inset: -5px;
+  transform: translate3d(0px, 0px, 0px);
+  /* (X, Y, Z) */
+  border: 8px solid;
+  border-image-source: repeating-conic-gradient(from var(--angle), var(--neonpink) 0%, var(--neonblue) 50%, var(--neonpink) 100%);
+  border-image-slice: 1;
+  filter: blur(8px);
+  animation: 10s rotate linear infinite;
+}
+.highlighted .bubble {
+  background-color: var(--transparent-white);
+  color: var(--black);
+}
+.highlighted .name {
+	background: var(--gradient);
+  background-size: 300%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: animated_text 10s ease-in-out infinite;
+}
+
+.highlighted span {
+	color: var(--neonpink);
+}
+
+.highlighted .user {
+	border-image-source: repeating-conic-gradient(from var(--angle), var(--neonpink) 0%, var(--neonblue) 50%, var(--neonpink) 100%);
+}
+
+.fade .message:not(.highlighted) .wrap {
+  opacity: 0.6;
+  animation: low 1s forwards;
+}
+
+
+@keyframes fade {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes hide {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes low {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.6;
+  }
+}
+
+@keyframes high {
+  0% {
+    opacity: 0.6;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes rotate {
+  to {
+    --angle: 360deg;
+  }
+}
+
+@keyframes animated_text {
+	0% { background-position: 0px 50%; }
+	50% { background-position: 100% 50%; }
+	100% { background-position: 0px 50%; }
+}
+
+@property --angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
