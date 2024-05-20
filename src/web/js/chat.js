@@ -87,7 +87,7 @@ chat.component('chatMessage', {
 				setTimeout(() => {
 					emit('removeItem', onChatMessageEvent.id);
 				}, 1100)
-			}, 10000);
+			}, 60000);
 		})
 
 		onUnmounted(() => {
