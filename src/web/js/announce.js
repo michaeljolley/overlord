@@ -120,7 +120,7 @@ const announce = createApp({
 										x="-500" y="-500" 
 										width="2000" height="2000">
 				<div
-				style="width: 100%; height: 100%; border-radius: 50%;background: conic-gradient(from 270deg, var(--neonpink) 1%, var(--neonblue) 49%, var(--neonblue) 51%, var(--neonpink) 99%);"
+				style="width: 100%; height: 100%; border-radius: 50%;background: linear-gradient(to right, var(--neonpink) 10%, var(--neonblue) 100%);"
 				xmlns="http://www.w3.org/1999/xhtml"
 						</div>
 			</foreignObject>
