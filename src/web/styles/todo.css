@@ -1,0 +1,91 @@
+@import "_global.css";
+
+.todos {
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 4rem);
+  position: absolute;
+  left: 30px;
+  width: 400px;
+	font-family: 'Inter';
+	font-size: 0.9rem;
+	box-shadow: 0 1px 5px var(--black);
+}
+.todos .list-move {
+  transition: transform 0.5s;
+}
+
+header {
+  background: var(--transparent-deep-black);
+  padding: 0.25rem 0.5rem;
+  color: rgba(255, 255,255, .5);
+  font-weight: bold;
+  border: 1px solid var(--black);
+  font-family: 'Kanit';
+}
+main {
+  padding: 0.5rem;
+  background-color: var(--transparent-black);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.todo {
+	--angle: 90deg;
+	width: 100%;
+	position: relative;
+	display: flex;
+	align-items: center;
+}
+
+.name {
+	display: flex;
+	align-items: center;
+  font-family: 'Kanit', sans-serif;
+  font-size: 0.8rem;
+	font-weight: bold;
+  margin-right: 0.7rem;
+	background: var(--gray);
+	background-clip: text;
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
+
+.user {
+	height: 1.5rem;
+	width: 1.5rem;
+	margin-right: 0.25rem;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-color: #fff;
+	
+  border: 2px solid;
+  border-image-source: repeating-conic-gradient(from var(--angle), var(--gray) 0%, var(--white) 50%, var(--gray) 100%);
+  border-image-slice: 1;
+  animation: 10s rotate linear infinite;
+}
+
+.title {
+  font-size: 0.8rem;
+  color: var(--white);
+}
+
+@keyframes rotate {
+  to {
+    --angle: 360deg;
+  }
+}
+
+@keyframes animated_text {
+	0% { background-position: 0px 50%; }
+	50% { background-position: 100% 50%; }
+	100% { background-position: 0px 50%; }
+}
+
+@property --angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}

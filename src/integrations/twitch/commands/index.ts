@@ -4,6 +4,7 @@ export { github } from './github';
 export { instagram } from './instagram'; 
 export { mute } from './mute';
 export { shop } from './shop';
+export { todo } from './todo';
 export { tiktok } from './tiktok';
 export { tips } from './tips';
 export { twitter } from './twitter';

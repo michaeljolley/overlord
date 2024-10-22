@@ -7,6 +7,7 @@ import {
 	instagram,
 	mute,
 	shop,
+	todo,
 	tiktok,
 	tips,
 	twitter,
@@ -21,6 +22,7 @@ import { OnChatMessageEvent } from '../../types/onChatMessageEvent';
 import { BotEvents } from '../../botEvents';
 import sanitizeHtml from 'sanitize-html';
 import { UserStore } from '../../stores/userStore';
+import { TaskStore } from '../../stores/taskStore';
 
 const TWITCH_BOT_USERNAME = process.env.PALLYGG_API_KEY!;
 const TWITCH_BOT_AUTH_TOKEN = process.env.TWITCH_BOT_AUTH_TOKEN;
@@ -37,6 +39,7 @@ export default function twitchChat() {
     commands.push(new Command('instagram', instagram as unknown as (onCommandEvent: OnCommandEvent) => void));
     commands.push(new Command('mute', mute as unknown as (onCommandEvent: OnCommandEvent) => void));
     commands.push(new Command('shop', shop as unknown as (onCommandEvent: OnCommandEvent) => void));
+    commands.push(new Command('todo', tasks as unknown as (onCommandEvent: OnCommandEvent) => void));
     commands.push(new Command('tiktok', tiktok as unknown as (onCommandEvent: OnCommandEvent) => void));
     commands.push(new Command('tips', tips as unknown as (onCommandEvent: OnCommandEvent) => void));
     commands.push(new Command('twitter', twitter as unknown as (onCommandEvent: OnCommandEvent) => void));
@@ -79,7 +82,8 @@ export default function twitchChat() {
       if (userInfo) {
         const processedChatMessage = processChat(message, flags, extra.messageEmotes);
         if (processedChatMessage.length > 0) {
-          emit(BotEvents.OnChatMessage, new OnChatMessageEvent(userInfo, message, processedChatMessage, flags, self, extra, extra.id))
+					const todoData = TaskStore.getUserTasks(userInfo.login);
+          emit(BotEvents.OnChatMessage, new OnChatMessageEvent(userInfo, message, processedChatMessage, flags, self, extra, extra.id, todoData))
         }
       }
     }
