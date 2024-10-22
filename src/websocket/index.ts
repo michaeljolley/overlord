@@ -50,6 +50,10 @@ export function registerWebsocket(fastify: FastifyInstance, _: any, done: () => 
 		EventBus.eventEmitter.on(BotEvents.OnCreditRoll, (payload: any) => {
 			connection.socket.send(JSON.stringify({ type: BotEvents.OnCreditRoll, payload }));
 		});
+		
+		EventBus.eventEmitter.on(BotEvents.OnTodoUpdated, (payload: any) => {
+			connection.socket.send(JSON.stringify({ type: BotEvents.OnTodoUpdated, payload }));
+		});
 	});
 
 	done();

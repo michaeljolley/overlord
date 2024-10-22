@@ -13,14 +13,15 @@ export const todo = async (onCommandEvent: OnCommandEvent): Promise<void> => {
 
 	const words = onCommandEvent.message.split(' ');
 
-	const command = words.shift();
+	const command = words[0].toLocaleLowerCase();
+	const username = onCommandEvent.user.toLocaleLowerCase();
 
 	if (command) {
 
-		switch (command.toLowerCase()) {
+		switch (command) {
 			case 'done':
 
-				const todo = await TaskStore.getTask(onCommandEvent.user);
+				const todo = await TaskStore.getTask(username);
 				if (todo) {
 					todo.isDone = true;
 					TaskStore.setTask(todo);
@@ -35,12 +36,12 @@ export const todo = async (onCommandEvent: OnCommandEvent): Promise<void> => {
 
 				const title = words.join(' ');
 
-				const existingTodo = await TaskStore.getTask(onCommandEvent.user);
+				const existingTodo = await TaskStore.getTask(username);
 				if (existingTodo) {
 					existingTodo.title = title;
 					TaskStore.setTask(existingTodo);
 				} else {
-					const user = await UserStore.getUser(onCommandEvent.user);
+					const user = await UserStore.getUser(username);
 					if (user) {
 						TaskStore.setTask(new Task(user, title));
 

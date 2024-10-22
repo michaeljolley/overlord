@@ -18,11 +18,13 @@ export abstract class TaskStore {
 	}
 
 	public static setTask = (task: Task): void => {
-		const index = this.tasks.findIndex(t => t.user.login === task.user.login && !task.isDone);
-		if (index === -1) {
-			this.tasks.push(task);
-		} else {
-			this.tasks[index] = task;
+		if (!task.isDone) {
+			const index = this.tasks.findIndex(t => t.user.login === task.user.login && !t.isDone);
+			if (index === -1) {
+				this.tasks.push(task);
+			} else {
+				this.tasks[index] = task;
+			}
 		}
 
 		EventBus.eventEmitter.emit(BotEvents.OnTodoUpdated, { todos: this.tasks });
