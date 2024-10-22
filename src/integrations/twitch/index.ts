@@ -70,9 +70,11 @@ export default function twitchChat() {
 	const handleChat = async (user: string, message: string, flags: OnMessageFlags, self: boolean, extra: OnMessageExtra) => {
 		user = user.toLocaleLowerCase();
 
-    if (!self
-      && user !== TWITCH_BOT_USERNAME.toLocaleLowerCase()
-      && user !== TWITCH_CHANNEL.toLocaleLowerCase()
+    if (
+			//!self
+      //&& 
+			user !== TWITCH_BOT_USERNAME.toLocaleLowerCase()
+      // && user !== TWITCH_CHANNEL.toLocaleLowerCase()
 		) {
 
       let userInfo: User | undefined
