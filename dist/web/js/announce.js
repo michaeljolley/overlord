@@ -56,8 +56,7 @@ const announce = createApp({
 		}
 		
 		const setNewSVGList = () => {
-
-			let {poly: list, path: pathList} = generateSVGPointListFromArray();
+			let {poly: list} = generateSVGPointListFromArray();
 
 			announcePolygon.value.setAttribute('points', list);
 			announceClipPolygon.value.setAttribute('points', list);
@@ -107,23 +106,26 @@ const announce = createApp({
 			<p>{{chatMessage.sanitizedMessage}}</p>
 		</div>
 
+		
 		<svg xmlns="http://www.w3.org/2000/svg">
 			<g>
 				<polygon ref="announcePolygon" class="bgPolygon"/>
 			</g>
 			
-			<mask class="clip" id="clip-bottom-left">
+			<mask id="clip" class="clip">
 				<polygon ref="announceClipPolygon"/>
 			</mask>
 			
-			<foreignObject mask="url(#clip-bottom-left)"
+			<foreignObject mask="url(#clip)"
 										x="-500" y="-500" 
 										width="2000" height="2000">
-				<div class="gradient" 
-						xmlns="http://www.w3.org/1999/xhtml"
+				<div
+				style="width: 100%; height: 100%; border-radius: 50%;background: conic-gradient(from 270deg, var(--neonpink) 1%, var(--neonblue) 49%, var(--neonblue) 51%, var(--neonpink) 99%);"
+				xmlns="http://www.w3.org/1999/xhtml"
 						</div>
 			</foreignObject>
 		</svg>
+
 	</div>
 `
 });
