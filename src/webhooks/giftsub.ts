@@ -1,6 +1,7 @@
 import { FastifyReply, FastifyRequest, RouteOptions } from "fastify";
 import EventBus from "../eventBus";
 import { BotEvents } from "../botEvents";
+import Supabase from "../integrations/supabase";
 
 const GiftSubWebhookBodyType = {
 	username: { type: "string" },
@@ -21,8 +22,10 @@ export const giftedSubWebhook: RouteOptions = {
 			},
 		},
 	},
-	handler: (request: FastifyRequest, reply: FastifyReply) => {
+	handler: async (request: FastifyRequest, reply: FastifyReply) => {
 		EventBus.eventEmitter.emit(BotEvents.OnGiftSub,  request.body);
+		const { username, giftedTotal } = request.body as { username: string, giftedTotal: number };
+		await Supabase.addSubGift(username, giftedTotal);
 		reply.code(200).send(true);
 	},
 };
