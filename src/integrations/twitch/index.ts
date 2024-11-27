@@ -2,10 +2,12 @@ import ComfyJS, { EmoteSet, OnCommandExtra, OnMessageExtra, OnMessageFlags } fro
 import EventBus from "../../eventBus";
 import {
 	blog,
+  bluesky,
 	discord,
 	github,
 	instagram,
 	mute,
+  say,
 	shop,
 	todo,
 	tiktok,
@@ -23,6 +25,8 @@ import { BotEvents } from '../../botEvents';
 import sanitizeHtml from 'sanitize-html';
 import { UserStore } from '../../stores/userStore';
 import { TaskStore } from '../../stores/taskStore';
+import { AnnouncementStore } from '../../stores/announcementStore';
+import { Announcement } from '../../types/announcement';
 
 const TWITCH_BOT_USERNAME = process.env.PALLYGG_API_KEY!;
 const TWITCH_BOT_AUTH_TOKEN = process.env.TWITCH_BOT_AUTH_TOKEN;
@@ -31,28 +35,35 @@ const TWITCH_CHANNEL = process.env.TWITCH_CHANNEL!;
 export default function twitchChat() {
 
 	const commands: Command[] = [];
+	let announcements: Announcement[] = [];
   
 	const loadCommands = () => {
-    commands.push(new Command('blog', blog as unknown as (onCommandEvent: OnCommandEvent) => void));
-    commands.push(new Command('discord', discord as unknown as (onCommandEvent: OnCommandEvent) => void));
-    commands.push(new Command('github', github as unknown as (onCommandEvent: OnCommandEvent) => void));
-    commands.push(new Command('instagram', instagram as unknown as (onCommandEvent: OnCommandEvent) => void));
-    commands.push(new Command('mute', mute as unknown as (onCommandEvent: OnCommandEvent) => void));
-    commands.push(new Command('shop', shop as unknown as (onCommandEvent: OnCommandEvent) => void));
-    commands.push(new Command('todo', todo as unknown as (onCommandEvent: OnCommandEvent) => void));
-    commands.push(new Command('tiktok', tiktok as unknown as (onCommandEvent: OnCommandEvent) => void));
-    commands.push(new Command('tips', tips as unknown as (onCommandEvent: OnCommandEvent) => void));
-    commands.push(new Command('twitter', twitter as unknown as (onCommandEvent: OnCommandEvent) => void));
-    commands.push(new Command('unmute', unmute as unknown as (onCommandEvent: OnCommandEvent) => void));
-    commands.push(new Command('uses', uses as unknown as (onCommandEvent: OnCommandEvent) => void));
-    commands.push(new Command('youtube', youtube as unknown as (onCommandEvent: OnCommandEvent) => void));
+    commands.push(new Command('blog', blog));
+    commands.push(new Command('bluesky', bluesky));
+    commands.push(new Command('discord', discord));
+    commands.push(new Command('github', github));
+    commands.push(new Command('instagram', instagram));
+    commands.push(new Command('mute', mute));
+    commands.push(new Command('shop', shop));
+    commands.push(new Command('todo', todo));
+    commands.push(new Command('tiktok', tiktok));
+    commands.push(new Command('tips', tips));
+    commands.push(new Command('twitter', twitter));
+    commands.push(new Command('unmute', unmute));
+    commands.push(new Command('uses', uses));
+    commands.push(new Command('youtube', youtube));
 	}
+
+  const loadAnnouncements = async () => {
+    let newAnnouncements = AnnouncementStore.getAnnouncements();
+    announcements = newAnnouncements.filter(a => a.command && a.message);
+  }
 	
 	const emit = (eventType: string, payload: any) => {
 		EventBus.eventEmitter.emit(eventType, payload);
 	}
 
-  const say = (message: string) => {
+  const sendToChat = (message: string) => {
     ComfyJS.Say(message, TWITCH_CHANNEL);
   }
 	
@@ -64,6 +75,13 @@ export default function twitchChat() {
 		const command: Command | undefined = getCommand(onCommandEvent.command);
     if (command) {
       command.command(onCommandEvent);
+      return;
+    }
+
+    const announcement = announcements.find(a => a.command === onCommandEvent.command);
+    if (announcement) {
+      onCommandEvent.message = announcement.message!;
+      say(onCommandEvent);
     }
 	}
 
@@ -175,10 +193,12 @@ export default function twitchChat() {
   }
 
 	loadCommands();
+  loadAnnouncements();
 	
 	EventBus.eventEmitter.on(BotEvents.OnSay, (payload: { message: string }) => {
-		say(payload.message);
+		sendToChat(payload.message);
 	});
+  EventBus.eventEmitter.on(BotEvents.LoadAnnouncements, loadAnnouncements);
 	
   ComfyJS.Init(TWITCH_BOT_USERNAME, TWITCH_BOT_AUTH_TOKEN, TWITCH_CHANNEL);
 	ComfyJS.onCommand = onCommand;

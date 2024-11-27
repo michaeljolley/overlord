@@ -1,8 +1,10 @@
 export { blog } from './blog';
+export { bluesky } from './bluesky';
 export { discord } from './discord';
 export { github } from './github';
 export { instagram } from './instagram'; 
 export { mute } from './mute';
+export { say } from './say';
 export { shop } from './shop';
 export { todo } from './todo';
 export { tiktok } from './tiktok';

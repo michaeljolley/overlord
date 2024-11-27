@@ -32,6 +32,7 @@
 		"@fastify/websocket": "^9.0.0",
 		"@supabase/supabase-js": "^2.46.1",
 		"comfy.js": "^1.1.16",
+		"cron": "^3.2.1",
 		"fastify": "^4.26.1",
 		"sanitize-html": "^2.13.0",
 		"ws": "^8.16.0"

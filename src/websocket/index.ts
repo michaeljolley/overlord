@@ -54,6 +54,10 @@ export function registerWebsocket(fastify: FastifyInstance, _: any, done: () => 
 		EventBus.eventEmitter.on(BotEvents.OnTodoUpdated, (payload: any) => {
 			connection.socket.send(JSON.stringify({ type: BotEvents.OnTodoUpdated, payload }));
 		});
+		
+		EventBus.eventEmitter.on(BotEvents.Announcement, (payload: any) => {
+			connection.socket.send(JSON.stringify({ type: BotEvents.Announcement, payload }));
+		});
 	});
 
 	done();

@@ -109,7 +109,6 @@ chat.component('chatMessage', {
 							<div class="user" :style="{ backgroundImage: bgImage }"></div>
 							{{onChatMessageEvent.user.display_name}}
 						</div>
-						<span>{{onChatMessageEvent.todos.completed}}/{{onChatMessageEvent.todos.total}}</span>
 					</div>
 				</div>
 			</div>

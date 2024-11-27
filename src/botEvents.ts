@@ -15,6 +15,10 @@ export enum BotEvents {
   OnSay = 'onSay',
 	OnStreamMode = "onStreamMode",
 
+  /* Announcement Events */
+  LoadAnnouncements = "onLoadAnnouncements",
+  Announcement = "onAnnouncement",
+
 	/* Twitch Events */
   OnCheer = 'twitch:cheer',
 	OnDonation = 'twitch:donation',

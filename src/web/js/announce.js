@@ -2,11 +2,76 @@ const { computed, createApp, onMounted, onUnmounted, ref } = Vue
 
 const announce = createApp({
 	setup() {
-		const chatMessage = ref(null);
+		const announcement = ref(null);
+		const destroyTimeout = ref(null);
+		const hideMe = ref(null);
+		
+		const newAnnouncement = (payload) => {
+      destroyTimeout.value = setTimeout(() => {
+				hideMe.value = true;
+			}, 8000);
+
+      announcement.value = payload;
+
+      setTimeout(() => {
+        announcement.value = undefined;
+      }, 12000);
+		}
+	
+		onMounted(() => {
+			const webSocket = ref(new WebSocket(`ws://${window.location.host}/socket`));
+
+			webSocket.value.onmessage = function(e) {
+				const event = JSON.parse(e.data);
+				if (event.type === 'onAnnouncement') {
+					setTimeout(newAnnouncement(event.payload), 1000);
+				} 
+			}
+
+			webSocket.value.onopen = function(e) {
+				console.log('Connection opened');
+			}
+
+			webSocket.value.onerror = function(e) {
+				console.log('Error: ', e);
+			}
+
+			webSocket.value.onclose = function(e) {
+				console.log('Connection closed');
+				window.location.reload();
+			}
+		});
+
+    onUnmounted(() => {
+      if (destroyTimeout.value) {
+        clearTimeout(destroyTimeout.value);
+      }
+    });
+
+		return { announcement, hideMe }
+	},
+	template:
+	`
+	<div id="window">
+    <div class="announcement" v-if="announcement">
+      <div class="content" :class="{ hide: hideMe }">
+        <h1>{{announcement.title}}</h1>
+        <p v-html="announcement.subtitle"></p>
+      </div>
+      <polyBG v-if="announcement" />    
+    </div>
+	</div>
+`
+});
+
+announce.component('polyBG', {
+  setup() {
 		const announcePolygon = ref(null);
 		const announceClipPolygon = ref(null);
-		
-		let firstV = 0;
+		const destroyTimeout = ref(null);
+		const hideMe = ref(null);
+
+    let firstV = 0;
 		let lastH = 0;
 		
 		const generateRandomPointArr = () => {
@@ -16,7 +81,7 @@ const announce = createApp({
 		
 				while (lastH !== 960) {
 						const h = lastH;
-						let v = getRandomInt(10, 130);
+						let v = getRandomInt(10, 110);
 						if (h === 960) {
 								v = 300;
 						}
@@ -63,71 +128,42 @@ const announce = createApp({
 		}
 		
 		const getRandomInt = (min, max) => {
-				return Math.floor(Math.random() * (max - min + 1) + min);
+			return Math.floor(Math.random() * (max - min + 1) + min);
 		}
-
-		const newMessage = (payload) => {
-			chatMessage.value = undefined;
-			setNewSVGList();
-			chatMessage.value = payload;
-		}
-	
+    
 		onMounted(() => {
-			const webSocket = ref(new WebSocket(`ws://${window.location.host}/socket`));
+      setNewSVGList();
+      destroyTimeout.value = setTimeout(() => {
+				hideMe.value = true;
+			}, 10000);
+    });
+    
+		onUnmounted(() => {
+			clearTimeout(destroyTimeout.value);
+		})
 
-			webSocket.value.onmessage = function(e) {
-				const event = JSON.parse(e.data);
-				if (event.type === 'onChatMessage') {
-					setTimeout(newMessage(event.payload), 1000);
-				} 
-			}
-
-			webSocket.value.onopen = function(e) {
-				console.log('Connection opened');
-			}
-
-			webSocket.value.onerror = function(e) {
-				console.log('Error: ', e);
-			}
-
-			webSocket.value.onclose = function(e) {
-				console.log('Connection closed');
-				window.location.reload();
-			}
-		});
-
-		return { announcePolygon, announceClipPolygon, chatMessage }
+		return { announcePolygon, announceClipPolygon, hideMe }
 	},
-	template:
-	`
-	<div id="window">
-		<div class="content" v-if="chatMessage">
-			<h1>{{chatMessage.user.display_name}}</h1>
-			<p>{{chatMessage.sanitizedMessage}}</p>
-		</div>
-
-		
-		<svg xmlns="http://www.w3.org/2000/svg">
-			<g>
-				<polygon ref="announcePolygon" class="bgPolygon"/>
-			</g>
-			
-			<mask id="clip" class="clip">
-				<polygon ref="announceClipPolygon"/>
-			</mask>
-			
-			<foreignObject mask="url(#clip)"
-										x="-500" y="-500" 
-										width="2000" height="2000">
-				<div
-				style="width: 100%; height: 100%; border-radius: 50%;background: linear-gradient(to right, var(--neonpink) 10%, var(--neonblue) 100%);"
-				xmlns="http://www.w3.org/1999/xhtml"
-						</div>
-			</foreignObject>
-		</svg>
-
-	</div>
-`
+	template: `
+  <svg xmlns="http://www.w3.org/2000/svg" :class="{ hide: hideMe }">
+    <g>
+      <polygon ref="announcePolygon" class="bgPolygon"/>
+    </g>
+    
+    <mask id="clip" class="clip">
+      <polygon ref="announceClipPolygon"/>
+    </mask>
+    
+    <foreignObject mask="url(#clip)"
+                  x="-500" y="-500" 
+                  width="2000" height="2000">
+      <div
+      style="width: 100%; height: 100%; border-radius: 50%;background: conic-gradient(from 270deg, var(--neonpink) 1%, var(--neonblue) 49%, var(--neonblue) 51%, var(--neonpink) 99%);/*animation: colorRotate 7.5s 0.5s infinite linear;*/"
+      xmlns="http://www.w3.org/1999/xhtml"
+          </div>
+    </foreignObject>
+  </svg>
+  `
 });
 
 announce.mount('#app');

@@ -15,4 +15,15 @@ export  default abstract class Supabase {
             console.log("Error adding sub gift: ", {error, username, giftedTotal});
         }
     }
+
+    static async getAnnouncements() {
+        const { data: announcements, error } = await supabaseClient
+            .from('announcements')
+            .select('*');
+        if (error) {
+            console.log("Error getting announcements: ", error);
+        }
+        return announcements!.filter(a => a.expiration_date === null || new Date(a.expiration_date) > new Date());
+    }
+
 }
