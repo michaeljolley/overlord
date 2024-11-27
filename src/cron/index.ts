@@ -8,7 +8,7 @@ export default async function cron() {
   let announcements: Announcement[] = [];
   let queue: Announcement[] = [];
   
-  const announcementCronJob = new CronJob('*/20 * * * * *', function () {
+  const announcementCronJob = new CronJob('0 */10 * * * *', function () {
     if (queue.length === 0) {
       queue = [...announcements];
     }

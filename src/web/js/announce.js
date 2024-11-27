@@ -1,21 +1,18 @@
-const { computed, createApp, onMounted, onUnmounted, ref } = Vue
+const { computed, createApp, onMounted, onUnmounted, ref, watch } = Vue
+
+const _announcementLength = 30000;
 
 const announce = createApp({
 	setup() {
-		const announcement = ref(null);
 		const destroyTimeout = ref(null);
-		const hideMe = ref(null);
+		const announcement = ref(null);
 		
 		const newAnnouncement = (payload) => {
       destroyTimeout.value = setTimeout(() => {
-				hideMe.value = true;
-			}, 8000);
+				announcement.value = undefined;
+			}, _announcementLength);
 
       announcement.value = payload;
-
-      setTimeout(() => {
-        announcement.value = undefined;
-      }, 12000);
 		}
 	
 		onMounted(() => {
@@ -48,122 +45,120 @@ const announce = createApp({
       }
     });
 
-		return { announcement, hideMe }
+		return { announcement }
 	},
 	template:
 	`
 	<div id="window">
-    <div class="announcement" v-if="announcement">
-      <div class="content" :class="{ hide: hideMe }">
-        <h1>{{announcement.title}}</h1>
-        <p v-html="announcement.subtitle"></p>
-      </div>
-      <polyBG v-if="announcement" />    
-    </div>
+			<div class="announcement">
+				<Transition name="bottom-content">
+					<div class="content" v-if="announcement">
+						<h1>{{announcement.title}}</h1>
+						<p v-html="announcement.subtitle"></p>
+					</div>
+				</Transition>
+				<polyBG :announcement="announcement"/>
+			</div>
 	</div>
 `
 });
 
 announce.component('polyBG', {
-  setup() {
-		const announcePolygon = ref(null);
-		const announceClipPolygon = ref(null);
-		const destroyTimeout = ref(null);
-		const hideMe = ref(null);
+	template: `
+  <svg xmlns="http://www.w3.org/2000/svg">
+    <g>
+			<Transition name="bottom-poly">
+      	<polygon ref="announcePolygon" class="bgPolygon" v-if="announcement"/>
+			</Transition>
+    </g>
+    
+    <mask id="clip" class="clip">
+			<Transition name="bottom-path">
+				<path ref="announceClipPath" v-if="announcement"/>
+			</Transition>
+    </mask>
 
-    let firstV = 0;
-		let lastH = 0;
-		
-		const generateRandomPointArr = () => {
-				let list = [];
-				let pathList = [];
-				lastH = 0;
-		
-				while (lastH !== 960) {
-						const h = lastH;
-						let v = getRandomInt(10, 110);
-						if (h === 960) {
-								v = 300;
-						}
-						if (lastH === 0) {
-								firstV = v;
-								list.push(`${h - 40}, ${v}`);
-								list.push(`${h}, ${v}`);
-								pathList.push(`M ${h} ${v}`);
-						} else {
-								list.push(`${h}, ${v}`);
-								pathList.push(`L ${h} ${v}`);
-						}
-						setNewLastH();
-				}
-				
-				list.push(`960, 300`);
-				list.push('980, 350');
-				list.push('-50, 350');
-				pathList.push(`L 960 300`);
-				
-				return {list, pathList};
-		}
-		
-		const setNewLastH = () => {
-				lastH = getRandomInt(lastH + 40, lastH + 150);
+		<foreignObject mask="url(#clip)"
+                  x="-500" y="-500" 
+                  width="2000" height="2000"
+									style="mask:url(#clip);-webkit-mask:url(#clip);">
+      <div
+      	style="width: 100%; height: 100%; border-radius: 50%;background: conic-gradient(from 270deg, var(--neonpink) 1%, var(--neonblue) 49%, var(--neonblue) 51%, var(--neonpink) 99%);/*animation: colorRotate 7.5s 0.5s infinite linear;*/"
+      >
+          </div>
+    </foreignObject>
+  </svg>
+  `,
+	props: ['announcement'],
+	data() {
+		return {
+			firstV: 0,
+			lastH: 0
+		};
+	},
+  watch: {
+    announcement(newAnnouncement, oldAnnouncement) {
+      if (newAnnouncement) {
+				this.setNewSVGList();
+			}
+    }
+  },
+	methods: {
+		generateRandomPointArr() {
+			let list = [];
+			let pathList = [];
+			lastH = 0;
+	
+			while (lastH !== 960) {
+					const h = lastH;
+					let v = this.getRandomInt(10, 110);
+					if (h === 960) {
+							v = 300;
+					}
+					if (lastH === 0) {
+							firstV = v;
+							list.push(`${h - 40}, ${v}`);
+							list.push(`${h}, ${v}`);
+							pathList.push(`M ${h} ${v}`);
+					} else {
+							list.push(`${h}, ${v}`);
+							pathList.push(`L ${h} ${v}`);
+					}
+					this.setNewLastH();
+			}
+			
+			list.push(`960, 300`);
+			list.push('980, 350');
+			list.push('-50, 350');
+			pathList.push(`L 960 300`);
+			
+			return {list, pathList};
+		},
+		setNewLastH() {
+				lastH = this.getRandomInt(lastH + 40, lastH + 150);
 				if (lastH >= 900) {
 						lastH = 960;
 				}
-		}
-		
-		const generateSVGPointListFromArray = () => {
-				let _arr = generateRandomPointArr();
+		},
+		generateSVGPointListFromArray() {
+				let _arr = this.generateRandomPointArr();
 				return {
 						poly: _arr.list.join(' '),
 						path: _arr.pathList.join(' ')
 				};
-		}
-		
-		const setNewSVGList = () => {
-			let {poly: list} = generateSVGPointListFromArray();
+		},
+		setNewSVGList() {
+			let {poly: list, path} = this.generateSVGPointListFromArray();
 
-			announcePolygon.value.setAttribute('points', list);
-			announceClipPolygon.value.setAttribute('points', list);
-		}
-		
-		const getRandomInt = (min, max) => {
+			this.$nextTick(function () {
+				this.$refs.announcePolygon.setAttribute('points', list);
+				this.$refs.announceClipPath.setAttribute('d', path);
+			});
+		},
+		getRandomInt(min, max) {
 			return Math.floor(Math.random() * (max - min + 1) + min);
 		}
-    
-		onMounted(() => {
-      setNewSVGList();
-      destroyTimeout.value = setTimeout(() => {
-				hideMe.value = true;
-			}, 10000);
-    });
-    
-		onUnmounted(() => {
-			clearTimeout(destroyTimeout.value);
-		})
-
-		return { announcePolygon, announceClipPolygon, hideMe }
-	},
-	template: `
-  <svg xmlns="http://www.w3.org/2000/svg" :class="{ hide: hideMe }">
-    <g>
-      <polygon ref="announcePolygon" class="bgPolygon"/>
-    </g>
-    
-    <mask id="clip" class="clip">
-      <polygon ref="announceClipPolygon"/>
-    </mask>
-    
-    <foreignObject mask="url(#clip)"
-                  x="-500" y="-500" 
-                  width="2000" height="2000">
-      <div
-      style="width: 100%; height: 100%; border-radius: 50%;background: conic-gradient(from 270deg, var(--neonpink) 1%, var(--neonblue) 49%, var(--neonblue) 51%, var(--neonpink) 99%);/*animation: colorRotate 7.5s 0.5s infinite linear;*/"
-      xmlns="http://www.w3.org/1999/xhtml"
-          </div>
-    </foreignObject>
-  </svg>
-  `
+	}
 });
 
 announce.mount('#app');
