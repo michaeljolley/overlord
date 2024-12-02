@@ -93,7 +93,7 @@ const alerts = createApp({
 						line1 = `Showing love to`;
 						line2 = name;
 						line3 = `${payload.giftedTotal} friends!`;
-						audio = alertsAudioSrc('hair');
+						audio = alertsAudioSrc('season');
 						isGift = true;
 						break;
 					case 'twitch:raid': 
