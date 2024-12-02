@@ -75,6 +75,7 @@ const alerts = createApp({
 				let line3;
 				let line4;
 				let audio;
+				let isGift = false;
 
 				switch (type) {
 					case 'twitch:follow':
@@ -93,6 +94,7 @@ const alerts = createApp({
 						line2 = name;
 						line3 = `${payload.giftedTotal} friends!`;
 						audio = alertsAudioSrc('hair');
+						isGift = true;
 						break;
 					case 'twitch:raid': 
 						line1 = 'Raid';
@@ -119,7 +121,8 @@ const alerts = createApp({
 					line2: line2 ? line2.split('') : null,
 					line3: line3 ? line3.split('') : null,
 					line4: line4 ? line4.split('') : null,
-					audio
+					audio,
+					isGift
 				};
 
 				playAudio();
@@ -164,17 +167,17 @@ const alerts = createApp({
 		<audio ref="audioPlayer"></audio>
 		<div v-if="activeAlert">
 			<transition name="fade">
-				<div class="sign pink" v-if="activeAlert.line1">
+				<div class="sign pink" :class="{ red: activeAlert.isGift }" v-if="activeAlert.line1">
 					<letter v-for="(letter, index) in activeAlert.line1" :key="index" :letter="letter"/>
 				</div>
 			</transition>
 			<transition name="fade">
-				<div class="sign blue" v-if="activeAlert.line2">
+				<div class="sign blue" :class="{ green: activeAlert.isGift }" v-if="activeAlert.line2">
 					<letter v-for="(letter, index) in activeAlert.line2" :key="index" :letter="letter"/>
 				</div>
 			</transition>
 			<transition name="fade">
-				<div class="sign pink" v-if="activeAlert.line3">
+				<div class="sign pink" :class="{ red: activeAlert.isGift }" v-if="activeAlert.line3">
 					<letter v-for="(letter, index) in activeAlert.line3" :key="index" :letter="letter"/>
 				</div>
 			</transition>

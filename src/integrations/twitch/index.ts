@@ -90,10 +90,10 @@ export default function twitchChat() {
 		user = user.toLocaleLowerCase();
 
     if (
-			//!self
-      //&& 
+			!self
+      && 
 			user !== TWITCH_BOT_USERNAME.toLocaleLowerCase()
-      // && user !== TWITCH_CHANNEL.toLocaleLowerCase()
+      && user !== TWITCH_CHANNEL.toLocaleLowerCase()
 		) {
 
       let userInfo: User | undefined

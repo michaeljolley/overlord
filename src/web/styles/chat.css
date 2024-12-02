@@ -146,11 +146,7 @@ span {
 .vip .user {
 	border-image-source: repeating-conic-gradient(from var(--angle), var(--neonpink) 0%, var(--neonblue) 50%, var(--neonpink) 100%);
 }
-body {
-  background-image: url('https://clips-media-assets2.twitch.tv/_Bnvlgrtq5qmgbnnhMF_rg/AT-cm%7C_Bnvlgrtq5qmgbnnhMF_rg-preview-260x147.jpg');
-    background-size: cover;
-    background-repeat: no-repeat;
-}
+
 .gift .panel {
   border-image-source: repeating-conic-gradient(from var(--angle), var(--gift-red-bright) 0%, var(--gift-green-dark) 45%, var(--gift-green-dark) 55%, var(--gift-red-bright) 100%);
 }
