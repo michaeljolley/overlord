@@ -14,9 +14,12 @@
 	/* Gift Season colors */
 	--gift-green: rgb(115, 186, 155);
 	--gift-red: #f14e61;
-	--gift-green-light: #D5F2E3;
+	--gift-red-light: #f57584;
+	--gift-green-light: #a8efca;
 	--gift-red-bright: #D90429;
+	--gift-red-dark: #b10421;
 	--gift-green-dark: #00783C;
+	--gift-green-darker: rgb(0, 64, 32);
 	--transparent-green: rgba(0, 62, 31, 0.5);
 	--transparent-white-light: rgba(255, 255, 255, 0.7);
 

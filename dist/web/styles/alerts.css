@@ -88,6 +88,66 @@
 	text-shadow: none;
 }
 
+.sign.red {
+	color: var(--gift-red-bright);
+	text-shadow: 0 0 0.6rem var(--gift-red-light), 0 0 1.5rem var(--gift-red),
+		-0.2rem 0.1rem 1rem var(--gift-red), 0.2rem 0.1rem 1rem var(--gift-red),
+		0 -0.5rem 2rem var(--gift-red-dark), 0 0.5rem 3rem var(--gift-red-bright);
+	animation: shinered 2s forwards, flicker 3s infinite;
+	z-index: 50;
+}
+
+.sign.red:not(:first-child) {
+	margin-left: calc(100% - 90%);
+	margin-top: -10px;
+}
+
+.sign.red .flicker {
+	animation: shinered 5s forwards, blinkred 1s 2s infinite;
+}
+
+.sign.red .fast-flicker {
+	animation: shinered 1s forwards, blinkred 10s 1s infinite;
+}
+
+.sign.red .fast-flicker2 {
+	animation: shinered 2s forwards, blinkred 7s 2s infinite;
+}
+
+.sign.red .off {
+	color: var(--gift-red-dark);
+	text-shadow: none;
+}
+
+.sign.green {
+	color: var(--gift-green-dark);
+	text-shadow: 0 0 0.6rem var(--gift-green-light), 0 0 1.5rem var(--gift-green),
+		-0.2rem 0.1rem 1rem var(--gift-green), 0.2rem 0.1rem 1rem var(--gift-green),
+		0 -0.5rem 2rem var(--gift-green-darker), 0 0.5rem 3rem var(--gift-green-dark);
+	animation: shinegreen 2s forwards, flicker 3s infinite;
+	margin-top: -90px;
+	margin-left: unset;
+	z-index: 100;
+	position: absolute;
+}
+
+.sign.green .flicker {
+	animation: shinegreen 5s forwards, blinkgreen 1s 2s infinite;
+}
+
+.sign.green .fast-flicker {
+	animation: shinegreen 1s forwards, blinkgreen 10s 1s infinite;
+}
+
+.sign.green .fast-flicker2 {
+	animation: shinegreen 2s forwards, blinkgreen 7s 2s infinite;
+}
+
+.sign.green .off {
+	color: var(--gift-green-darker);
+	text-shadow: none;
+}
+
 .sign.fade-leave-active {
 	animation: unset;
 	transition: opacity 2s;
@@ -140,6 +200,50 @@
   }
 }
 
+@keyframes blinkred {
+  0%,
+  22%,
+  36%,
+  75% {
+    color: var(--gift-red-light);
+    text-shadow: 0 0 0.6rem var(--gift-red-light), 0 0 1.5rem var(--gift-red),
+      -0.2rem 0.1rem 1rem var(--gift-red), 0.2rem 0.1rem 1rem var(--gift-red),
+      0 -0.5rem 2rem var(--gift-red-dark), 0 0.5rem 3rem var(--gift-red-bright);
+  }
+  28%,
+  33% {
+    color: var(--gift-red);
+    text-shadow: none;
+  }
+  82%,
+  97% {
+    color: var(--gift-red-bright);
+    text-shadow: none;
+  }
+}
+
+@keyframes blinkgreen {
+  0%,
+  22%,
+  36%,
+  75% {
+    color: var(--gift-green-light);
+    text-shadow: 0 0 0.6rem var(--gift-green-light), 0 0 1.5rem var(--gift-green),
+      -0.2rem 0.1rem 1rem var(--gift-green), 0.2rem 0.1rem 1rem var(--gift-green),
+      0 -0.5rem 2rem var(--gift-green-darker), 0 0.5rem 3rem var(--gift-green-dark);
+  }
+  28%,
+  33% {
+    color: var(--gift-green);
+    text-shadow: none;
+  }
+  82%,
+  97% {
+    color: var(--gift-green-dark);
+    text-shadow: none;
+  }
+}
+
 @keyframes shinepink {
   0% {
     color: var(--darkestneonpink);
@@ -163,6 +267,32 @@
     text-shadow: 0 0 0.6rem var(--lightestneonblue), 0 0 1.5rem var(--lightneonblue),
       -0.2rem 0.1rem 1rem var(--lightneonblue), 0.2rem 0.1rem 1rem var(--lightneonblue),
       0 -0.5rem 2rem var(--neonblue), 0 0.5rem 3rem var(--neonblue);
+  }
+}
+
+@keyframes shinered {
+  0% {
+    color: var(--gift-red-dark);
+    text-shadow: none;
+  }
+  100% {
+    color: var(--gift-red-light);
+    text-shadow: 0 0 0.6rem var(--gift-red-light), 0 0 1.5rem var(--gift-red-bright),
+      -0.2rem 0.1rem 1rem var(--lightneonpink), 0.2rem 0.1rem 1rem var(--gift-red),
+      0 -0.5rem 2rem var(--gift-red-bright), 0 0.5rem 3rem var(--gift-red-bright);
+  }
+}
+
+@keyframes shinegreen {
+  0% {
+    color: var(--gift-green-darker);
+    text-shadow: none;
+  }
+  100% {
+    color: var(--gift-green);
+    text-shadow: 0 0 0.6rem var(--gift-green-darker), 0 0 1.5rem var(--gift-green-dark),
+      -0.2rem 0.1rem 1rem var(--gift-green), 0.2rem 0.1rem 1rem var(--gift-green),
+      0 -0.5rem 2rem var(--gift-green-dark), 0 0.5rem 3rem var(--gift-green-dark);
   }
 }
 

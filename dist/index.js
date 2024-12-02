@@ -84363,11 +84363,7 @@ function twitchChat() {
   };
   const handleChat = async (user, message2, flags, self2, extra) => {
     user = user.toLocaleLowerCase();
-    if (
-      //!self
-      //&& 
-      user !== TWITCH_BOT_USERNAME.toLocaleLowerCase()
-    ) {
+    if (!self2 && user !== TWITCH_BOT_USERNAME.toLocaleLowerCase() && user !== TWITCH_CHANNEL.toLocaleLowerCase()) {
       let userInfo;
       userInfo = await UserStore.getUser(user);
       if (userInfo) {
