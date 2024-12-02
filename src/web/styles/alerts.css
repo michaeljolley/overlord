@@ -124,7 +124,7 @@
 	text-shadow: 0 0 0.6rem var(--gift-green-light), 0 0 1.5rem var(--gift-green),
 		-0.2rem 0.1rem 1rem var(--gift-green), 0.2rem 0.1rem 1rem var(--gift-green),
 		0 -0.5rem 2rem var(--gift-green-darker), 0 0.5rem 3rem var(--gift-green-dark);
-	animation: shinepink 2s forwards, flicker 3s infinite;
+	animation: shinegreen 2s forwards, flicker 3s infinite;
 	z-index: 50;
 }
 
