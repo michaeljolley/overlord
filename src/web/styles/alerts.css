@@ -93,7 +93,7 @@
 	text-shadow: 0 0 0.6rem var(--gift-red-light), 0 0 1.5rem var(--gift-red),
 		-0.2rem 0.1rem 1rem var(--gift-red), 0.2rem 0.1rem 1rem var(--gift-red),
 		0 -0.5rem 2rem var(--gift-red-dark), 0 0.5rem 3rem var(--gift-red-bright);
-	animation: shinepink 2s forwards, flicker 3s infinite;
+	animation: shinered 2s forwards, flicker 3s infinite;
 	z-index: 50;
 }
 
@@ -126,11 +126,6 @@
 		0 -0.5rem 2rem var(--gift-green-darker), 0 0.5rem 3rem var(--gift-green-dark);
 	animation: shinepink 2s forwards, flicker 3s infinite;
 	z-index: 50;
-}
-
-.sign.green:not(:first-child) {
-	margin-left: calc(100% - 90%);
-	margin-top: -10px;
 }
 
 .sign.green .flicker {
