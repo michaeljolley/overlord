@@ -92,7 +92,7 @@ const alerts = createApp({
 					case 'twitch:giftsub':
 						line1 = `Showing love to`;
 						line2 = name;
-						line3 = `${payload.giftedTotal} friends!`;
+						line3 = `${payload.giftedTotal === 1 ? "a" : payload.giftedTotal} friend${payload.giftedTotal > 1 ? "s" : ""}!`;
 						audio = alertsAudioSrc('season');
 						isGift = true;
 						break;
