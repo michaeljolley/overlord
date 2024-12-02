@@ -10,7 +10,16 @@
 	--midblue: #182430;
 	--darkblue: #110e1a;
 	--purple: #7d00c9;
-	
+
+	/* Gift Season colors */
+	--gift-green: rgb(115, 186, 155);
+	--gift-red: #f14e61;
+	--gift-green-light: #D5F2E3;
+	--gift-red-bright: #D90429;
+	--gift-green-dark: #00783C;
+	--transparent-green: rgba(0, 62, 31, 0.5);
+	--transparent-white-light: rgba(255, 255, 255, 0.7);
+
 	--lightestneonpink: #ff66ff;
 	--lightneonpink: #ff17ff;
 	--darkneonpink: #cc00cc;

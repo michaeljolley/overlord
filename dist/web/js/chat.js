@@ -99,7 +99,7 @@ chat.component('chatMessage', {
 		return { hideMe, bgImage };
 	},
 	template: `
-	<div class="message" :class="{ hide: getOuttaHere || hideMe, highlighted: onChatMessageEvent.flags.highlighted, mod: onChatMessageEvent.flags.mod, vip: onChatMessageEvent.flags.vip }" >
+	<div class="message" :class="{ hide: getOuttaHere || hideMe, highlighted: onChatMessageEvent.flags.highlighted, mod: onChatMessageEvent.flags.mod, vip: onChatMessageEvent.flags.vip, gift: onChatMessageEvent.isRegistered }" >
 		<div class="wrap">
 			<div class="panel">
 				<div class="bubble">

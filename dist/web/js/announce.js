@@ -1,6 +1,6 @@
 const { computed, createApp, onMounted, onUnmounted, ref, watch } = Vue
 
-const _announcementLength = 10000;
+const _announcementLength = 30000;
 
 const announce = createApp({
 	setup() {

@@ -27,6 +27,7 @@ import { UserStore } from '../../stores/userStore';
 import { TaskStore } from '../../stores/taskStore';
 import { AnnouncementStore } from '../../stores/announcementStore';
 import { Announcement } from '../../types/announcement';
+import Supabase from '../supabase';
 
 const TWITCH_BOT_USERNAME = process.env.PALLYGG_API_KEY!;
 const TWITCH_BOT_AUTH_TOKEN = process.env.TWITCH_BOT_AUTH_TOKEN;
@@ -103,7 +104,8 @@ export default function twitchChat() {
         const processedChatMessage = processChat(message, flags, extra.messageEmotes);
         if (processedChatMessage.length > 0) {
 					const todoData = TaskStore.getUserTasks(userInfo.login);
-          emit(BotEvents.OnChatMessage, new OnChatMessageEvent(userInfo, message, processedChatMessage, flags, self, extra, extra.id, todoData))
+          const isRegistered = await Supabase.getGiftingRegistration(userInfo.login);
+          emit(BotEvents.OnChatMessage, new OnChatMessageEvent(userInfo, message, processedChatMessage, flags, self, extra, extra.id, todoData, isRegistered))
         }
       }
     }

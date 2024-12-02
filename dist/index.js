@@ -83671,6 +83671,13 @@ var Supabase = class {
     }
     return announcements.filter((a) => a.expiration_date === null || new Date(a.expiration_date) > /* @__PURE__ */ new Date());
   }
+  static async getGiftingRegistration(username) {
+    const { data: registrant, error } = await supabaseClient.from("get_registrations").select("*").eq("user", username.toLocaleLowerCase()).limit(1).maybeSingle();
+    if (error) {
+      console.log("Error getting registration: ", error);
+    }
+    return registrant ? true : false;
+  }
 };
 
 // src/webhooks/giftsub.ts
@@ -84277,7 +84284,7 @@ var OnCommandEvent = class {
 
 // src/types/onChatMessageEvent.ts
 var OnChatMessageEvent = class {
-  constructor(user, message2, sanitizedMessage, flags, self2, extra, id, todos) {
+  constructor(user, message2, sanitizedMessage, flags, self2, extra, id, todos, isRegistered) {
     this.user = user;
     this.message = message2;
     this.sanitizedMessage = sanitizedMessage;
@@ -84286,6 +84293,7 @@ var OnChatMessageEvent = class {
     this.extra = extra;
     this.id = id;
     this.todos = todos;
+    this.isRegistered = isRegistered;
   }
 };
 
@@ -84366,7 +84374,8 @@ function twitchChat() {
         const processedChatMessage = processChat(message2, flags, extra.messageEmotes);
         if (processedChatMessage.length > 0) {
           const todoData = TaskStore.getUserTasks(userInfo.login);
-          emit("onChatMessage" /* OnChatMessage */, new OnChatMessageEvent(userInfo, message2, processedChatMessage, flags, self2, extra, extra.id, todoData));
+          const isRegistered = await Supabase.getGiftingRegistration(userInfo.login);
+          emit("onChatMessage" /* OnChatMessage */, new OnChatMessageEvent(userInfo, message2, processedChatMessage, flags, self2, extra, extra.id, todoData, isRegistered));
         }
       }
     }
@@ -84449,7 +84458,7 @@ var import_cron = __toESM(require_dist3());
 async function cron() {
   let announcements = [];
   let queue = [];
-  const announcementCronJob = new import_cron.CronJob("*/20 * * * * *", function() {
+  const announcementCronJob = new import_cron.CronJob("0 */10 * * * *", function() {
     if (queue.length === 0) {
       queue = [...announcements];
     }

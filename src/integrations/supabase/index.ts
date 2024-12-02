@@ -26,4 +26,17 @@ export  default abstract class Supabase {
         return announcements!.filter(a => a.expiration_date === null || new Date(a.expiration_date) > new Date());
     }
 
+    static async getGiftingRegistration(username: string): Promise<boolean> {
+        const { data: registrant, error } = await supabaseClient
+            .from('get_registrations')
+            .select('*')
+            .eq('user', username.toLocaleLowerCase())
+            .limit(1)
+            .maybeSingle();
+        if (error) {
+            console.log("Error getting registration: ", error);
+        }
+        return registrant ? true : false;
+    }
+
 }
