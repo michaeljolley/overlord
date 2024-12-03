@@ -12,14 +12,14 @@
 	--purple: #7d00c9;
 
 	/* Gift Season colors */
-	--gift-green: rgb(115, 186, 155);
-	--gift-red: #f14e61;
-	--gift-red-light: #f57584;
-	--gift-green-light: #a8efca;
-	--gift-red-bright: #D90429;
-	--gift-red-dark: #b10421;
-	--gift-green-dark: #00783C;
-	--gift-green-darker: rgb(0, 64, 32);
+	--gift-green: oklch(73.31% 0.0853 164.69);
+	--gift-red: oklch(65.47% 0.1983 17.98);
+	--gift-red-light: oklch(71.61% 0.1572 14.64);
+	--gift-green-light: oklch(89.51% 0.0875 161.23);
+	--gift-red-bright: oklch(55.91% 0.2248 23.97);
+	--gift-red-dark: oklch(48.08% 0.1925 23.65);
+	--gift-green-dark: oklch(50.17% 0.1311 152.29);
+	--gift-green-darker: oklch(32.61% 0.0818 154.19);
 	--transparent-green: rgba(0, 62, 31, 0.5);
 	--transparent-white-light: rgba(255, 255, 255, 0.7);
 

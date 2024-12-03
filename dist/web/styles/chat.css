@@ -151,8 +151,8 @@ span {
   border-image-source: repeating-conic-gradient(from var(--angle), var(--gift-red-bright) 0%, var(--gift-green-dark) 45%, var(--gift-green-dark) 55%, var(--gift-red-bright) 100%);
 }
 .gift .bubble {
-	background-color: var(--transparent-white-light);
-  color: var(--black);
+	background-color: var(--transparent-black);
+  color: var(--white);
 }
 .gift .name > div {
 	background: unset;
