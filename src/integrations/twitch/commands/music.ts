@@ -26,17 +26,18 @@ export const music = async (onCommandEvent: OnCommandEvent): Promise<void> => {
     }
   });
 
-  const data = await response.json();
-
   let message = `No song playing`;
 
-  // If the currently playing item is a song, send the song name, artist, and url
-  if (data.item) {
-    const trackNumber = data.item.name;
-    const artist = data.item.artists[0].name;
-    const url = data.item.external_urls.spotify;
-    
-    message = `${trackNumber} - ${artist} -> ${url}`;
+  if (response.ok) {
+    const data = await response.json();
+
+    // If the currently playing item is a song, send the song name, artist, and url
+    if (data.item) {
+      const trackNumber = data.item.name;
+      const artist = data.item.artists[0].name;
+      const url = data.item.external_urls.spotify;
+      message = `${trackNumber} - ${artist} -> ${url}`;
+    }
   }
 
   // Send the message to Twitch chat

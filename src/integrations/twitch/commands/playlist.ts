@@ -26,17 +26,18 @@ export const playlist = async (onCommandEvent: OnCommandEvent): Promise<void> =>
       'Authorization': `Bearer ${process.env.SPOTIFY_API_KEY}`
     }
   });
-
-  const data = await response.json();
-
+  
   let message = `No playlist currently playing`;
 
-  // If the currently playing item is a playlist, send the playlist name and url
-  if (data.item && data.context.type === 'playlist') {
-    const playlistName = data.context.name;
-    const playlistUrl = data.context.external_urls.spotify;
-    
-    message = `${playlistName} -> ${playlistUrl}`;
+  if (response.ok) {
+    const data = await response.json();
+
+    // If the currently playing item is a playlist, send the playlist name and url
+    if (data.item && data.context.type === 'playlist') {
+      const playlistName = data.context.name;
+      const playlistUrl = data.context.external_urls.spotify;
+      message = `${playlistName} -> ${playlistUrl}`;
+    }
   }
 
   // Send the message to Twitch chat
