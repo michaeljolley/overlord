@@ -216,6 +216,19 @@ span {
   animation: low 1s forwards;
 }
 
+.message.shake {
+	opacity: 1;
+	animation: shake 1s alternate linear infinite;
+}
+.message.shake2 {
+	opacity: 1;
+	animation: shake2 0.6s alternate linear infinite;
+}
+.message.shake3 {
+	opacity: 1;
+	animation: shake3 0.8s alternate linear infinite;
+}
+
 
 @keyframes fade {
   0% {
@@ -269,4 +282,32 @@ span {
   syntax: '<angle>';
   initial-value: 0deg;
   inherits: false;
+}
+
+
+@keyframes shake {
+  0% {
+    transform: rotate(5deg);
+  }
+  100% {
+    transform: rotate(-5deg);
+  }
+}
+
+@keyframes shake2 {
+  0% {
+    transform: rotate(3deg);
+  }
+  100% {
+    transform: rotate(-6deg);
+  }
+}
+
+@keyframes shake3 {
+  0% {
+    transform: rotate(7deg);
+  }
+  100% {
+    transform: rotate(-4deg);
+  }
 }
