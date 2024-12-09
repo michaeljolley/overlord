@@ -34,5 +34,8 @@ export enum BotEvents {
 	/* ToDo Events */
 	OnTodoUpdated = 'onTodoUpdated',
 
+	/* Redemption Events */
+	OnParty = 'onParty',
+
   RequestCreditRoll = 'requestCreditRoll'
 }

@@ -83782,6 +83782,30 @@ var modeWebhook = {
   }
 };
 
+// src/webhooks/party.ts
+var PartyWebhookBodyType = {
+  username: { type: "string" }
+};
+var partyWebhook = {
+  method: "POST",
+  url: "/party",
+  schema: {
+    body: {
+      type: "object",
+      properties: PartyWebhookBodyType
+    },
+    response: {
+      200: {
+        type: "boolean"
+      }
+    }
+  },
+  handler: async (request, reply) => {
+    EventBus.eventEmitter.emit("onParty" /* OnParty */, request.body);
+    reply.code(200).send(true);
+  }
+};
+
 // src/webhooks/tip.ts
 var TipWebhookBodyType = {
   "campaignTip": { type: "object" }
@@ -83835,6 +83859,7 @@ function registerWebhooks(fastify2, _, done) {
   fastify2.route(audioWebhook);
   fastify2.route(followWebhook);
   fastify2.route(cheerWebhook);
+  fastify2.route(partyWebhook);
   fastify2.route(giftedSubWebhook);
   fastify2.route(raidWebhook);
   fastify2.route(subWebhook);
@@ -83884,6 +83909,9 @@ function registerWebsocket(fastify2, _, done) {
     });
     EventBus.eventEmitter.on("onAnnouncement" /* Announcement */, (payload) => {
       connection.socket.send(JSON.stringify({ type: "onAnnouncement" /* Announcement */, payload }));
+    });
+    EventBus.eventEmitter.on("onParty" /* OnParty */, (payload) => {
+      connection.socket.send(JSON.stringify({ type: "onParty" /* OnParty */, payload }));
     });
   });
   done();
@@ -83987,7 +84015,7 @@ var github = (onCommandEvent) => {
   if (!onCommandEvent.flags.broadcaster && ShouldThrottle(onCommandEvent.extra.sinceLastCommand, cooldownSeconds, true)) {
     return;
   }
-  const message2 = `All of our code can be found at https://github.com/build-with-me`;
+  const message2 = `All of our code can be found at https://github.com/michaeljolley`;
   EventBus.eventEmitter.emit("onSay" /* OnSay */, { message: message2 });
 };
 

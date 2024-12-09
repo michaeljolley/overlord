@@ -1,5 +1,7 @@
 const { computed, createApp, onMounted, onUnmounted, ref } = Vue
 
+const isParty = ref(false);
+
 const chat = createApp({
 	setup() {
 		const messages = ref([]);
@@ -43,6 +45,11 @@ const chat = createApp({
 					addMessage(event.payload);
 				} else if (event.type === 'onChatClear') {
 					clearMessages();
+				} else if (event.type === 'onParty') {
+					isParty.value = true;
+					setTimeout(() => {
+						isParty.value = false;	
+					}, 20000);
 				}
 			}
 
@@ -70,7 +77,7 @@ const chat = createApp({
 	template:
 	`<div class="chat" :class="{ fade: hasHighlight }">
 	<transition-group name="list" @enter="checkOverflow">
-		<chatMessage ref="chatMessage" v-for="(message, index) in messages" :key="message.id" :onChatMessageEvent="message" :ind="index" :total="messages.length" :getOuttaHere="shouldClear"  v-on:removeItem="removeItem"></chatMessage>
+		<chatMessage ref="chatMessage" v-for="(message, index) in messages" :key="message.id" :onChatMessageEvent="message" :ind="index" :total="messages.length" :getOuttaHere="shouldClear" v-on:removeItem="removeItem"></chatMessage>
 	</transition-group>
 </div>`
 });
@@ -98,8 +105,22 @@ chat.component('chatMessage', {
 
 		return { hideMe, bgImage };
 	},
+	computed: {
+		shake() {
+			if (!isParty.value) {
+				return null;
+			}
+			if (this.total % 3 === 0) {
+				return 'shake3';
+			}
+			if (this.total % 2 === 0) {
+				return 'shake2';
+			}
+			return 'shake';
+		}
+	},
 	template: `
-	<div class="message" :class="{ hide: getOuttaHere || hideMe, highlighted: onChatMessageEvent.flags.highlighted, mod: onChatMessageEvent.flags.mod, vip: onChatMessageEvent.flags.vip, gift: onChatMessageEvent.isRegistered }" >
+	<div class="message" :class="{ shake, hide: getOuttaHere || hideMe, highlighted: onChatMessageEvent.flags.highlighted, mod: onChatMessageEvent.flags.mod, vip: onChatMessageEvent.flags.vip, gift: onChatMessageEvent.isRegistered }" >
 		<div class="wrap">
 			<div class="panel">
 				<div class="bubble">
