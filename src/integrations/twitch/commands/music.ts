@@ -4,6 +4,11 @@ import { OnCommandEvent } from "../../../types/onCommandEvent";
 import { BotEvents } from "../../../botEvents";
 import { SpotifyAPI } from "../../spotifyAPI";
 
+console.log(SpotifyAPI.getAuthorizationUrl());
+
+// Sends a message to the console with the link to authticate for spotify
+// TODO maybe look for better / other options
+
 /**
  * Sends a message to chat with a link to Michael's GitHub profile
  * @param onCommandEvent

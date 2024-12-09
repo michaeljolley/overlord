@@ -5,25 +5,28 @@ export abstract class SpotifyAPI {
   private static refreshToken: string | null = null;
   private static tokenExpiration: number | null = null;
 
-  public static async init(): Promise<void> {
-    if (!this.accessToken || (this.tokenExpiration && Date.now() >= this.tokenExpiration)) {
-      await this.fetchAccessToken();
-    }
+  public static getAuthorizationUrl(): string {
+    const clientId = process.env.SPOTIFY_CLIENT_ID;
+    const redirectUri = encodeURIComponent(process.env.SPOTIFY_REDIRECT_URI!);
+    const scope = encodeURIComponent('user-read-private user-read-email user-read-currently-playing');
+    return `https://accounts.spotify.com/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}`;
   }
 
-  private static async fetchAccessToken(): Promise<void> {
-    const spotifyAuth = await fetch(`https://accounts.spotify.com/api/token`, {
+  public static async exchangeAuthorizationCode(code: string): Promise<void> {
+    const response = await fetch(`https://accounts.spotify.com/api/token`, {
       method: "POST",
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
         'Authorization': `Basic ${btoa(`${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`)}`
       },
       body: new URLSearchParams({
-        'grant_type': 'client_credentials'
+        'grant_type': 'authorization_code',
+        'code': code,
+        'redirect_uri': process.env.SPOTIFY_REDIRECT_URI!
       }).toString()
     });
 
-    const authData = await spotifyAuth.json();
+    const authData = await response.json();
     this.accessToken = authData.access_token;
     this.refreshToken = authData.refresh_token;
     this.tokenExpiration = Date.now() + (authData.expires_in * 1000);
@@ -31,6 +34,31 @@ export abstract class SpotifyAPI {
       ['Authorization', `Bearer ${this.accessToken}`],
       ['Content-Type', 'application/json']
     ];
+  }
+
+  public static async init(): Promise<void> {
+    if (!this.accessToken || (this.tokenExpiration && Date.now() >= this.tokenExpiration)) {
+      await this.refreshAccessToken();
+    }
+  }
+
+  private static async refreshAccessToken(): Promise<void> {
+    const response = await fetch(`https://accounts.spotify.com/api/token`, {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization': `Basic ${btoa(`${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`)}`
+      },
+      body: new URLSearchParams({
+        'grant_type': 'refresh_token',
+        'refresh_token': this.refreshToken!
+      }).toString()
+    });
+
+    const authData = await response.json();
+    this.accessToken = authData.access_token;
+    this.tokenExpiration = Date.now() + (authData.expires_in * 1000);
+    this.headers[0] = ['Authorization', `Bearer ${this.accessToken}`];
   }
 
   public static async getCurrentTrack(): Promise<any> {
@@ -58,26 +86,9 @@ export abstract class SpotifyAPI {
       throw new Error("Failed to refresh access token after multiple attempts.");
     }
 
-    const body = await response.json();
-    return body;
-  }
-
-  private static async refreshAccessToken(): Promise<void> {
-    const refreshAuth = await fetch(`https://accounts.spotify.com/api/token`, {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Authorization': `Basic ${btoa(`${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`)}`
-      },
-      body: new URLSearchParams({
-        'grant_type': 'refresh_token',
-        'refresh_token': this.refreshToken!
-      }).toString()
-    });
-
-    const authData = await refreshAuth.json();
-    this.accessToken = authData.access_token;
-    this.tokenExpiration = Date.now() + (authData.expires_in * 1000);
-    this.headers[0] = ['Authorization', `Bearer ${this.accessToken}`];
+    if (response.ok) {
+      const body = await response.json();
+      return body;
+    }
   }
 }
