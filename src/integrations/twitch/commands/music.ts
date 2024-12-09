@@ -2,6 +2,7 @@ import EventBus from "../../../eventBus";
 import { ShouldThrottle } from "../shouldThrottle";
 import { OnCommandEvent } from "../../../types/onCommandEvent";
 import { BotEvents } from "../../../botEvents";
+import { SpotifyAPI } from "../../spotifyAPI";
 
 /**
  * Sends a message to chat with a link to Michael's GitHub profile
@@ -20,7 +21,7 @@ export const music = async (onCommandEvent: OnCommandEvent): Promise<void> => {
   }
 
   // Get the currently playing song
-  const response = await spotifyAPI(`https://api.spotify.com/v1/me/player/currently-playing`);
+  const response = await SpotifyAPI.getCurrentTrack();
 
   let message = `Can you believe this guy is coding in silence?! The nerve! 🤮`;
 
@@ -35,7 +36,7 @@ export const music = async (onCommandEvent: OnCommandEvent): Promise<void> => {
 			
 			let playlist = '';
 			if (data.context.type === 'playlist') {
-  			const playlistResponse = await spotifyAPI(data.context.href);
+  			const playlistResponse = await SpotifyAPI.getPlaylist(data.context.href);
 				if (playlistResponse.ok) {
 					const playlistData = await playlistResponse.json();
 					playlist = ` on the ${playlistData.name} playlist.`;
@@ -50,11 +51,3 @@ export const music = async (onCommandEvent: OnCommandEvent): Promise<void> => {
   // Send the message to Twitch chat
   EventBus.eventEmitter.emit(BotEvents.OnSay, { message });
 };
-
-const spotifyAPI = (path: string) => {
-	return fetch(path, {
-		headers: {
-      'Authorization': `Bearer ${process.env.SPOTIFY_API_KEY}`
-    }
-	});
-}
