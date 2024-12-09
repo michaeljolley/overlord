@@ -84029,6 +84029,41 @@ var instagram = (onCommandEvent) => {
   EventBus.eventEmitter.emit("onSay" /* OnSay */, { message: message2 });
 };
 
+// src/integrations/twitch/commands/music.ts
+var music = async (onCommandEvent) => {
+  const cooldownSeconds = 300;
+  if (!onCommandEvent.flags.broadcaster && ShouldThrottle(onCommandEvent.extra.sinceLastCommand, cooldownSeconds, true)) {
+    return;
+  }
+  const response = await spotifyAPI(`https://api.spotify.com/v1/me/player/currently-playing`);
+  let message2 = `Can you believe this guy is coding in silence?! The nerve! \u{1F92E}`;
+  if (response.ok) {
+    const data = await response.json();
+    if (data.item) {
+      const trackName = data.item.name;
+      let url = data.item.external_urls.spotify;
+      let playlist = "";
+      if (data.context.type === "playlist") {
+        const playlistResponse = await spotifyAPI(data.context.href);
+        if (playlistResponse.ok) {
+          const playlistData = await playlistResponse.json();
+          playlist = ` on the ${playlistData.name} playlist.`;
+          url = playlistData.external_urls.spotify;
+        }
+      }
+      message2 = `We're listening to ${trackName} ${playlist}. Find it at ${url}`;
+    }
+  }
+  EventBus.eventEmitter.emit("onSay" /* OnSay */, { message: message2 });
+};
+var spotifyAPI = (path) => {
+  return fetch(path, {
+    headers: {
+      "Authorization": `Bearer ${process.env.SPOTIFY_API_KEY}`
+    }
+  });
+};
+
 // src/integrations/twitch/commands/mute.ts
 var mute = (onCommandEvent) => {
   if (onCommandEvent.flags.broadcaster || onCommandEvent.flags.mod) {
@@ -84286,49 +84321,6 @@ var youtube = (onCommandEvent) => {
   EventBus.eventEmitter.emit("onSay" /* OnSay */, { message: message2 });
 };
 
-// src/integrations/twitch/commands/music.ts
-var music = async (onCommandEvent) => {
-  const cooldownSeconds = 300;
-  if (!onCommandEvent.flags.broadcaster && ShouldThrottle(onCommandEvent.extra.sinceLastCommand, cooldownSeconds, true)) {
-    return;
-  }
-  const response = await fetch(`https://api.spotify.com/v1/me/player/currently-playing`, {
-    headers: {
-      "Authorization": `Bearer ${process.env.SPOTIFY_API_KEY}`
-    }
-  });
-  const data = await response.json();
-  let message2 = `No song playing`;
-  if (data.item) {
-    const trackNumber = data.item.name;
-    const artist = data.item.artists[0].name;
-    const url = data.item.external_urls.spotify;
-    message2 = `${trackNumber} - ${artist} -> ${url}`;
-  }
-  EventBus.eventEmitter.emit("onSay" /* OnSay */, { message: message2 });
-};
-
-// src/integrations/twitch/commands/playlist.ts
-var playlist = async (onCommandEvent) => {
-  const cooldownSeconds = 300;
-  if (!onCommandEvent.flags.broadcaster && ShouldThrottle(onCommandEvent.extra.sinceLastCommand, cooldownSeconds, true)) {
-    return;
-  }
-  const response = await fetch(`https://api.spotify.com/v1/me/player/currently-playing`, {
-    headers: {
-      "Authorization": `Bearer ${process.env.SPOTIFY_API_KEY}`
-    }
-  });
-  const data = await response.json();
-  let message2 = `No playlist currently playing`;
-  if (data.item && data.context.type === "playlist") {
-    const playlistName = data.context.name;
-    const playlistUrl = data.context.external_urls.spotify;
-    message2 = `${playlistName} -> ${playlistUrl}`;
-  }
-  EventBus.eventEmitter.emit("onSay" /* OnSay */, { message: message2 });
-};
-
 // src/types/command.ts
 var Command = class {
   constructor(commandName, command) {
@@ -84397,6 +84389,7 @@ function twitchChat() {
     commands.push(new Command("discord", discord));
     commands.push(new Command("github", github));
     commands.push(new Command("instagram", instagram));
+    commands.push(new Command("music", music));
     commands.push(new Command("mute", mute));
     commands.push(new Command("shop", shop));
     commands.push(new Command("todo", todo));
@@ -84406,8 +84399,6 @@ function twitchChat() {
     commands.push(new Command("unmute", unmute));
     commands.push(new Command("uses", uses));
     commands.push(new Command("youtube", youtube));
-    commands.push(new Command("music", music));
-    commands.push(new Command("playlist", playlist));
   };
   const loadAnnouncements = async () => {
     let newAnnouncements = AnnouncementStore.getAnnouncements();
