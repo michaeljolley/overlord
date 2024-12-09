@@ -13,3 +13,5 @@ export { twitter } from './twitter';
 export { unmute } from './unmute';
 export { uses } from './uses';
 export { youtube } from './youtube';
+export { music } from './music';
+export { playlist } from './playlist';

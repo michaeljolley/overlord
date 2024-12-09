@@ -15,7 +15,9 @@ import {
 	twitter,
 	unmute,
 	uses,
-	youtube
+	youtube,
+  music,
+  playlist
 } from './commands';
 import { Command } from '../../types/command';
 import { OnCommandEvent } from '../../types/onCommandEvent';
@@ -52,7 +54,9 @@ export default function twitchChat() {
     commands.push(new Command('twitter', twitter));
     commands.push(new Command('unmute', unmute));
     commands.push(new Command('uses', uses));
-    commands.push(new Command('youtube', youtube));
+    commands.push(new Command('youtube', youtube)); 
+    commands.push(new Command('music', music));
+    commands.push(new Command('playlist', playlist));
 	}
 
   const loadAnnouncements = async () => {
