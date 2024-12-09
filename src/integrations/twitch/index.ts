@@ -6,6 +6,7 @@ import {
 	discord,
 	github,
 	instagram,
+  music,
 	mute,
   say,
 	shop,
@@ -15,9 +16,7 @@ import {
 	twitter,
 	unmute,
 	uses,
-	youtube,
-  music,
-  playlist
+	youtube
 } from './commands';
 import { Command } from '../../types/command';
 import { OnCommandEvent } from '../../types/onCommandEvent';
@@ -46,6 +45,7 @@ export default function twitchChat() {
     commands.push(new Command('discord', discord));
     commands.push(new Command('github', github));
     commands.push(new Command('instagram', instagram));
+    commands.push(new Command('music', music));
     commands.push(new Command('mute', mute));
     commands.push(new Command('shop', shop));
     commands.push(new Command('todo', todo));
@@ -55,8 +55,6 @@ export default function twitchChat() {
     commands.push(new Command('unmute', unmute));
     commands.push(new Command('uses', uses));
     commands.push(new Command('youtube', youtube)); 
-    commands.push(new Command('music', music));
-    commands.push(new Command('playlist', playlist));
 	}
 
   const loadAnnouncements = async () => {
