@@ -51,7 +51,7 @@ const chat = createApp({
 					isParty.value = true;
 					setTimeout(() => {
 						isParty.value = false;
-					}, 45000);
+					}, 50000);
 				}
 			};
 

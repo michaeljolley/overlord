@@ -2,15 +2,10 @@ import EventBus from "../../../eventBus";
 import { ShouldThrottle } from "../shouldThrottle";
 import { OnCommandEvent } from "../../../types/onCommandEvent";
 import { BotEvents } from "../../../botEvents";
-import { SpotifyAPI } from "../../spotifyAPI";
-
-console.log(SpotifyAPI.getAuthorizationUrl());
-
-// Sends a message to the console with the link to authticate for spotify
-// TODO maybe look for better / other options
+import SpotifyAPI from "../../spotifyAPI";
 
 /**
- * Sends a message to chat with a link to Michael's GitHub profile
+ * Sends a message to chat with the currently playing song on Spotify.
  * @param onCommandEvent
  */
 export const music = async (onCommandEvent: OnCommandEvent): Promise<void> => {
@@ -25,31 +20,29 @@ export const music = async (onCommandEvent: OnCommandEvent): Promise<void> => {
     return;
   }
 
-  // Get the currently playing song
-  const response = await SpotifyAPI.getCurrentTrack();
+  let message = `Ugh... this guy hasn't even authenticated with Spotify yet. 🙄`;
 
-  let message = `Can you believe this guy is coding in silence?! The nerve! 🤮`;
+  // Only proceed if Spotify is authenticated
+  if (SpotifyAPI.isAuthenticated()) {
+    message = `Can you believe this guy is coding in silence?! The nerve! 🤮`;
 
-  if (response.ok) {
-    const data = await response.json();
+    // Get the currently playing song
+    const currentTrack = await SpotifyAPI.getCurrentTrack();
 
-    // If the currently playing item is a song, send the song name, artist, and url
-    if (data.item) {
-      const trackName = data.item.name;
-      //const artist = data.item.artists[0].name;
-      let url = data.item.external_urls.spotify;
-			
-			let playlist = '';
-			if (data.context.type === 'playlist') {
-  			const playlistResponse = await SpotifyAPI.getPlaylist(data.context.href);
-				if (playlistResponse.ok) {
-					const playlistData = await playlistResponse.json();
-					playlist = ` on the ${playlistData.name} playlist.`;
-					url = playlistData.external_urls.spotify;
-				}
-			}
+    if (currentTrack) {
+      let url = currentTrack.url;
+      let playlistMsg = '';
 
-      message = `We're listening to ${trackName} ${playlist}. Find it at ${url}`;
+      if (currentTrack.playlist_url) {
+        const playlist = await SpotifyAPI.getPlaylist(currentTrack.playlist_url);
+
+        if (playlist) {
+          url = playlist.url;
+          playlistMsg = ` on the ${playlist.name} playlist.`;
+        }
+      }
+
+      message = `We're listening to ${currentTrack.name} ${playlistMsg}. Find it at ${url}`;
     }
   }
 
