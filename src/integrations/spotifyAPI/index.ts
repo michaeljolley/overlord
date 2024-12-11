@@ -29,6 +29,7 @@ export default abstract class SpotifyAPI {
 	}
 
 	public static async exchangeAuthorizationCode(code: string): Promise<void> {
+
 		const response = await fetch(this.spotifyAPIAuthEndpoint, {
 			method: 'POST',
 			headers: this.authHeaders,
@@ -58,7 +59,7 @@ export default abstract class SpotifyAPI {
 	}
 
 	private static async refreshAccessToken(): Promise<void> {
-		const response = await fetch(`${this.spotifyAPIAuthEndpoint}/token`, {
+		const response = await fetch(this.spotifyAPIAuthEndpoint, {
 			method: 'POST',
 			headers: this.authHeaders,
 			body: new URLSearchParams({
