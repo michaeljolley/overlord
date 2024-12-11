@@ -21,7 +21,9 @@ export const spotifyWebhook: RouteOptions = {
 	},
 	handler: async (request: FastifyRequest, reply: FastifyReply) => {
 		const { code } = request.query as { code: string };
-		SpotifyAPI.exchangeAuthorizationCode(code);
+		if (code && code.length > 0) {
+			SpotifyAPI.exchangeAuthorizationCode(code);
+		}
 		reply.code(200).send(true);
 	},
 };
