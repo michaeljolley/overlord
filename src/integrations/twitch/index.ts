@@ -209,5 +209,5 @@ export default function twitchChat() {
   ComfyJS.Init(TWITCH_BOT_USERNAME, TWITCH_BOT_AUTH_TOKEN, TWITCH_CHANNEL);
 	ComfyJS.onCommand = onCommand;
 	ComfyJS.onChat = onChat;
-	ComfyJS.onJoin = giftSeasonWatcher;
+	// ComfyJS.onJoin = giftSeasonWatcher;
 }
