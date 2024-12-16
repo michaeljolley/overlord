@@ -29,6 +29,8 @@ import { TaskStore } from '../../stores/taskStore';
 import { AnnouncementStore } from '../../stores/announcementStore';
 import { Announcement } from '../../types/announcement';
 import Supabase from '../supabase';
+import giftSeasonWatcher from './giftSeasonWatcher';
+import { SubscriberStore } from '../../stores/subscriberStore';
 
 const TWITCH_BOT_USERNAME = process.env.PALLYGG_API_KEY!;
 const TWITCH_BOT_AUTH_TOKEN = process.env.TWITCH_BOT_AUTH_TOKEN;
@@ -207,4 +209,5 @@ export default function twitchChat() {
   ComfyJS.Init(TWITCH_BOT_USERNAME, TWITCH_BOT_AUTH_TOKEN, TWITCH_CHANNEL);
 	ComfyJS.onCommand = onCommand;
 	ComfyJS.onChat = onChat;
+	ComfyJS.onJoin = giftSeasonWatcher;
 }

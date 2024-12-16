@@ -10,6 +10,7 @@ export abstract class TwitchAPI {
   private static twitchAPIEndpoint = 'https://api.twitch.tv/helix'
   private static twitchAPIUserEndpoint = `${this.twitchAPIEndpoint}/users`
   private static twitchAPIStreamEndpoint = `${this.twitchAPIEndpoint}/streams`
+  private static twitchAPISubscriptionsEndpoint = `${this.twitchAPIEndpoint}/subscriptions`
 
   private static headers: [string, string][] = []
 
@@ -79,4 +80,29 @@ export abstract class TwitchAPI {
 
 		return stream
   }
+
+  public static async getSubscriptions(): Promise<string[] | undefined> {
+    const url = `${this.twitchAPISubscriptionsEndpoint}?broadcaster_id=${TWITCH_CHANNEL_ID}`
+
+    let subscribers: string[] = [];
+
+		try {
+			const response = await fetch(url, { 
+				method: "GET",
+				headers: this.headers }
+			);
+	
+			const body = await response.json();
+			const subData = body.data.length > 1 ? body.data : body.data[0];
+			if (subData) {
+				subscribers = subData.map((sub: any) => sub.user_name);
+			}
+		}
+		catch (error) {
+			console.error(error);
+		}
+
+		return subscribers
+  }
+
 }
