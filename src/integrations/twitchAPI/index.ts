@@ -91,11 +91,15 @@ export abstract class TwitchAPI {
 				method: "GET",
 				headers: this.headers }
 			);
-	
-			const body = await response.json();
-			const subData = body.data.length > 1 ? body.data : body.data[0];
-			if (subData) {
-				subscribers = subData.map((sub: any) => sub.user_name);
+
+			if (response.ok) {
+				const body = await response.json();
+				const subData = body.data.length > 1 ? body.data : body.data[0];
+				if (subData) {
+					subscribers = subData.map((sub: any) => sub.user_name);
+				}
+			} else {
+				console.error(`Error fetching subscriptions: ${response.statusText}`);
 			}
 		}
 		catch (error) {
