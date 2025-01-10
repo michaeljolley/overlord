@@ -24,8 +24,6 @@ export const giftedSubWebhook: RouteOptions = {
 	},
 	handler: async (request: FastifyRequest, reply: FastifyReply) => {
 		EventBus.eventEmitter.emit(BotEvents.OnGiftSub,  request.body);
-		const { username, giftedTotal } = request.body as { username: string, giftedTotal: number };
-		await Supabase.addSubGift(username, giftedTotal);
 		reply.code(200).send(true);
 	},
 };

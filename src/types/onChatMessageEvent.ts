@@ -10,8 +10,7 @@ export class OnChatMessageEvent  {
     public self: boolean,
     public extra: OnMessageExtra,
     public id: string,
-		public todos: { total: number, completed: number },
-    public isRegistered: boolean
+		public todos: { total: number, completed: number }
   ) { 
   }
 }

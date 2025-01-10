@@ -81,32 +81,4 @@ export abstract class TwitchAPI {
 		return stream
   }
 
-  public static async getSubscriptions(): Promise<string[] | undefined> {
-    const url = `${this.twitchAPISubscriptionsEndpoint}?broadcaster_id=${TWITCH_CHANNEL_ID}`
-
-    let subscribers: string[] = [];
-
-		try {
-			const response = await fetch(url, { 
-				method: "GET",
-				headers: this.headers }
-			);
-
-			if (response.ok) {
-				const body = await response.json();
-				const subData = body.data.length > 1 ? body.data : body.data[0];
-				if (subData) {
-					subscribers = subData.map((sub: any) => sub.user_name);
-				}
-			} else {
-				console.error(`Error fetching subscriptions: ${response.statusText}`);
-			}
-		}
-		catch (error) {
-			console.error(error);
-		}
-
-		return subscribers
-  }
-
 }
