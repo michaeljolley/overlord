@@ -5,6 +5,7 @@ import {
   bluesky,
 	discord,
 	github,
+	help,
 	instagram,
   music,
 	mute,
@@ -28,7 +29,6 @@ import { UserStore } from '../../stores/userStore';
 import { TaskStore } from '../../stores/taskStore';
 import { AnnouncementStore } from '../../stores/announcementStore';
 import { Announcement } from '../../types/announcement';
-import Supabase from '../supabase';
 
 const TWITCH_BOT_USERNAME = process.env.PALLYGG_API_KEY!;
 const TWITCH_BOT_AUTH_TOKEN = process.env.TWITCH_BOT_AUTH_TOKEN;
@@ -36,25 +36,25 @@ const TWITCH_CHANNEL = process.env.TWITCH_CHANNEL!;
 
 export default function twitchChat() {
 
-	const commands: Command[] = [];
+	const commands: { command: Command, public: boolean }[] = [];
 	let announcements: Announcement[] = [];
   
 	const loadCommands = () => {
-    commands.push(new Command('blog', blog));
-    commands.push(new Command('bluesky', bluesky));
-    commands.push(new Command('discord', discord));
-    commands.push(new Command('github', github));
-    commands.push(new Command('instagram', instagram));
-    commands.push(new Command('music', music));
-    commands.push(new Command('mute', mute));
-    commands.push(new Command('shop', shop));
-    commands.push(new Command('todo', todo));
-    commands.push(new Command('tiktok', tiktok));
-    commands.push(new Command('tips', tips));
-    commands.push(new Command('twitter', twitter));
-    commands.push(new Command('unmute', unmute));
-    commands.push(new Command('uses', uses));
-    commands.push(new Command('youtube', youtube)); 
+    commands.push({command: new Command('blog', blog), public: true});
+    commands.push({command: new Command('bluesky', bluesky), public: true});
+    commands.push({command: new Command('discord', discord), public: true});
+    commands.push({command: new Command('github', github), public: true});
+    commands.push({command: new Command('instagram', instagram), public: true});
+    commands.push({command: new Command('music', music), public: false});
+    commands.push({command: new Command('mute', mute), public: false});
+    commands.push({command: new Command('shop', shop), public: true});
+    commands.push({command: new Command('todo', todo), public: false});
+    commands.push({command: new Command('tiktok', tiktok), public: true});
+    commands.push({command: new Command('tips', tips), public: true});
+    commands.push({command: new Command('twitter', twitter), public: true});
+    commands.push({command: new Command('unmute', unmute), public: false});
+    commands.push({command: new Command('uses', uses), public: true});
+    commands.push({command: new Command('youtube', youtube), public: true});
 	}
 
   const loadAnnouncements = async () => {
@@ -71,7 +71,7 @@ export default function twitchChat() {
   }
 	
   const getCommand = (commandName: string): Command | undefined => {
-    return commands.find(f => f?.commandName === commandName);
+    return commands.find(f => f?.command.commandName === commandName)?.command;
   }
 
 	const handleCommand = (onCommandEvent: OnCommandEvent) => {
@@ -80,6 +80,11 @@ export default function twitchChat() {
       command.command(onCommandEvent);
       return;
     }
+
+		if (command === 'help') {
+			help(onCommandEvent, commands);
+			return;
+		}
 
     const announcement = announcements.find(a => a.command === onCommandEvent.command);
     if (announcement) {

@@ -93,7 +93,7 @@ const alerts = createApp({
 						line1 = `Showing love to`;
 						line2 = name;
 						line3 = `${payload.giftedTotal === 1 ? "a" : payload.giftedTotal} friend${payload.giftedTotal > 1 ? "s" : ""}!`;
-						audio = alertsAudioSrc('season');
+						audio = alertsAudioSrc('hair');
 						isGift = true;
 						break;
 					case 'twitch:raid': 
@@ -167,17 +167,17 @@ const alerts = createApp({
 		<audio ref="audioPlayer"></audio>
 		<div v-if="activeAlert">
 			<transition name="fade">
-				<div class="sign" :class="{ pink: !activeAlert.isGift }" v-if="activeAlert.line1">
+				<div class="sign" class="pink" v-if="activeAlert.line1">
 					<letter v-for="(letter, index) in activeAlert.line1" :key="index" :letter="letter"/>
 				</div>
 			</transition>
 			<transition name="fade">
-				<div class="sign" :class="{ blue: !activeAlert.isGift }" v-if="activeAlert.line2">
+				<div class="sign" class="blue" v-if="activeAlert.line2">
 					<letter v-for="(letter, index) in activeAlert.line2" :key="index" :letter="letter"/>
 				</div>
 			</transition>
 			<transition name="fade">
-				<div class="sign" :class="{ pink: !activeAlert.isGift }" v-if="activeAlert.line3">
+				<div class="sign" class="pink" v-if="activeAlert.line3">
 					<letter v-for="(letter, index) in activeAlert.line3" :key="index" :letter="letter"/>
 				</div>
 			</transition>

@@ -2,6 +2,7 @@ export { blog } from './blog';
 export { bluesky } from './bluesky';
 export { discord } from './discord';
 export { github } from './github';
+export { help } from './help';
 export { instagram } from './instagram'; 
 export { music } from './music';
 export { mute } from './mute';
