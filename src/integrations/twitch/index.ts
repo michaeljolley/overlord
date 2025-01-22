@@ -81,7 +81,7 @@ export default function twitchChat() {
       return;
     }
 
-		if (command === 'help') {
+		if (onCommandEvent.command === 'help') {
 			help(onCommandEvent, commands);
 			return;
 		}

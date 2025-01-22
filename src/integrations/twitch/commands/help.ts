@@ -9,7 +9,7 @@ import { Command } from "../../../types/command";
  * @param onCommandEvent
  * @param commands
  */
-export const instagram = (onCommandEvent: OnCommandEvent, commands: { command: Command, public: boolean }[]): void => {
+export const help = (onCommandEvent: OnCommandEvent, commands: { command: Command, public: boolean }[]): void => {
 	const cooldownSeconds = 300;
 
 	// The broadcaster is allowed to bypass throttling. Otherwise,
