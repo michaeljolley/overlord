@@ -7,8 +7,8 @@ import {
 	github,
 	help,
 	instagram,
-  music,
 	mute,
+  powertoys,
   say,
 	shop,
 	todo,
@@ -30,7 +30,7 @@ import { TaskStore } from '../../stores/taskStore';
 import { AnnouncementStore } from '../../stores/announcementStore';
 import { Announcement } from '../../types/announcement';
 
-const TWITCH_BOT_USERNAME = process.env.PALLYGG_API_KEY!;
+const TWITCH_BOT_USERNAME = process.env.TWITCH_BOT_USERNAME!;
 const TWITCH_BOT_AUTH_TOKEN = process.env.TWITCH_BOT_AUTH_TOKEN;
 const TWITCH_CHANNEL = process.env.TWITCH_CHANNEL!;
 
@@ -45,8 +45,8 @@ export default function twitchChat() {
     commands.push({command: new Command('discord', discord), public: true});
     commands.push({command: new Command('github', github), public: true});
     commands.push({command: new Command('instagram', instagram), public: true});
-    commands.push({command: new Command('music', music), public: false});
     commands.push({command: new Command('mute', mute), public: false});
+    commands.push({command: new Command('powertoys', powertoys), public: true});
     commands.push({command: new Command('shop', shop), public: true});
     commands.push({command: new Command('todo', todo), public: false});
     commands.push({command: new Command('tiktok', tiktok), public: true});
