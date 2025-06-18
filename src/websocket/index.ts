@@ -3,6 +3,7 @@ import EventBus from "../eventBus";
 import { SocketStream } from "@fastify/websocket";
 import { BotEvents } from "../botEvents";
 import { CreditStore } from "../stores/creditStore";
+import { UserStore } from "../stores/userStore";
 
 export function registerWebsocket(fastify: FastifyInstance, _: any, done: () => void) {
 
@@ -10,37 +11,36 @@ export function registerWebsocket(fastify: FastifyInstance, _: any, done: () => 
 
 		EventBus.eventEmitter.on(BotEvents.OnChatMessage, (payload: any) => {
 			connection.socket.send(JSON.stringify({ type: BotEvents.OnChatMessage, payload }));
-			CreditStore.addCredit({type: BotEvents.OnChatMessage, user: payload.user});
+			addCredit({ type: BotEvents.OnChatMessage, username: payload.user });
 		});
 
 		EventBus.eventEmitter.on(BotEvents.OnFollow, (payload: any) => {
 			connection.socket.send(JSON.stringify({ type: BotEvents.OnFollow, payload }));
-			CreditStore.addCredit({type: BotEvents.OnFollow, user: payload.user});
+			addCredit({ type: BotEvents.OnFollow, username: payload.user });
 		});
 		
 		EventBus.eventEmitter.on(BotEvents.OnRaid, (payload: any) => {
 			connection.socket.send(JSON.stringify({ type: BotEvents.OnRaid, payload }));
-			CreditStore.addCredit({type: BotEvents.OnRaid, user: payload.user});
+			addCredit({ type: BotEvents.OnRaid, username: payload.user });
 		});
 		
 		EventBus.eventEmitter.on(BotEvents.OnSub, (payload: any) => {
 			connection.socket.send(JSON.stringify({ type: BotEvents.OnSub, payload }));
-			CreditStore.addCredit({type: BotEvents.OnSub, user: payload.user});
+			addCredit({ type: BotEvents.OnSub, username: payload.user });
 		});
 		
 		EventBus.eventEmitter.on(BotEvents.OnGiftSub, (payload: any) => {
 			connection.socket.send(JSON.stringify({ type: BotEvents.OnGiftSub, payload }));
-			CreditStore.addCredit({type: BotEvents.OnGiftSub, user: payload.user});
+			addCredit({ type: BotEvents.OnGiftSub, username: payload.user });
 		});
 		
 		EventBus.eventEmitter.on(BotEvents.OnCheer, (payload: any) => {
 			connection.socket.send(JSON.stringify({ type: BotEvents.OnCheer, payload }));
-			CreditStore.addCredit({type: BotEvents.OnCheer, user: payload.user});
+			addCredit({ type: BotEvents.OnCheer, username: payload.username });
 		});
 		
 		EventBus.eventEmitter.on(BotEvents.OnDonation, (payload: any) => {
 			connection.socket.send(JSON.stringify({ type: BotEvents.OnDonation, payload }));
-			CreditStore.addCredit({type: BotEvents.OnDonation, user: payload.user});
 		});
 		
 		EventBus.eventEmitter.on(BotEvents.OnStreamMode, (payload: any) => {
@@ -55,13 +55,9 @@ export function registerWebsocket(fastify: FastifyInstance, _: any, done: () => 
 			connection.socket.send(JSON.stringify({ type: BotEvents.OnSoundEffect, payload }));
 		});
 		
-		EventBus.eventEmitter.on(BotEvents.OnCreditRoll, (payload: any) => {
-			connection.socket.send(JSON.stringify({ type: BotEvents.OnCreditRoll, payload }));
-		});
-		
 		EventBus.eventEmitter.on(BotEvents.OnTriggerCredits, (payload: any) => {
 			const credits = CreditStore.getCredits(); 
-			EventBus.eventEmitter.emit(BotEvents.OnCreditRoll, { credits });
+			connection.socket.send(JSON.stringify({ type: BotEvents.OnCreditRoll, payload: credits }));
 		});
 		
 		EventBus.eventEmitter.on(BotEvents.OnTodoUpdated, (payload: any) => {
@@ -78,4 +74,20 @@ export function registerWebsocket(fastify: FastifyInstance, _: any, done: () => 
 	});
 
 	done();
+}
+
+interface UserWebhookEvent {
+	type: string;
+	username: string;
+}
+
+const addCredit = async (event: UserWebhookEvent) => {
+	const user = await UserStore.getUser(event.username);
+
+	if (user) {
+		CreditStore.addCredit({
+			type: event.type,
+			user
+		});
+	}
 }

@@ -1,59 +1,46 @@
-const { createApp, onMounted, ref } = Vue
+const { computed, createApp, nextTick, onMounted, ref } = Vue
 
 const typeDict = {
 	'onChatMessage': 'Builders',
 	'twitch:follow': 'New Followers',
 	'twitch:sub': 'New Subscribers',
-	'twitch:giftsub': 'Subs Gifted By',
-	'twitch:raid': 'Raids By',
-	'twitch:cheer': 'Cheered By',
-	'twitch:donation': 'Donations By'
+	'twitch:giftsub': 'Subs Gifted From',
+	'twitch:raid': 'Awesome Raiders',
+	'twitch:cheer': 'Cheered From',
+	'twitch:donation': 'Donations From'
 }
-
-const maxUsers = 9;
-const millisecondsPerUserGroup = 10;
 
 const credits = createApp({
 	setup() {
 		const credits = ref([]);
-		const activeType = ref(null);
 
-		const onInterval = function() {
-			if (!activeType.value &&
-        credits.value.length > 0) {
-        processNextCredit();
-      }
-		}
-
-		const processNextCredit = function() {
-			if (credits.value.length > 0) {
-				const nextCredit = credits.value.shift();
-				const { type, users } = nextCredit;
-
-				console.dir(nextCredit);
+		const runCredits = function(payload) {
+			credits.value = [];
+			const newCredits = payload || [];
+			
+			newCredits.forEach(credit => {
+				const { type, users } = credit;
 
 				const labels = typeDict[type].split(' ') || [];
 				const line1 = labels.length > 1 ? labels[0] : null;
 				const line2 = labels.length > 1 ? labels[1] : null;
 				const line3 = labels.length > 2 ? labels[2] : null;
 
-				const timeout = users.length < maxUsers ? millisecondsPerUserGroup : users.length / maxUsers * millisecondsPerUserGroup;
-
-				activeType.value = {
+				credits.value.push({
 					line1,
 					line2,
 					line3,
-					users
-				};
-
-				setTimeout(() => {
-					activeType.value = null;
-				}, timeout);
-			}
-		}
-
-		const runCredits = function(payload) {
-			credits.value = payload.credits;
+					users: users.sort((a, b) => a > b)
+				});
+			});
+			
+			credits.value.push({
+				line1: "Thanks",
+				line2: "for Joining!",
+				line3: null,
+				message: "You are the secret sauce that makes this community great!",
+				users: []
+			});
 		}
 
 		onMounted(() => {
@@ -61,9 +48,11 @@ const credits = createApp({
 
 			webSocket.value.onmessage = function(e) {
 				const event = JSON.parse(e.data);
-
 				if (event.type === "onCreditRoll") {
-					runCredits(event.payload);
+					credits.value = [];
+					nextTick(() => {
+						runCredits(event.payload);
+					});
 				}
 			}
 
@@ -79,81 +68,82 @@ const credits = createApp({
 				console.log('Connection closed');
 				window.location.reload();
 			}
-
-			setInterval(onInterval, 2000);
 		});
 
-		return { activeType }
+		return { credits }
 	},
 	template:
-	`<div class="credits">
-		<div v-if="activeType">
-			<div class="users">
-				<div>
-					<transition name="fade">
-						<div class="sign" class="pink" v-if="activeAlert.line1">
-							<letter v-for="(letter, index) in activeType.line1" :key="index" :letter="letter"/>
-						</div>
-					</transition>
-					<transition name="fade">
-						<div class="sign" class="blue" v-if="activeType.line2">
-							<letter v-for="(letter, index) in activeType.line2" :key="index" :letter="letter"/>
-						</div>
-					</transition>
-					<transition name="fade">
-						<div class="sign" class="pink" v-if="activeType.line3">
-							<letter v-for="(letter, index) in activeType.line3" :key="index" :letter="letter"/>
-						</div>
-					</transition>
-				</div>
-				<div class="users">
-					<transition name="fade">
-						<user v-for="(user, index) in activeType.users" :key="user + index" />
-					</transition>
-				</div>
-		</div>
+	`<div class="credits" v-if="credits && credits.length > 0">
+		<credit v-for="(credit, index) in credits" :key="index" :credit="credit" />
 	</div>`
+});
+
+credits.component('credit', {
+	template: `<div class="credit">
+		<div v-if="credit">
+			<div class="type">
+				<transition name="fade">
+					<div class="sign pink" v-if="credit.line1">
+						<letter v-for="(letter, index) in credit.line1" :key="index" :letter="letter"/>
+					</div>
+				</transition>
+				<transition name="fade">
+					<div class="sign blue" v-if="credit.line2">
+						<letter v-for="(letter, index) in credit.line2" :key="index" :letter="letter"/>
+					</div>
+				</transition>
+				<transition name="fade">
+					<div class="sign pink" v-if="credit.line3">
+						<letter v-for="(letter, index) in credit.line3" :key="index" :letter="letter"/>
+					</div>
+				</transition>
+			</div>
+			<p v-if="credit.message" class="message" v-html="credit.message"></p>
+			<div class="users-container" v-if="credit.users && credit.users.length > 0">
+				<div class="users">
+					<user v-for="(user, index) in credit.users" :key="user.id + index" :user="user"/>
+				</div>
+			</div>
+		</div>
+	</div>`,
+	props: ['credit']
 });
 
 credits.component('letter', {
 	setup() {
-		const hideMe = ref(false);
 		const classes = ['', 'flicker', 'fast-flicker', 'fast-flicker2'];
 		const assignedClass = ref(null);
 
-		const finish = function () {
-      hideMe.value = true;
-      assignedClass.value = null;
-    }
-
 		onMounted(() => {
 			setTimeout(() => {
-				const turnOff = Math.floor(Math.random() * 6) + 3;
-	
 				const randomClass = Math.floor(Math.random() * 4);
 				if (randomClass !== 0) {
 					assignedClass.value = classes[randomClass];
 				}
-	
-				setTimeout(finish, turnOff * 1000);
 			}, 2500);
 		})
 
-		return { hideMe, assignedClass };
+		return { assignedClass };
 	},
-	template: '<span class="letter" v-bind:class="[assignedClass,{ off: hideMe}]">{{letter}}</span>',
+	template: '<span class="letter" v-bind:class="[assignedClass]">{{letter}}</span>',
   props: ['letter'],
 });
 
 credits.component('user', {
-	setup() {
-			
+	setup(props) {
+		const display_name = props.user.display_name || props.user.login;
+
+		const bgImage = computed(
+			() => `url(${props.user.avatar_url})`
+		);
+		
+		return { display_name, bgImage };
 	},
 	template: `<div class="user">
-		<img v-if="user.avatar_url" :src="user.avatar_url" />
-		<p>{{user.diplay_name}}</p>
+		<div class="profile-pic" :style="{ backgroundImage: bgImage }"></div>
+		<p>{{display_name}}</p>
 	</div>`,
 	props: ['user']
 });
 
-		credits.mount('#app');
+credits.mount('#app');

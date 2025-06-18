@@ -1,15 +1,92 @@
 @import "_global.css";
 
-.credits {
+body, html {
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+  mask-image: var(--gradient-fade-in-out);
+  -webkit-mask-image: var(--gradient-fade-in-out);
+}
+
+.type {
   margin: 50px;
   font-family: "Monoton";
   text-transform: uppercase;
   font-size: 6em;
 }
 
+.users-container {
+  display: flex;
+  margin: 100px 0 250px 50px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.credits {
+  position: absolute;
+  animation: 120s credits linear infinite;
+}
+
+.users {
+  display: grid;
+  gap:5rem;
+  grid-template-columns: 1fr 1fr 1fr;
+  font-family: 'Inter';
+  font-weight: bold;
+}
+.user {
+  display: flex;
+  flex-direction: row;
+  gap: 1.5rem;
+  align-items: center;
+}
+.profile-pic {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-color: var(--black);
+  height: 4rem;
+  width: 4rem;
+  border: 3px solid;
+  border-image-source: repeating-conic-gradient(from var(--angle), var(--gray) 0%, var(--white) 50%, var(--gray) 100%);
+  border-image-slice: 1;
+  animation: 10s rotate linear infinite;
+}
+.user.vip .profile-pic,
+.user.mod .profile-pic,
+.user.sub .profile-pic {
+  border-image-source: repeating-conic-gradient(from var(--angle), var(--neonpink) 0%, var(--neonblue) 50%, var(--neonpink) 100%);
+}
+.user p {
+  font-size: 1.5rem;
+	background: var(--gradient-silver);
+  background-size: 300%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: animated_text 10s ease-in-out infinite;
+}
+.user.mod p,
+.user.vip p,
+.user.sub p {
+	background-image: var(--gradient);
+}
+
 .letter {
 	display: inline-block;
 	min-width: 20px;
+}
+
+.message {
+  color: var(--white);
+  font-family: 'Kanit';
+  font-weight: bold;
+	width: 75%;
+  margin: 150px 0 500px 50px;
+  font-size: 1.5rem;
+}
+
+.message span {
+	color: var(--neonpink);
 }
 
 .sign {
@@ -155,29 +232,6 @@
 
 .sign.fade-leave-to {
 	opacity: 0;
-}
-
-.users {
-	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(1fr, 1fr));
-	gap: 2rem;
-}
-
-.user {
-	display: flex;
-	align-items: center;
-	flex-direction: column;
-	gap: 2rem;
-}
-
-img {
-	border-radius: 50%;
-	width: 50px;
-	height: 50px;
-}
-
-p {
-	color: var(--white);
 }
 
 @keyframes blinkpink {
@@ -456,4 +510,27 @@ p {
   to {
     opacity: 1;
   }
+}
+
+@keyframes rotate {
+  to {
+    --angle: 360deg;
+  }
+}
+
+@property --angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes animated_text {
+	0% { background-position: 0px 50%; }
+	50% { background-position: 100% 50%; }
+	100% { background-position: 0px 50%; }
+}
+
+@keyframes credits {
+    0% { top:  100%; }
+  100% { top: -500%; }
 }

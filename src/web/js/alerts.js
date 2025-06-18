@@ -167,17 +167,17 @@ const alerts = createApp({
 		<audio ref="audioPlayer"></audio>
 		<div v-if="activeAlert">
 			<transition name="fade">
-				<div class="sign" class="pink" v-if="activeAlert.line1">
+				<div class="sign pink" v-if="activeAlert.line1">
 					<letter v-for="(letter, index) in activeAlert.line1" :key="index" :letter="letter"/>
 				</div>
 			</transition>
 			<transition name="fade">
-				<div class="sign" class="blue" v-if="activeAlert.line2">
+				<div class="sign blue" v-if="activeAlert.line2">
 					<letter v-for="(letter, index) in activeAlert.line2" :key="index" :letter="letter"/>
 				</div>
 			</transition>
 			<transition name="fade">
-				<div class="sign" class="pink" v-if="activeAlert.line3">
+				<div class="sign pink" v-if="activeAlert.line3">
 					<letter v-for="(letter, index) in activeAlert.line3" :key="index" :letter="letter"/>
 				</div>
 			</transition>
