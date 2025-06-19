@@ -23,12 +23,12 @@ fastify.register(FastifyStatic, {
 
 fastify.register(registerWebhooks, { prefix: "/webhooks" });
 
-try {
-	fastify.listen({ port, host });
-} catch (err) {
-	fastify.log.error(err);
-	process.exit(1);
-}
+fastify.listen({ port, host }, err => {
+	if (err) {
+		fastify.log.error(err);
+		process.exit(1);
+	}
+});
 
 TwitchAPI.init().then(() => {
 	twitchChat();

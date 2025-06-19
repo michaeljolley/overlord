@@ -7,6 +7,11 @@ const RaidWebhookBodyType = {
 	viewers: { type: "number" },
 }
 
+export type RaidWebhookBody = {
+	username: string;
+	viewers: number;
+}
+
 export const raidWebhook: RouteOptions = {
 	method: "POST",
 	url: "/raid",

@@ -6,7 +6,13 @@ const CheerWebhookBodyType = {
 	username: { type: "string" },
 	bits: { type: "number" },
 	message: { type: "string" },
-} 
+}
+
+export type CheerWebhookBody = {
+	username: string;
+	bits: number;
+	message: string;
+}
 
 export const cheerWebhook: RouteOptions = {
 	method: "POST",

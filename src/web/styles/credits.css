@@ -1,13 +1,5 @@
 @import "_global.css";
 
-body, html {
-  overflow: hidden;
-  height: 100%;
-  width: 100%;
-  mask-image: var(--gradient-fade-in-out);
-  -webkit-mask-image: var(--gradient-fade-in-out);
-}
-
 .type {
   margin: 50px;
   font-family: "Monoton";
@@ -18,18 +10,11 @@ body, html {
 .users-container {
   display: flex;
   margin: 100px 0 250px 50px;
-  width: 100%;
-  overflow: hidden;
-}
-
-.credits {
-  position: absolute;
-  animation: 120s credits linear infinite;
 }
 
 .users {
   display: grid;
-  gap:5rem;
+  gap:3.5rem;
   grid-template-columns: 1fr 1fr 1fr;
   font-family: 'Inter';
   font-weight: bold;
@@ -39,17 +24,19 @@ body, html {
   flex-direction: row;
   gap: 1.5rem;
   align-items: center;
+	opacity: 1;
 }
 .profile-pic {
   background-size: cover;
   background-repeat: no-repeat;
   background-color: var(--black);
-  height: 4rem;
-  width: 4rem;
+  height: 2.5rem;
+  width: 2.5rem;
   border: 3px solid;
   border-image-source: repeating-conic-gradient(from var(--angle), var(--gray) 0%, var(--white) 50%, var(--gray) 100%);
-  border-image-slice: 1;
-  animation: 10s rotate linear infinite;
+	border-image-source: repeating-conic-gradient(from var(--angle), var(--neonpink) 0%, var(--neonblue) 50%, var(--neonpink) 100%);
+ 	border-image-slice: 1;
+  animation: 6s rotate linear infinite;
 }
 .user.vip .profile-pic,
 .user.mod .profile-pic,
@@ -57,13 +44,8 @@ body, html {
   border-image-source: repeating-conic-gradient(from var(--angle), var(--neonpink) 0%, var(--neonblue) 50%, var(--neonpink) 100%);
 }
 .user p {
-  font-size: 1.5rem;
-	background: var(--gradient-silver);
-  background-size: 300%;
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: animated_text 10s ease-in-out infinite;
+  font-size: 1.3rem;
+	color: var(--white);
 }
 .user.mod p,
 .user.vip p,
@@ -74,19 +56,6 @@ body, html {
 .letter {
 	display: inline-block;
 	min-width: 20px;
-}
-
-.message {
-  color: var(--white);
-  font-family: 'Kanit';
-  font-weight: bold;
-	width: 75%;
-  margin: 150px 0 500px 50px;
-  font-size: 1.5rem;
-}
-
-.message span {
-	color: var(--neonpink);
 }
 
 .sign {
@@ -225,12 +194,22 @@ body, html {
 	text-shadow: none;
 }
 
-.sign.fade-leave-active {
+.fade-leave-active {
 	animation: unset;
 	transition: opacity 2s;
 }
 
-.sign.fade-leave-to {
+.fade-leave-to {
+	opacity: 0;
+}
+
+.userfade-enter-active,
+.userfade-leave-active {
+	transition: opacity 2s ease;
+}
+
+.userfade-enter-from,
+.userfade-leave-to {
 	opacity: 0;
 }
 
@@ -528,9 +507,4 @@ body, html {
 	0% { background-position: 0px 50%; }
 	50% { background-position: 100% 50%; }
 	100% { background-position: 0px 50%; }
-}
-
-@keyframes credits {
-    0% { top:  100%; }
-  100% { top: -500%; }
 }

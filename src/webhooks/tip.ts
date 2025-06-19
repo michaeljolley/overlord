@@ -6,6 +6,13 @@ const TipWebhookBodyType = {
 	"campaignTip": {type: "object"}
 }
 
+export type TipWebhookBody = {
+	campaignTip: {
+		amount: number;
+		message: string;
+	};
+}
+
 export const tipWebhook: RouteOptions = {
 	method: "POST",
 	url: "/tip",
@@ -21,7 +28,7 @@ export const tipWebhook: RouteOptions = {
 		},
 	},
 	handler: (request: FastifyRequest, reply: FastifyReply) => {
-		EventBus.eventEmitter.emit(BotEvents.OnDonation, (request.body as { campaignTip: any }).campaignTip);
+		EventBus.eventEmitter.emit(BotEvents.OnDonation, request.body);
 		reply.code(200).send(true);
 	},
 };

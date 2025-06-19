@@ -30,42 +30,45 @@ export default abstract class Supabase {
 		}
 
 		static async getUser(login: string) : Promise<User | null> {
-			const { data: user, error } = await supabaseClient
+			const { data: users, error } = await supabaseClient
 				.from('streamUsers')
 				.select('*')
-				.eq('login', login)
-				.single();
+				.eq('login', login);
+
+
 			if (error) {
 				console.log("Error getting user: ", error);
 				return null;
 			}
-			return user;
+			return users && users.length > 0 ? users[0] as User : null;
 		}
 
 		static async addUser(user: User) : Promise<User | null> {
-			const { data, error } = await supabaseClient
+			const { data: users, error } = await supabaseClient
 				.from('streamUsers')
 				.upsert(user)
-				.select()
-				.single();
+				.select();
+				
 			if (error) {
 				console.log("Error adding user: ", error);
 				return null;
 			}
-			return data as User;
+
+			return users && users.length > 0 ? users[0] as User : null;
 		}
 
 		static async addStreamEvent(event: StreamEvent) : Promise<StreamEvent | null> {
 			const { data, error } = await supabaseClient
 				.from('streamEvents')
 				.insert(event)
-				.select()
-				.single();
+				.select();
+
 			if (error) {
 				console.log("Error adding stream event: ", error);
 				return null;
 			}
-			return data as StreamEvent;
+			
+			return data && data.length > 0 ? data[0] as StreamEvent : null;
 		}
 
 }

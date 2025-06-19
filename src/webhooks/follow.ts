@@ -6,6 +6,10 @@ const FollowWebhookBodyType = {
 	username: { type: "string" }
 }
 
+export type FollowWebhookBody = {
+	username: string;
+}
+
 export const followWebhook: RouteOptions = {
 	method: "POST",
 	url: "/follow",

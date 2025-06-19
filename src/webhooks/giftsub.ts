@@ -7,6 +7,11 @@ const GiftSubWebhookBodyType = {
 	giftedTotal: { type: "number" },
 }
 
+export type GiftSubWebhookBody = {
+	username: string;
+	giftedTotal: number;
+}
+
 export const giftedSubWebhook: RouteOptions = {
 	method: "POST",
 	url: "/giftsub",

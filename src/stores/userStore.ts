@@ -25,7 +25,8 @@ export abstract class UserStore {
 			}
 		}
 
-		// If not in local cache or Supabase, fetch from Twitch API
+		// If not in local cache or Supabase or if it needs to be updated,
+		// fetch from Twitch API
 		if (!user ||
 				!user.lastUpdated || 
 				user.lastUpdated < new Date(Date.now() - 1000 * 60 * 60 * (24 * UPDATE_USER_DATA_INTERVAL_IN_DAYS))

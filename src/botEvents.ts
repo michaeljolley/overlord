@@ -32,9 +32,6 @@ export enum BotEvents {
   OnStreamEnd = 'onStreamEnd',
   OnStreamStart = 'onStreamStart',
 
-	/* ToDo Events */
-	OnTodoUpdated = 'onTodoUpdated',
-
 	/* Redemption Events */
 	OnParty = 'onParty',
 

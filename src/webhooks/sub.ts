@@ -7,6 +7,11 @@ const SubWebhookBodyType = {
 	message: { type: "string" },
 }
 
+export type SubWebhookBody = {
+	username: string;
+	message: string;
+}
+
 export const subWebhook: RouteOptions = {
 	method: "POST",
 	url: "/sub",

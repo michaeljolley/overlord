@@ -6,6 +6,10 @@ const PartyWebhookBodyType = {
 	username: { type: "string" },
 }
 
+export type PartyWebhookBody = {
+	username: string;
+}
+
 export const partyWebhook: RouteOptions = {
 	method: "POST",
 	url: "/party",
