@@ -6,6 +6,7 @@ import { registerWebsocket } from "./websocket/index.js";
 import twitchChat from "./integrations/twitch/index.js";
 import { TwitchAPI } from "./integrations/twitchAPI/index.js";
 import cron from "./cron/index.js";
+import { Logger } from "./logger/index.js";
 
 const host = process.argv[2] || "localhost";
 const port = process.argv[3] ? parseInt(process.argv[3]) : 3000;
@@ -31,6 +32,7 @@ fastify.listen({ port, host }, err => {
 });
 
 TwitchAPI.init().then(() => {
+	Logger.init();
 	twitchChat();
 	cron();
 });

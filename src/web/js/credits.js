@@ -63,7 +63,7 @@ const credits = createApp({
 				if (event.type === "onCreditRoll") {
 					credits.value = [];
 					nextTick(() => {
-						runCredits(event.payload);
+						runCredits(event.payload.credits);
 					});
 				}
 			}
