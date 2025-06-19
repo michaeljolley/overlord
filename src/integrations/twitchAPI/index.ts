@@ -34,9 +34,9 @@ export abstract class TwitchAPI {
    * Retrieves data regarding a Twitch user from the Twitch API
    * @param login username of the user to retrieve
    */
-	 public static async getUser(login: string): Promise<User | undefined> {
+	 public static async getUser(login: string): Promise<User | null> {
     const url = `${this.twitchAPIUserEndpoint}?login=${login}`
-    let user: User | undefined;
+    let user: User | null = null;
 
 		try {
 			const response = await fetch(url, { 
@@ -57,10 +57,15 @@ export abstract class TwitchAPI {
     return user;
   }
 
-  public static async getStream(streamDate: string): Promise<Stream | undefined> {
+	/**
+	 * Retrieves a Twitch stream by date
+	 * @param streamDate The date of the stream to retrieve
+	 * @returns The stream object or null if not found
+	 */
+  public static async getStream(streamDate: string): Promise<Stream | null> {
     const url = `${this.twitchAPIStreamEndpoint}?user_id=${TWITCH_CHANNEL_ID}&first=1`
 
-    let stream: Stream | undefined;
+    let stream: Stream | null = null;
 
 		try {
 			const response = await fetch(url, { 
@@ -71,14 +76,14 @@ export abstract class TwitchAPI {
 			const body = await response.json();
 			const streamData = body.data.length > 1 ? body.data : body.data[0];
 			if (streamData) {
-				stream = new Stream(streamData.id, streamDate);
+				stream = new Stream(streamDate);
 			}
 		}
 		catch (error) {
 			console.error(error);
 		}
 
-		return stream
+		return stream;
   }
 
 }

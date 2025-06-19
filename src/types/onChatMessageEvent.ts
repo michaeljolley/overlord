@@ -9,8 +9,7 @@ export class OnChatMessageEvent  {
     public flags: OnMessageFlags,
     public self: boolean,
     public extra: OnMessageExtra,
-    public id: string,
-		public todos: { total: number, completed: number }
+    public id: string
   ) { 
   }
 }

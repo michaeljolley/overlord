@@ -1,7 +1,6 @@
 import { FastifyReply, FastifyRequest, RouteOptions } from "fastify";
 import EventBus from "../eventBus";
 import { BotEvents } from "../botEvents";
-import Supabase from "../integrations/supabase";
 
 const GiftSubWebhookBodyType = {
 	username: { type: "string" },

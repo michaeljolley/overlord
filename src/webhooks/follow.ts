@@ -3,8 +3,7 @@ import EventBus from "../eventBus";
 import { BotEvents } from "../botEvents";
 
 const FollowWebhookBodyType = {
-	username: { type: "string" },
-	profileImageUrl: { type: "string" },
+	username: { type: "string" }
 }
 
 export const followWebhook: RouteOptions = {

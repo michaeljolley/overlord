@@ -11,9 +11,7 @@ import {
   powertoys,
   say,
 	shop,
-	todo,
 	tiktok,
-	tips,
 	twitter,
 	unmute,
 	uses,
@@ -26,7 +24,6 @@ import { OnChatMessageEvent } from '../../types/onChatMessageEvent';
 import { BotEvents } from '../../botEvents';
 import sanitizeHtml from 'sanitize-html';
 import { UserStore } from '../../stores/userStore';
-import { TaskStore } from '../../stores/taskStore';
 import { AnnouncementStore } from '../../stores/announcementStore';
 import { Announcement } from '../../types/announcement';
 
@@ -48,9 +45,7 @@ export default function twitchChat() {
     commands.push({command: new Command('mute', mute), public: false});
     commands.push({command: new Command('powertoys', powertoys), public: true});
     commands.push({command: new Command('shop', shop), public: true});
-    commands.push({command: new Command('todo', todo), public: false});
     commands.push({command: new Command('tiktok', tiktok), public: true});
-    commands.push({command: new Command('tips', tips), public: true});
     commands.push({command: new Command('twitter', twitter), public: true});
     commands.push({command: new Command('unmute', unmute), public: false});
     commands.push({command: new Command('uses', uses), public: true});
@@ -103,15 +98,14 @@ export default function twitchChat() {
       && user !== TWITCH_CHANNEL.toLocaleLowerCase()
 		) {
 
-      let userInfo: User | undefined
+      let userInfo: User | null;
 
 			userInfo = await UserStore.getUser(user)
 
       if (userInfo) {
         const processedChatMessage = processChat(message, flags, extra.messageEmotes);
         if (processedChatMessage.length > 0) {
-					const todoData = TaskStore.getUserTasks(userInfo.login);
-          emit(BotEvents.OnChatMessage, new OnChatMessageEvent(userInfo, message, processedChatMessage, flags, self, extra, extra.id, todoData))
+          emit(BotEvents.OnChatMessage, new OnChatMessageEvent(userInfo, message, processedChatMessage, flags, self, extra, extra.id))
         }
       }
     }
