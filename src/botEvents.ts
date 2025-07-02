@@ -27,6 +27,8 @@ export enum BotEvents {
 	OnGiftSub = 'twitch:giftsub',
   OnRaid = 'twitch:raid',
   OnSub = 'twitch:sub',
+	OnSubGifted = 'twitch:subgifted',
+	OnBlazor = 'twitch:blazor',
 
 	/* Stream Events */
   OnStreamEnd = 'onStreamEnd',

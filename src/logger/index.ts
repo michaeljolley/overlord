@@ -31,6 +31,10 @@ export abstract class Logger {
 		EventBus.eventEmitter.on(BotEvents.OnSub, async (payload: SubWebhookBody) => {
 			await this.logEvent({ type: BotEvents.OnSub, username: payload.username, message: payload.message });
 		});
+		
+		EventBus.eventEmitter.on(BotEvents.OnSubGifted, async (payload: { username: string }) => {
+			await this.logEvent({ type: BotEvents.OnSub, username: payload.username });
+		});
 
 		EventBus.eventEmitter.on(BotEvents.OnGiftSub, async (payload: GiftSubWebhookBody) => {
 			await this.logEvent({ type: BotEvents.OnGiftSub, username: payload.username });

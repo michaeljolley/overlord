@@ -64,6 +64,10 @@ export function registerWebsocket(fastify: FastifyInstance, _: any, done: () => 
 			connection.socket.send(JSON.stringify({ type: BotEvents.OnCreditRoll, payload }));
 		});
 		
+		EventBus.eventEmitter.on(BotEvents.OnBlazor, async (payload: { username: string }) => {
+			connection.socket.send(JSON.stringify({ type: BotEvents.OnBlazor, payload }));
+		});
+		
 		EventBus.eventEmitter.on(BotEvents.Announcement, (payload: any) => {
 			connection.socket.send(JSON.stringify({ type: BotEvents.Announcement, payload }));
 		});

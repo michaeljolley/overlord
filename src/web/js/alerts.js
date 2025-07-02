@@ -6,7 +6,8 @@ const alertTypes = [
 	'twitch:raid',
 	'twitch:cheer',
 	'twitch:giftsub',
-	'twitch:donation'
+	'twitch:donation',
+	'twitch:blazor',
 ];
 
 const alerts = createApp({
@@ -113,6 +114,12 @@ const alerts = createApp({
 						line2 = payload.displayName || "Someone";
 						line3 = `tipped 'em $${Math.round(payload.grossAmountInCents / 100, 2)}`;
 						audio = alertsAudioSrc('donate');
+						break;
+					case 'twitch:blazor':
+						line1 = `Blazor!?`;
+						line2 = payload.username || "Someone";
+						line3 = `I hardly knew her`;
+						audio = alertsAudioSrc('metal-gear-alert');
 						break;
 				}
 

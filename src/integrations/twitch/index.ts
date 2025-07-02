@@ -1,4 +1,4 @@
-import ComfyJS, { EmoteSet, OnCommandExtra, OnMessageExtra, OnMessageFlags } from 'comfy.js'
+import ComfyJS, { EmoteSet, OnCommandExtra, OnMessageExtra, OnMessageFlags, OnSubGiftExtra, SubMethods } from 'comfy.js'
 import EventBus from "../../eventBus";
 import {
 	blog,
@@ -106,7 +106,12 @@ export default function twitchChat() {
         const processedChatMessage = processChat(message, flags, extra.messageEmotes);
         if (processedChatMessage.length > 0) {
           emit(BotEvents.OnChatMessage, new OnChatMessageEvent(userInfo, message, processedChatMessage, flags, self, extra, extra.id))
-        }
+
+					// If the message includes the word "blazor", call the onBlazor event
+					if (processedChatMessage.toLowerCase().includes('blazor')) {
+						onBlazor(userInfo.display_name || userInfo.login);
+					}
+  	    }
       }
     }
 	}
@@ -178,6 +183,21 @@ export default function twitchChat() {
     };
   }
 
+	const onSubGift  = (
+			gifterUser: string,
+			streakMonths: number,
+			recipientUser: string,
+			senderCount: number,
+			subTierInfo: SubMethods,
+			extra: OnSubGiftExtra
+		) => {
+			   emit(BotEvents.OnSubGifted, { username: recipientUser });
+	}
+
+	const onBlazor = (username: string) => {
+		emit(BotEvents.OnBlazor, { username });
+	}
+
 	type Emote = ReturnType<typeof generateEmote>
 
 	const onCommand = async (user: string, command: string, message: string, flags: OnMessageFlags, extra: OnCommandExtra) => {
@@ -205,4 +225,5 @@ export default function twitchChat() {
   ComfyJS.Init(TWITCH_BOT_USERNAME, TWITCH_BOT_AUTH_TOKEN, TWITCH_CHANNEL);
 	ComfyJS.onCommand = onCommand;
 	ComfyJS.onChat = onChat;
+	ComfyJS.onSubGift = onSubGift;
 }
