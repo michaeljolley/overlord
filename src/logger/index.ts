@@ -59,7 +59,7 @@ export abstract class Logger {
 
 			const streamEvent: StreamEvent = {
 				streamDate: new Date().toISOString().split("T")[0],
-				login: username,
+				login: username.toLocaleLowerCase(),
 				created_at: new Date(),
 				eventType: type,
 				message

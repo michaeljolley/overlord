@@ -1,5 +1,5 @@
 import { Stream } from "../../types/stream";
-import { User } from "../../types/user"
+import { StreamUser } from "../../types/streamUser"
 
 const TWITCH_CLIENT_ID = process.env.TWITCH_CLIENT_ID as string;
 const TWITCH_CLIENT_SECRET = process.env.TWITCH_CLIENT_SECRET as string;
@@ -34,9 +34,9 @@ export abstract class TwitchAPI {
    * Retrieves data regarding a Twitch user from the Twitch API
    * @param login username of the user to retrieve
    */
-	 public static async getUser(login: string): Promise<User | null> {
+	 public static async getUser(login: string): Promise<StreamUser | null> {
     const url = `${this.twitchAPIUserEndpoint}?login=${login}`
-    let user: User | null = null;
+    let user: StreamUser | null = null;
 
 		try {
 			const response = await fetch(url, { 
@@ -47,7 +47,7 @@ export abstract class TwitchAPI {
 			const body = await response.json();
 			const userData = body.data.length > 1 ? body.data : body.data[0];
 			if (userData) {
-				user = new User(userData.login, userData.profile_image_url, userData.id, userData.display_name);
+				user = new StreamUser(userData.login, userData.profile_image_url, userData.id, userData.display_name);
 			}
 		}
 		catch (error) {

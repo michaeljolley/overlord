@@ -19,13 +19,14 @@ import {
 } from './commands';
 import { Command } from '../../types/command';
 import { OnCommandEvent } from '../../types/onCommandEvent';
-import { User } from '../../types/user';
+import { StreamUser } from '../../types/streamUser';
 import { OnChatMessageEvent } from '../../types/onChatMessageEvent';
 import { BotEvents } from '../../botEvents';
 import sanitizeHtml from 'sanitize-html';
 import { UserStore } from '../../stores/userStore';
 import { AnnouncementStore } from '../../stores/announcementStore';
 import { Announcement } from '../../types/announcement';
+import { blazor } from './triggers';
 
 const TWITCH_BOT_USERNAME = process.env.TWITCH_BOT_USERNAME!;
 const TWITCH_BOT_AUTH_TOKEN = process.env.TWITCH_BOT_AUTH_TOKEN;
@@ -33,23 +34,28 @@ const TWITCH_CHANNEL = process.env.TWITCH_CHANNEL!;
 
 export default function twitchChat() {
 
-	const commands: { command: Command, public: boolean }[] = [];
+	const commands: Record<string, { command: Command, public: boolean }> = {};
+	const triggers: { name: string, trigger: (onChatMessageEvent: OnChatMessageEvent) => void}[] = [];
 	let announcements: Announcement[] = [];
   
 	const loadCommands = () => {
-    commands.push({command: new Command('blog', blog), public: true});
-    commands.push({command: new Command('bluesky', bluesky), public: true});
-    commands.push({command: new Command('discord', discord), public: true});
-    commands.push({command: new Command('github', github), public: true});
-    commands.push({command: new Command('instagram', instagram), public: true});
-    commands.push({command: new Command('mute', mute), public: false});
-    commands.push({command: new Command('powertoys', powertoys), public: true});
-    commands.push({command: new Command('shop', shop), public: true});
-    commands.push({command: new Command('tiktok', tiktok), public: true});
-    commands.push({command: new Command('twitter', twitter), public: true});
-    commands.push({command: new Command('unmute', unmute), public: false});
-    commands.push({command: new Command('uses', uses), public: true});
-    commands.push({command: new Command('youtube', youtube), public: true});
+    commands['blog'] = { command: new Command('blog', blog), public: true };
+    commands['bluesky'] = { command: new Command('bluesky', bluesky), public: true };
+    commands['discord'] = { command: new Command('discord', discord), public: true };
+    commands['github'] = { command: new Command('github', github), public: true };
+    commands['instagram'] = { command: new Command('instagram', instagram), public: true };
+    commands['mute'] = { command: new Command('mute', mute), public: false };
+    commands['powertoys'] = { command: new Command('powertoys', powertoys), public: true };
+    commands['shop'] = { command: new Command('shop', shop), public: true };
+    commands['tiktok'] = { command: new Command('tiktok', tiktok), public: true };
+    commands['twitter'] = { command: new Command('twitter', twitter), public: true };
+    commands['unmute'] = { command: new Command('unmute', unmute), public: false };
+    commands['uses'] = { command: new Command('uses', uses), public: true };
+    commands['youtube'] = { command: new Command('youtube', youtube), public: true };
+	}
+
+	const loadTriggers = () => {
+		triggers.push({ name: 'blazor', trigger: blazor });
 	}
 
   const loadAnnouncements = async () => {
@@ -66,7 +72,7 @@ export default function twitchChat() {
   }
 	
   const getCommand = (commandName: string): Command | undefined => {
-    return commands.find(f => f?.command.commandName === commandName)?.command;
+		return commands[commandName]?.command;
   }
 
 	const handleCommand = (onCommandEvent: OnCommandEvent) => {
@@ -88,6 +94,16 @@ export default function twitchChat() {
     }
 	}
 
+	const handleTriggers = (onChatMessageEvent: OnChatMessageEvent) => {
+    const message = onChatMessageEvent.message.toLocaleLowerCase();
+    
+		triggers.forEach(trigger => {
+			if (message.includes(trigger.name)) {
+				trigger.trigger(onChatMessageEvent);
+			}
+		});
+	}
+
 	const handleChat = async (user: string, message: string, flags: OnMessageFlags, self: boolean, extra: OnMessageExtra) => {
 		user = user.toLocaleLowerCase();
 
@@ -98,19 +114,18 @@ export default function twitchChat() {
       && user !== TWITCH_CHANNEL.toLocaleLowerCase()
 		) {
 
-      let userInfo: User | null;
+      let userInfo: StreamUser | null;
 
 			userInfo = await UserStore.getUser(user)
 
       if (userInfo) {
         const processedChatMessage = processChat(message, flags, extra.messageEmotes);
         if (processedChatMessage.length > 0) {
-          emit(BotEvents.OnChatMessage, new OnChatMessageEvent(userInfo, message, processedChatMessage, flags, self, extra, extra.id))
+					const onChatMessageEvent = new OnChatMessageEvent(userInfo, message, processedChatMessage, flags, self, extra, extra.id)
 
-					// If the message includes the word "blazor", call the onBlazor event
-					if (processedChatMessage.toLowerCase().includes('blazor')) {
-						onBlazor(userInfo.display_name || userInfo.login);
-					}
+          emit(BotEvents.OnChatMessage, onChatMessageEvent)
+
+					handleTriggers(onChatMessageEvent)
   	    }
       }
     }
@@ -194,10 +209,6 @@ export default function twitchChat() {
 			   emit(BotEvents.OnSubGifted, { username: recipientUser });
 	}
 
-	const onBlazor = (username: string) => {
-		emit(BotEvents.OnBlazor, { username });
-	}
-
 	type Emote = ReturnType<typeof generateEmote>
 
 	const onCommand = async (user: string, command: string, message: string, flags: OnMessageFlags, extra: OnCommandExtra) => {
@@ -215,6 +226,7 @@ export default function twitchChat() {
   }
 
 	loadCommands();
+	loadTriggers();
   loadAnnouncements();
 	
 	EventBus.eventEmitter.on(BotEvents.OnSay, (payload: { message: string }) => {

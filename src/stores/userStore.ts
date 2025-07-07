@@ -1,15 +1,15 @@
 import Supabase from "../integrations/supabase";
 import { TwitchAPI } from "../integrations/twitchAPI";
-import { User } from "../types/user"
+import { StreamUser } from "../types/streamUser"
 
 const UPDATE_USER_DATA_INTERVAL_IN_DAYS = 1; // Update user data every 1 day
 
 export abstract class UserStore {
 
-	static users: Record<string, User> = {};
+	static users: Record<string, StreamUser> = {};
 
-	public static getUser = async (login: string): Promise<User | null> => {
-		let user: User | null = null;
+	public static getUser = async (login: string): Promise<StreamUser | null> => {
+		let user: StreamUser | null = null;
 
 		// Local cache of users
 		user = this.users[login];
@@ -46,8 +46,8 @@ export abstract class UserStore {
 		return user;
 	}
 
-	public static getUsersByLogins = async (logins: string[]): Promise<User[]> => {
-		const users: User[] = [];
+	public static getUsersByLogins = async (logins: string[]): Promise<StreamUser[]> => {
+		const users: StreamUser[] = [];
 		
 		for (const login of logins) {
 			const user = await this.getUser(login);

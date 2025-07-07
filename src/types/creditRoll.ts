@@ -1,6 +1,6 @@
-import { User } from "./user";
+import { StreamUser } from "./streamUser";
 
 export type CreditRoll = {
 	type: string;
-	users: User[];
+	users: StreamUser[];
 }

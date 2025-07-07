@@ -1,9 +1,9 @@
 import { OnMessageExtra, OnMessageFlags } from "comfy.js";
-import { User } from "./user";
+import { StreamUser } from "./streamUser";
 
 export class OnChatMessageEvent  {
   constructor(
-    public user: User, 
+    public user: StreamUser, 
     public message: string,
 		public sanitizedMessage: string,
     public flags: OnMessageFlags,

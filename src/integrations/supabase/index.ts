@@ -1,6 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import { StreamEvent } from '../../types/streamEvent';
-import { User } from '../../types/user';
+import { StreamUser } from '../../types/streamUser';
 
 const SUPABASE_URL = process.env.SUPABASE_URL || "";
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || "";
@@ -29,7 +29,7 @@ export default abstract class Supabase {
 			return events as StreamEvent[];
 		}
 
-		static async getUser(login: string) : Promise<User | null> {
+		static async getUser(login: string) : Promise<StreamUser | null> {
 			const { data: users, error } = await supabaseClient
 				.from('streamUsers')
 				.select('*')
@@ -40,10 +40,10 @@ export default abstract class Supabase {
 				console.log("Error getting user: ", error);
 				return null;
 			}
-			return users && users.length > 0 ? users[0] as User : null;
+			return users && users.length > 0 ? users[0] as StreamUser : null;
 		}
 
-		static async addUser(user: User) : Promise<User | null> {
+		static async addUser(user: StreamUser) : Promise<StreamUser | null> {
 			const { data: users, error } = await supabaseClient
 				.from('streamUsers')
 				.upsert(user)
@@ -54,7 +54,7 @@ export default abstract class Supabase {
 				return null;
 			}
 
-			return users && users.length > 0 ? users[0] as User : null;
+			return users && users.length > 0 ? users[0] as StreamUser : null;
 		}
 
 		static async addStreamEvent(event: StreamEvent) : Promise<StreamEvent | null> {

@@ -1,5 +1,5 @@
 
-export class User {
+export class StreamUser {
   constructor(
     public login: string,
     public avatar_url: string,

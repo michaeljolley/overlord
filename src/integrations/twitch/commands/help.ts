@@ -9,7 +9,7 @@ import { Command } from "../../../types/command";
  * @param onCommandEvent
  * @param commands
  */
-export const help = (onCommandEvent: OnCommandEvent, commands: { command: Command, public: boolean }[]): void => {
+export const help = (onCommandEvent: OnCommandEvent, commands: Record<string, { command: Command, public: boolean }>): void => {
 	const cooldownSeconds = 300;
 
 	// The broadcaster is allowed to bypass throttling. Otherwise,
@@ -21,7 +21,7 @@ export const help = (onCommandEvent: OnCommandEvent, commands: { command: Comman
 		return;
 	}
 
-	const message = `I'm currently listening for the following commands: ${commands.map(c => `!${c.command.commandName}`).join(', ')}.`;
+	const message = `I'm currently listening for the following commands: ${Object.keys(commands).map(c => `!${c}`).join(', ')}.`;
 
 	// Send the message to Twitch chat
 	EventBus.eventEmitter.emit(BotEvents.OnSay, { message });

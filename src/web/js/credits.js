@@ -11,7 +11,7 @@ const typeDict = {
 }
 
 const usersPerBatch = 9;
-const millisecondsPerBatch = 4000;
+const millisecondsPerBatch = 6000;
 const millisecondsPerBatchFade = 4000;
 
 const credits = createApp({

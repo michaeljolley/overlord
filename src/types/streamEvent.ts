@@ -1,6 +1,5 @@
 
 export type StreamEvent = {
-	id?: number;
 	streamDate: string;
 	login: string;
 	created_at: Date;
