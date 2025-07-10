@@ -47,7 +47,7 @@ export abstract class TwitchAPI {
 			const body = await response.json();
 			const userData = body.data.length > 1 ? body.data : body.data[0];
 			if (userData) {
-				user = new StreamUser(userData.login, userData.profile_image_url, userData.id, userData.display_name);
+				user = new StreamUser(userData.login, userData.profile_image_url, userData.display_name);
 			}
 		}
 		catch (error) {
