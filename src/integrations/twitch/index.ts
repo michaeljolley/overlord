@@ -27,6 +27,8 @@ import { UserStore } from '../../stores/userStore';
 import { AnnouncementStore } from '../../stores/announcementStore';
 import { Announcement } from '../../types/announcement';
 import { blazor } from './triggers';
+import Supabase from '../supabase';
+import { Replacement } from '../../types/replacement';
 
 const TWITCH_BOT_USERNAME = process.env.TWITCH_BOT_USERNAME!;
 const TWITCH_BOT_AUTH_TOKEN = process.env.TWITCH_BOT_AUTH_TOKEN;
@@ -37,6 +39,7 @@ export default function twitchChat() {
 	const commands: Record<string, { command: Command, public: boolean }> = {};
 	const triggers: { name: string, trigger: (onChatMessageEvent: OnChatMessageEvent) => void}[] = [];
 	let announcements: Announcement[] = [];
+	let replacements: Replacement[] = [];
   
 	const loadCommands = () => {
     commands['blog'] = { command: new Command('blog', blog), public: true };
@@ -61,6 +64,11 @@ export default function twitchChat() {
   const loadAnnouncements = async () => {
     let newAnnouncements = AnnouncementStore.getAnnouncements();
     announcements = newAnnouncements.filter(a => a.command && a.message);
+  }
+
+  const loadReplacements = async () => {
+    let newReplacements = await Supabase.getReplacements();
+    replacements = newReplacements.filter(r => r.fromWord && r.toWord);
   }
 	
 	const emit = (eventType: string, payload: any) => {
@@ -183,6 +191,19 @@ export default function twitchChat() {
     });
 
     tempMessage = tempMessage.replace(/@(\w*)/gm, `<span>$&</span>`);
+
+		for (const replacement of replacements) {
+			let msg = tempMessage.toLocaleLowerCase();
+
+			var index = msg.indexOf(replacement.fromWord.toLocaleLowerCase());
+
+			if (index !== -1) {
+				tempMessage = tempMessage.slice(0, index) +
+					replacement.toWord +
+					tempMessage.slice(index + replacement.fromWord.length);
+			}
+		}
+
     return tempMessage;
   }
 
@@ -228,7 +249,8 @@ export default function twitchChat() {
 	loadCommands();
 	loadTriggers();
   loadAnnouncements();
-	
+	loadReplacements();
+
 	EventBus.eventEmitter.on(BotEvents.OnSay, (payload: { message: string }) => {
 		sendToChat(payload.message);
 	});

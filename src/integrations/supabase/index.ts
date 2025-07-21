@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 import { StreamEvent } from '../../types/streamEvent';
 import { StreamUser } from '../../types/streamUser';
+import { Replacement } from '../../types/replacement';
 
 const SUPABASE_URL = process.env.SUPABASE_URL || "";
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || "";
@@ -27,6 +28,16 @@ export default abstract class Supabase {
 				console.log("Error getting stream events: ", error);
 			}
 			return events as StreamEvent[];
+		}
+		
+		static async getReplacements() : Promise<Replacement[]> {
+			const { data: replacements, error } = await supabaseClient
+				.from('replacements')
+				.select('*');
+			if (error) {
+				console.log("Error getting replacements: ", error);
+			}
+			return replacements as Replacement[];
 		}
 
 		static async getUser(login: string) : Promise<StreamUser | null> {
