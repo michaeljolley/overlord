@@ -198,12 +198,12 @@ export default function twitchChat() {
 			var index = msg.indexOf(replacement.fromWord.toLocaleLowerCase());
 
 			if (index !== -1) {
-        if (index > 0 && msg[index - 1].match(/[a-zA-Z0-9]/)) {
-          continue; // Don't replace if it's part of a word
-        }
-        if (index + replacement.fromWord.length < msg.length && msg[index + replacement.fromWord.length].match(/[a-zA-Z0-9]/)) {
-          continue; // Don't replace if it's part of a word
-        }
+				if (index > 0 && msg[index - 1].match(/[a-zA-Z0-9]/)) {
+					continue; // Don't replace if it's part of a word
+				}
+				if (index + replacement.fromWord.length < msg.length && msg[index + replacement.fromWord.length].match(/[a-zA-Z0-9]/)) {
+					continue; // Don't replace if it's part of a word
+				}
 				tempMessage = tempMessage.slice(0, index) +
 					replacement.toWord +
 					tempMessage.slice(index + replacement.fromWord.length);
