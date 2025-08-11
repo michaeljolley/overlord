@@ -20,7 +20,7 @@ const chat = createApp({
 			}, 1200);
 		};
 		const removeMessages = (count) => {
-			messages.value = messages.value.slice(count);
+			messages.value = messages.value.slice(0, -count);
 		};
 		const removeItem = (id) => {
 			messages.value = messages.value.filter((f) => f.id !== id);
