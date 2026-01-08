@@ -19,8 +19,8 @@ const chat = createApp({
 				clearTimeout(clearMSGTimeout);
 			}, 1200);
 		};
-		const removeMessages = (count) => {
-			messages.value = messages.value.slice(0, -count);
+		const removeMessages = (messagesToPop) => {
+			messages.value = messages.value.slice(0, messages.value.length - messagesToPop + 1);
 		};
 		const removeItem = (id) => {
 			messages.value = messages.value.filter((f) => f.id !== id);
@@ -28,10 +28,12 @@ const chat = createApp({
 		const checkOverflow = (_, done) => {
 			const chatMessages = chatMessage.value;
 			if (chatMessages) {
-				const badGuys = chatMessages.filter((f) => {
-					return f.$el.getBoundingClientRect().top < 0;
-				}).length;
-				removeMessages(badGuys);
+				const messagesToPop = chatMessages.filter((f) => {
+																						return f.$el.getBoundingClientRect().top < 80;
+																					}).length;
+				if (messagesToPop > 0) {
+					removeMessages(messagesToPop);
+				}
 			}
 			done();
 		};
