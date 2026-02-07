@@ -5,4 +5,5 @@ export type StreamEvent = {
 	created_at: Date;
 	eventType: string;
 	message?: string;
+	quantity?: number;
 };

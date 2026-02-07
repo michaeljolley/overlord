@@ -25,7 +25,7 @@ export abstract class Logger {
 		});
 
 		EventBus.eventEmitter.on(BotEvents.OnRaid, async (payload: RaidWebhookBody) => {
-			await this.logEvent({ type: BotEvents.OnRaid, username: payload.username });
+			await this.logEvent({ type: BotEvents.OnRaid, username: payload.username, quantity: payload.viewers });
 		});
 
 		EventBus.eventEmitter.on(BotEvents.OnSub, async (payload: SubWebhookBody) => {
@@ -37,11 +37,11 @@ export abstract class Logger {
 		});
 
 		EventBus.eventEmitter.on(BotEvents.OnGiftSub, async (payload: GiftSubWebhookBody) => {
-			await this.logEvent({ type: BotEvents.OnGiftSub, username: payload.username });
+			await this.logEvent({ type: BotEvents.OnGiftSub, username: payload.username, quantity: payload.giftedTotal });
 		});
 
 		EventBus.eventEmitter.on(BotEvents.OnCheer, async (payload: CheerWebhookBody) => {
-			await this.logEvent({ type: BotEvents.OnCheer, username: payload.username, message: payload.message });
+			await this.logEvent({ type: BotEvents.OnCheer, username: payload.username, message: payload.message, quantity: payload.bits });
 		});
 
 		EventBus.eventEmitter.on(BotEvents.OnTriggerCredits, async (payload: CreditsWebhookBody) => {
@@ -52,17 +52,18 @@ export abstract class Logger {
 
 	private static async logEvent(event: UserWebhookEvent) : Promise<void> {
 		try {
-			const { type, username, message } = event;
+			const { type, username, message, quantity } = event;
 
 			// Ensure user exists in cache/db
 			await UserStore.getUser(username);
 
-			const streamEvent: StreamEvent = {
+			let streamEvent: StreamEvent = {
 				streamDate: new Date().toISOString().split("T")[0],
 				login: username.toLocaleLowerCase(),
 				created_at: new Date(),
 				eventType: type,
-				message
+				message,
+				quantity
 			};
 			
 			await Supabase.addStreamEvent(streamEvent);
@@ -111,4 +112,5 @@ interface UserWebhookEvent {
 	type: string;
 	username: string;
 	message?: string;
+	quantity?: number;
 }
