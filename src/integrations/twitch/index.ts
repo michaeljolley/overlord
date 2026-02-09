@@ -116,10 +116,10 @@ export default function twitchChat() {
 		user = user.toLocaleLowerCase();
 
     if (
-			!self
-      && 
+			// !self
+      // && 
 			user !== TWITCH_BOT_USERNAME.toLocaleLowerCase()
-      && user !== TWITCH_CHANNEL.toLocaleLowerCase()
+      // && user !== TWITCH_CHANNEL.toLocaleLowerCase()
 		) {
 
       let userInfo: StreamUser | null;
@@ -129,7 +129,15 @@ export default function twitchChat() {
       if (userInfo) {
         const processedChatMessage = processChat(message, flags, extra.messageEmotes);
         if (processedChatMessage.length > 0) {
-					const onChatMessageEvent = new OnChatMessageEvent(userInfo, message, processedChatMessage, flags, self, extra, extra.id)
+					// TESTING: Randomly set flags for testing overlay styles
+					const testFlags = { ...flags };
+					const rand = Math.random();
+					if (rand < 0.2) testFlags.mod = true;
+					else if (rand < 0.4) testFlags.vip = true;
+					else if (rand < 0.55) testFlags.highlighted = true;
+					// END TESTING
+
+					const onChatMessageEvent = new OnChatMessageEvent(userInfo, message, processedChatMessage, testFlags, self, extra, extra.id)
 
           emit(BotEvents.OnChatMessage, onChatMessageEvent)
 

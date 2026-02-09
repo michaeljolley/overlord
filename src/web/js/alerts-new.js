@@ -118,7 +118,7 @@ const app = createApp({
 			glowLevels.value = activeAlert.value.lines.map(() => 0.18);
 
 			playAudio();
-			setTimeout(() => { activeAlert.value = null; }, 15000);
+			setTimeout(() => { activeAlert.value = null; }, 10000);
 		};
 
 		onMounted(() => {

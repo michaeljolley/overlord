@@ -1,0 +1,359 @@
+@import "_global.css";
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Modern Chat Overlay
+   A sleek, glass-morphism inspired chat overlay with smooth animations
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	background: transparent;
+	overflow: hidden;
+}
+
+/* ── Main Container ─────────────────────────────────────────────────────── */
+.chat-container {
+	display: flex;
+	flex-direction: column-reverse;
+	position: fixed;
+	right: 24px;
+	bottom: 24px;
+	top: 80px;
+	width: 420px;
+	font-family: 'Inter', sans-serif;
+	font-size: 15px;
+	gap: 12px;
+}
+
+/* ── Message Card ───────────────────────────────────────────────────────── */
+.message {
+	position: relative;
+	opacity: 0;
+	transform: translateX(60px) scale(0.95);
+	animation: slideIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.message.hide {
+	animation: slideOut 0.5s ease-in forwards;
+}
+
+.message-inner {
+	display: flex;
+	align-items: flex-start;
+	gap: 12px;
+	padding: 14px 16px;
+	background: rgba(17, 14, 26, 0.85);
+	backdrop-filter: blur(12px);
+	-webkit-backdrop-filter: blur(12px);
+	border: 1px solid rgba(255, 255, 255, 0.08);
+	border-radius: 16px;
+	position: relative;
+	overflow: hidden;
+	transition: all 0.3s ease;
+}
+
+/* Subtle accent line on left */
+.message-inner::before {
+	content: '';
+	position: absolute;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	width: 3px;
+	background: linear-gradient(180deg, var(--neonblue) 0%, var(--neonpink) 100%);
+	opacity: 0.6;
+	border-radius: 3px 0 0 3px;
+}
+
+/* ── Avatar ─────────────────────────────────────────────────────────────── */
+.avatar-ring {
+	flex-shrink: 0;
+	width: 42px;
+	height: 42px;
+	border-radius: 50%;
+	padding: 2px;
+	background: linear-gradient(135deg, var(--neonpink), var(--neonblue));
+	animation: ringPulse 3s ease-in-out infinite;
+}
+
+.avatar {
+	width: 100%;
+	height: 100%;
+	border-radius: 50%;
+	background-size: cover;
+	background-position: center;
+	background-color: var(--midblue);
+	border: 2px solid var(--darkblue);
+}
+
+/* ── Content ────────────────────────────────────────────────────────────── */
+.content {
+	flex: 1;
+	min-width: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+
+.meta {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.username {
+	font-weight: 600;
+	font-size: 14px;
+	background: linear-gradient(90deg, var(--lightgray) 0%, var(--white) 100%);
+	background-clip: text;
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
+
+.role-badge {
+	font-family: 'JetBrains Mono', monospace;
+	font-size: 9px;
+	font-weight: 500;
+	letter-spacing: 0.5px;
+	padding: 2px 6px;
+	border-radius: 4px;
+	background: rgba(255, 255, 255, 0.1);
+	color: var(--lightgray);
+	border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.vip-badge {
+	background: linear-gradient(135deg, rgba(255, 0, 255, 0.2), rgba(0, 255, 255, 0.2));
+	border-color: var(--neonpink);
+	color: var(--neonpink);
+}
+
+.text {
+	color: rgba(255, 255, 255, 0.9);
+	line-height: 1.5;
+	word-wrap: break-word;
+	white-space: pre-wrap;
+}
+
+.text img {
+	height: 1.5em;
+	vertical-align: middle;
+	margin: 0 2px;
+}
+
+/* ── Glow Effect (behind card) ──────────────────────────────────────────── */
+.glow {
+	position: absolute;
+	inset: -2px;
+	background: linear-gradient(135deg, var(--neonpink), var(--neonblue));
+	border-radius: 18px;
+	opacity: 0;
+	z-index: -1;
+	filter: blur(16px);
+	transition: opacity 0.4s ease;
+}
+
+.message.is-new .glow {
+	opacity: 0.4;
+	animation: glowFade 2s ease-out forwards;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Role-specific Styles
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── VIP ────────────────────────────────────────────────────────────────── */
+.vip .message-inner {
+	background: rgba(17, 14, 26, 0.9);
+	border-color: rgba(255, 0, 255, 0.25);
+}
+
+.vip .message-inner::before {
+	background: linear-gradient(180deg, var(--neonpink) 0%, var(--purple) 100%);
+	opacity: 1;
+}
+
+.vip .username {
+	background: linear-gradient(90deg, var(--neonpink) 0%, var(--neonblue) 100%);
+	background-clip: text;
+	-webkit-background-clip: text;
+}
+
+.vip .glow {
+	background: var(--neonpink);
+}
+
+/* ── Mod ────────────────────────────────────────────────────────────────── */
+.mod .message-inner {
+	border-color: rgba(255, 255, 255, 0.2);
+}
+
+.mod .message-inner::before {
+	background: linear-gradient(180deg, var(--white) 0%, var(--gray) 100%);
+	opacity: 0.8;
+}
+
+.mod .username {
+	background: linear-gradient(90deg, var(--gray) 0%, var(--white) 50%, var(--gray) 100%);
+	background-size: 200% 100%;
+	background-clip: text;
+	-webkit-background-clip: text;
+	animation: shimmer 3s linear infinite;
+}
+
+.mod .avatar-ring {
+	background: linear-gradient(135deg, var(--gray), var(--white));
+}
+
+/* ── Highlighted ────────────────────────────────────────────────────────── */
+.highlighted .message-inner {
+	background: rgba(255, 255, 255, 0.95);
+	border: 2px solid transparent;
+	background-clip: padding-box;
+}
+
+.highlighted .message-inner::before {
+	width: 100%;
+	height: 100%;
+	inset: 0;
+	border-radius: 16px;
+	background: linear-gradient(135deg, var(--neonpink), var(--neonblue), var(--neonpink));
+	background-size: 200% 200%;
+	opacity: 1;
+	z-index: -1;
+	animation: gradientShift 3s linear infinite;
+}
+
+.highlighted .username {
+	background: linear-gradient(90deg, var(--neonpink) 0%, var(--purple) 50%, var(--neonblue) 100%);
+	background-clip: text;
+	-webkit-background-clip: text;
+}
+
+.highlighted .text {
+	color: var(--darkblue);
+}
+
+.highlighted .glow {
+	opacity: 0.6 !important;
+	animation: none;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Fade State (when highlight is active)
+   ═══════════════════════════════════════════════════════════════════════════ */
+.fade .message:not(.highlighted) {
+	opacity: 0.5;
+	transform: scale(0.98);
+	filter: brightness(0.7);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Party Mode Bounces
+   ═══════════════════════════════════════════════════════════════════════════ */
+.bounce-1 {
+	animation: bounce1 0.6s ease-in-out infinite alternate;
+}
+.bounce-2 {
+	animation: bounce2 0.5s ease-in-out infinite alternate;
+}
+.bounce-3 {
+	animation: bounce3 0.7s ease-in-out infinite alternate;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Transition Group Animations
+   ═══════════════════════════════════════════════════════════════════════════ */
+.msg-move {
+	transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.msg-leave-active {
+	position: absolute;
+	width: 100%;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Keyframe Animations
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@keyframes slideIn {
+	0% {
+		opacity: 0;
+		transform: translateX(60px) scale(0.95);
+	}
+	100% {
+		opacity: 1;
+		transform: translateX(0) scale(1);
+	}
+}
+
+@keyframes slideOut {
+	0% {
+		opacity: 1;
+		transform: translateX(0) scale(1);
+	}
+	100% {
+		opacity: 0;
+		transform: translateX(40px) scale(0.9);
+	}
+}
+
+@keyframes glowFade {
+	0% {
+		opacity: 0.5;
+	}
+	100% {
+		opacity: 0;
+	}
+}
+
+@keyframes ringPulse {
+	0%, 100% {
+		box-shadow: 0 0 0 0 rgba(0, 255, 255, 0.3);
+	}
+	50% {
+		box-shadow: 0 0 8px 2px rgba(255, 0, 255, 0.2);
+	}
+}
+
+@keyframes shimmer {
+	0% {
+		background-position: 200% 0;
+	}
+	100% {
+		background-position: -200% 0;
+	}
+}
+
+@keyframes gradientShift {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+
+@keyframes bounce1 {
+	0% { transform: translateY(0) rotate(-2deg); }
+	100% { transform: translateY(-8px) rotate(2deg); }
+}
+
+@keyframes bounce2 {
+	0% { transform: translateY(0) rotate(1deg); }
+	100% { transform: translateY(-6px) rotate(-3deg); }
+}
+
+@keyframes bounce3 {
+	0% { transform: translateY(0) rotate(-1deg); }
+	100% { transform: translateY(-10px) rotate(1deg); }
+}
