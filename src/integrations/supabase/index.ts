@@ -75,7 +75,7 @@ export default abstract class Supabase {
 				.select();
 
 			if (error) {
-				console.log("Error adding stream event: ", error);
+				console.log("Error adding stream event: ", error, event);
 				return null;
 			}
 			

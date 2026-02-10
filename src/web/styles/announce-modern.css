@@ -1,0 +1,197 @@
+@import "_global.css";
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Modern Announcement Overlay — Cinematic Lower-Third
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	background: #000;
+	overflow: hidden;
+	font-family: 'Inter', sans-serif;
+}
+
+/* ── Positioning — bottom-left ────────────────────────────────────────── */
+.announce-container {
+	position: fixed;
+	bottom: 80px;
+	left: 60px;
+}
+
+/* ── Entrance / Exit ──────────────────────────────────────────────────── */
+.announce-enter-active {
+	animation: announceIn 0.7s cubic-bezier(0.25, 1, 0.5, 1) both;
+}
+
+.announce-leave-active {
+	animation: announceOut 0.6s ease-in both;
+}
+
+@keyframes announceIn {
+	from {
+		opacity: 0;
+		transform: translateX(-30px);
+		filter: blur(6px);
+	}
+	to {
+		opacity: 1;
+		transform: translateX(0);
+		filter: blur(0);
+	}
+}
+
+@keyframes announceOut {
+	from {
+		opacity: 1;
+	}
+	to {
+		opacity: 0;
+		transform: translateX(-20px);
+		filter: blur(4px);
+	}
+}
+
+/* ── Announcement block ───────────────────────────────────────────────── */
+.announce-block {
+	position: relative;
+	background: rgba(10, 8, 18, 0.95);
+	backdrop-filter: blur(12px);
+	-webkit-backdrop-filter: blur(12px);
+	border: 1px solid rgba(255, 255, 255, 0.06);
+	border-radius: 12px;
+	padding: 28px 36px;
+}
+
+/* Sheen effect */
+.announce-block::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+	border-radius: 12px;
+	background: linear-gradient(
+		120deg,
+		transparent 0%,
+		rgba(255, 255, 255, 0.06) 50%,
+		transparent 100%
+	);
+	background-size: 200% 100%;
+	background-position: -200% 0;
+	animation: cardSheen 20s 5s linear infinite;
+	pointer-events: none;
+}
+
+/* ── Top label ────────────────────────────────────────────────────────── */
+.announce-label {
+	font-family: 'JetBrains Mono', monospace;
+	font-size: 12px;
+	font-weight: 500;
+	letter-spacing: 3px;
+	text-transform: uppercase;
+	color: var(--neonpink);
+	margin-bottom: 10px;
+}
+
+/* ── Accent line ──────────────────────────────────────────────────────── */
+.announce-line {
+	width: 320px;
+	height: 3px;
+	margin-bottom: 18px;
+	border-radius: 2px;
+	background: linear-gradient(
+		90deg,
+		var(--neonpink),
+		var(--neonblue),
+		var(--neonpink),
+		var(--neonblue),
+		var(--neonpink)
+	);
+	background-size: 300% 100%;
+	animation: lineRevolve 8s linear infinite;
+	position: relative;
+}
+
+/* Glow under the line */
+.announce-line::after {
+	content: '';
+	position: absolute;
+	top: -4px;
+	left: -2px;
+	right: -2px;
+	height: 10px;
+	border-radius: 2px;
+	background: linear-gradient(
+		90deg,
+		var(--neonpink),
+		var(--neonblue),
+		var(--neonpink),
+		var(--neonblue),
+		var(--neonpink)
+	);
+	background-size: 300% 100%;
+	animation: lineRevolve 8s linear infinite;
+	filter: blur(8px);
+	opacity: 0.5;
+}
+
+/* ── Title ────────────────────────────────────────────────────────────── */
+.announce-title {
+	font-size: 42px;
+	font-weight: 800;
+	line-height: 1.1;
+	margin-bottom: 10px;
+	color: #f0f0f0;
+	white-space: nowrap;
+}
+
+/* ── Subtitle / message ───────────────────────────────────────────────── */
+.announce-subtitle {
+	font-size: 20px;
+	font-weight: 400;
+	color: rgba(255, 255, 255, 0.55);
+	letter-spacing: 0.5px;
+	line-height: 1.5;
+}
+
+.announce-subtitle a,
+.announce-subtitle span {
+	color: var(--neonpink);
+	font-weight: 600;
+}
+
+/* ── Ambient glow ─────────────────────────────────────────────────────── */
+.announce-block::before {
+	content: '';
+	position: absolute;
+	top: 20%;
+	left: -20px;
+	width: 200px;
+	height: 80%;
+	background: radial-gradient(
+		ellipse at center,
+		rgba(255, 0, 255, 0.06) 0%,
+		transparent 70%
+	);
+	filter: blur(30px);
+	z-index: -1;
+	pointer-events: none;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Keyframes
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@keyframes lineRevolve {
+	0% { background-position: 0% 50%; }
+	100% { background-position: 300% 50%; }
+}
+
+@keyframes cardSheen {
+	0% { background-position: 200% 0; }
+	40% { background-position: -200% 0; }
+	100% { background-position: -200% 0; }
+}

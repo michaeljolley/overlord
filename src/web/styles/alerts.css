@@ -1,58 +1,99 @@
 @import "_global.css";
 
-.alerts {
-  margin: 50px;
-  font-family: "Monoton";
-  text-transform: uppercase;
-  font-size: 6em;
+/* ── Alert wrapper ─────────────────────────────────── */
+.alerts-new {
+	margin: 50px;
+	font-family: "Monoton";
+	text-transform: uppercase;
+	font-size: 6em;
+	position: relative;
 }
 
-.letter {
-	display: inline-block;
-	min-width: 20px;
+/* ── Alert entrance / exit ─────────────────────────── */
+.alert-enter-active {
+	animation: alert-in 0.5s ease-out both;
 }
 
+.alert-leave-active {
+	animation: alert-out 1s ease-in both;
+}
+
+@keyframes alert-in {
+	from { opacity: 0; transform: scale(0.96); filter: blur(6px); }
+	to   { opacity: 1; transform: scale(1);    filter: blur(0); }
+}
+
+@keyframes alert-out {
+	from { opacity: 1; }
+	to   { opacity: 0; filter: blur(3px); }
+}
+
+/* ── Alert container ───────────────────────────────── */
+.alert-container {
+	position: relative;
+}
+
+/* ── Sign (one line of text) ───────────────────────── */
 .sign {
-  display: table;
-  margin-left: calc(100% - 95%);
-}
-
-.sign.pink {
-	color: var(--neonpink);
-	text-shadow: 0 0 0.6rem var(--lightestneonpink), 0 0 1.5rem var(--lightneonpink),
-		-0.2rem 0.1rem 1rem var(--lightneonpink), 0.2rem 0.1rem 1rem var(--lightneonpink),
-		0 -0.5rem 2rem var(--darkneonpink), 0 0.5rem 3rem var(--neonpink);
-	animation: shinepink 2s forwards, flicker 3s infinite;
+	display: table;
+	position: relative;
+	margin-left: calc(100% - 95%);
+	color: var(--sign-color);
+	text-shadow:
+		0 0 0.3rem var(--sign-lightest),
+		0 0 0.6rem var(--sign-lightest),
+		0 0 1.5rem var(--sign-light),
+		-0.2rem 0.1rem 1rem var(--sign-light),
+		0.2rem 0.1rem 1rem var(--sign-light),
+		0 -0.5rem 2rem var(--sign-dark),
+		0 0.5rem 3rem var(--sign-color),
+		0 0 4rem var(--sign-dark);
+	animation: flicker 3s infinite;
 	z-index: 50;
 }
+
+/* Ambient wall-glow behind each sign */
+.sign::after {
+	content: '';
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 120%;
+	height: 350%;
+	background: radial-gradient(
+		ellipse at center,
+		var(--sign-glow, transparent) 0%,
+		transparent 70%
+	);
+	opacity: var(--glow-opacity, 0.18);
+	z-index: -1;
+	pointer-events: none;
+	transition: opacity 0.8s ease-out;
+}
+
+/* ── Color themes (parametric via custom properties) ── */
+.sign.pink {
+	--sign-color: var(--neonpink);
+	--sign-lightest: var(--lightestneonpink);
+	--sign-light: var(--lightneonpink);
+	--sign-dark: var(--darkneonpink);
+	--sign-darkest: var(--darkestneonpink);
+	--sign-glow: var(--neonpink);
+}
+
 .sign.pink:not(:first-child) {
 	margin-left: calc(100% - 90%);
 	margin-top: -10px;
 }
 
-.sign.pink .flicker {
-	animation: shinepink 5s forwards, blinkpink 1s 2s infinite;
-}
-
-.sign.pink .fast-flicker {
-	animation: shinepink 1s forwards, blinkpink 10s 1s infinite;
-}
-
-.sign.pink .fast-flicker2 {
-	animation: shinepink 2s forwards, blinkpink 7s 2s infinite;
-}
-
-.sign.pink .off {
-	color: var(--darkestneonpink);
-	text-shadow: none;
-}
-
 .sign.blue {
-	color: var(--neonblue);
-	text-shadow: 0 0 0.6rem var(--lightestneonblue), 0 0 1.5rem var(--lightneonblue),
-		-0.2rem 0.1rem 1rem var(--lightneonblue), 0.2rem 0.1rem 1rem var(--lightneonblue),
-		0 -0.5rem 2rem var(--darkneonblue), 0 0.5rem 3rem var(--neonblue);
-	animation: shineblue 2s forwards, flicker 3s infinite;
+	--sign-color: var(--neonblue);
+	--sign-lightest: var(--lightestneonblue);
+	--sign-light: var(--lightneonblue);
+	--sign-dark: var(--darkneonblue);
+	--sign-darkest: var(--darkestneonblue);
+	--sign-glow: var(--neonblue);
 	margin-top: -90px;
 	margin-left: unset;
 	z-index: 100;
@@ -64,37 +105,23 @@
 	margin-left: 200px;
 	margin-top: -60px;
 	z-index: 200;
-	animation: shinebluesmall 2s forwards, flicker 3s infinite;
-	
-	text-shadow: 0 0 0.15rem var(--lightestneonblue), 0 0 .75rem var(--lightneonblue),
-	-0.2rem 0.1rem .25rem var(--lightneonblue), 0.2rem 0.1rem .25rem var(--lightneonblue),
-	0 -0.5rem .5rem var(--darkneonblue), 0 0.5rem .75rem var(--neonblue);
-}
-
-.sign.blue .flicker {
-	animation: shineblue 5s forwards, blinkblue 1s 2s infinite;
-}
-
-.sign.blue .fast-flicker {
-	animation: shineblue 1s forwards, blinkblue 10s 1s infinite;
-}
-
-.sign.blue .fast-flicker2 {
-	animation: shineblue 2s forwards, blinkblue 7s 2s infinite;
-}
-
-.sign.blue .off {
-	color: var(--darkestneonblue);
-	text-shadow: none;
+	text-shadow:
+		0 0 0.1rem var(--sign-lightest),
+		0 0 0.15rem var(--sign-lightest),
+		0 0 .75rem var(--sign-light),
+		-0.2rem 0.1rem .25rem var(--sign-light),
+		0.2rem 0.1rem .25rem var(--sign-light),
+		0 -0.5rem .5rem var(--sign-dark),
+		0 0.5rem .75rem var(--sign-color);
 }
 
 .sign.red {
-	color: var(--gift-red-bright);
-	text-shadow: 0 0 0.6rem var(--gift-red-light), 0 0 1.5rem var(--gift-red),
-		-0.2rem 0.1rem 1rem var(--gift-red), 0.2rem 0.1rem 1rem var(--gift-red),
-		0 -0.5rem 2rem var(--gift-red-dark), 0 0.5rem 3rem var(--gift-red-bright);
-	animation: shinered 2s forwards, flicker 3s infinite;
-	z-index: 50;
+	--sign-color: var(--gift-red-bright);
+	--sign-lightest: var(--gift-red-light);
+	--sign-light: var(--gift-red);
+	--sign-dark: var(--gift-red-dark);
+	--sign-darkest: var(--gift-red-dark);
+	--sign-glow: var(--gift-red-bright);
 }
 
 .sign.red:not(:first-child) {
@@ -102,335 +129,183 @@
 	margin-top: -10px;
 }
 
-.sign.red .flicker {
-	animation: shinered 5s forwards, blinkred 1s 2s infinite;
-}
-
-.sign.red .fast-flicker {
-	animation: shinered 1s forwards, blinkred 10s 1s infinite;
-}
-
-.sign.red .fast-flicker2 {
-	animation: shinered 2s forwards, blinkred 7s 2s infinite;
-}
-
-.sign.red .off {
-	color: var(--gift-red-dark);
-	text-shadow: none;
-}
-
 .sign.green {
-	color: var(--gift-green-dark);
-	text-shadow: 0 0 0.6rem var(--gift-green-light), 0 0 1.5rem var(--gift-green),
-		-0.2rem 0.1rem 1rem var(--gift-green), 0.2rem 0.1rem 1rem var(--gift-green),
-		0 -0.5rem 2rem var(--gift-green-darker), 0 0.5rem 3rem var(--gift-green-dark);
-	animation: shinegreen 2s forwards, flicker 3s infinite;
+	--sign-color: var(--gift-green-dark);
+	--sign-lightest: var(--gift-green-light);
+	--sign-light: var(--gift-green);
+	--sign-dark: var(--gift-green-darker);
+	--sign-darkest: var(--gift-green-darker);
+	--sign-glow: var(--gift-green);
 	margin-top: -90px;
 	margin-left: unset;
 	z-index: 100;
 	position: absolute;
 }
 
-.sign.green .flicker {
-	animation: shinegreen 5s forwards, blinkgreen 1s 2s infinite;
+/* ── Letter (individual character) ─────────────────── */
+.letter {
+	display: inline-block;
+	min-width: 20px;
+	will-change: opacity, color, text-shadow;
+	animation:
+		shine var(--shine-dur, 1.5s) var(--cascade-delay, 0s) both,
+		blink var(--blink-dur, 4s) var(--blink-delay, 2s) infinite;
 }
 
-.sign.green .fast-flicker {
-	animation: shinegreen 1s forwards, blinkgreen 10s 1s infinite;
+.letter.dying {
+	animation: die var(--dying-dur, 0.7s) forwards !important;
 }
 
-.sign.green .fast-flicker2 {
-	animation: shinegreen 2s forwards, blinkgreen 7s 2s infinite;
-}
-
-.sign.green .off {
-	color: var(--gift-green-darker);
+.letter.off {
+	animation: none !important;
+	color: var(--sign-darkest);
 	text-shadow: none;
+	opacity: 0.15;
 }
 
-.sign.fade-leave-active {
+/* ── Keyframes ─────────────────────────────────────── */
+
+/* Turn on: dark → full neon glow */
+@keyframes shine {
+	0% {
+		opacity: 0;
+		color: var(--sign-darkest);
+		text-shadow: none;
+	}
+	30% {
+		opacity: 0.4;
+		color: var(--sign-dark);
+		text-shadow: 0 0 0.2rem var(--sign-dark);
+	}
+	60% {
+		opacity: 0.8;
+		color: var(--sign-color);
+	}
+	100% {
+		opacity: 1;
+		color: var(--sign-lightest);
+		text-shadow:
+			0 0 0.3rem var(--sign-lightest),
+			0 0 0.6rem var(--sign-lightest),
+			0 0 1.5rem var(--sign-light),
+			-0.2rem 0.1rem 1rem var(--sign-light),
+			0.2rem 0.1rem 1rem var(--sign-light),
+			0 -0.5rem 2rem var(--sign-dark),
+			0 0.5rem 3rem var(--sign-color),
+			0 0 4rem var(--sign-dark);
+	}
+}
+
+/* Ongoing neon flicker (one set works for every color) */
+@keyframes blink {
+	0%,
+	22%,
+	36%,
+	75% {
+		color: var(--sign-lightest);
+		text-shadow:
+			0 0 0.3rem var(--sign-lightest),
+			0 0 0.6rem var(--sign-lightest),
+			0 0 1.5rem var(--sign-light),
+			-0.2rem 0.1rem 1rem var(--sign-light),
+			0.2rem 0.1rem 1rem var(--sign-light),
+			0 -0.5rem 2rem var(--sign-dark),
+			0 0.5rem 3rem var(--sign-color),
+			0 0 4rem var(--sign-dark);
+	}
+	28%,
+	33% {
+		color: var(--sign-light);
+		text-shadow: none;
+	}
+	82%,
+	97% {
+		color: var(--sign-color);
+		text-shadow: none;
+	}
+}
+
+/* Letter sputters and dies */
+@keyframes die {
+	0% {
+		opacity: 1;
+		color: var(--sign-lightest);
+		text-shadow:
+			0 0 0.3rem var(--sign-lightest),
+			0 0 0.6rem var(--sign-lightest),
+			0 0 1.5rem var(--sign-light),
+			-0.2rem 0.1rem 1rem var(--sign-light),
+			0.2rem 0.1rem 1rem var(--sign-light),
+			0 -0.5rem 2rem var(--sign-dark),
+			0 0.5rem 3rem var(--sign-color);
+	}
+	10% { opacity: 0.15; text-shadow: none; }
+	20% {
+		opacity: 0.7;
+		text-shadow: 0 0 0.5rem var(--sign-light);
+	}
+	30% { opacity: 0.05; text-shadow: none; }
+	42% {
+		opacity: 0.5;
+		text-shadow: 0 0 0.3rem var(--sign-dark);
+	}
+	52% { opacity: 0; text-shadow: none; }
+	64% {
+		opacity: 0.25;
+		text-shadow: 0 0 0.2rem var(--sign-dark);
+	}
+	75% { opacity: 0; text-shadow: none; }
+	88% { opacity: 0.1; }
+	100% {
+		opacity: 0.15;
+		color: var(--sign-darkest);
+		text-shadow: none;
+	}
+}
+
+/* Subtle overall opacity pulse (applied to .sign container) */
+@keyframes flicker {
+	from { opacity: 1; }
+	4% { opacity: 0.9; }
+	6% { opacity: 0.85; }
+	8% { opacity: 0.95; }
+	10% { opacity: 0.9; }
+	11% { opacity: 0.922; }
+	12% { opacity: 0.9; }
+	14% { opacity: 0.95; }
+	16% { opacity: 0.98; }
+	17% { opacity: 0.9; }
+	19% { opacity: 0.93; }
+	20% { opacity: 0.99; }
+	24% { opacity: 1; }
+	26% { opacity: 0.94; }
+	28% { opacity: 0.98; }
+	37% { opacity: 0.93; }
+	38% { opacity: 0.5; }
+	39% { opacity: 0.96; }
+	42% { opacity: 1; }
+	44% { opacity: 0.97; }
+	46% { opacity: 0.94; }
+	56% { opacity: 0.9; }
+	58% { opacity: 0.9; }
+	60% { opacity: 0.99; }
+	68% { opacity: 1; }
+	70% { opacity: 0.9; }
+	72% { opacity: 0.95; }
+	93% { opacity: 0.93; }
+	95% { opacity: 0.95; }
+	97% { opacity: 0.93; }
+	to { opacity: 1; }
+}
+
+
+
+/* ── Vue transition helpers ────────────────────────── */
+.fade-leave-active {
 	animation: unset;
 	transition: opacity 2s;
 }
 
-.sign.fade-leave-to {
+.fade-leave-to {
 	opacity: 0;
-}
-
-@keyframes blinkpink {
-  0%,
-  22%,
-  36%,
-  75% {
-    color: var(--lightestneonpink);
-    text-shadow: 0 0 0.6rem var(--lightestneonpink), 0 0 1.5rem var(--lightneonpink),
-      -0.2rem 0.1rem 1rem var(--lightneonpink), 0.2rem 0.1rem 1rem var(--lightneonpink),
-      0 -0.5rem 2rem var(--darkneonpink), 0 0.5rem 3rem var(--neonpink);
-  }
-  28%,
-  33% {
-    color: var(--lightneonpink);
-    text-shadow: none;
-  }
-  82%,
-  97% {
-    color: var(--neonpink);
-    text-shadow: none;
-  }
-}
-@keyframes blinkblue {
-  0%,
-  22%,
-  36%,
-  75% {
-    color: var(--lightestneonblue);
-    text-shadow: 0 0 0.6rem var(--lightestneonblue), 0 0 1.5rem var(--lightneonblue),
-      -0.2rem 0.1rem 1rem var(--lightneonblue), 0.2rem 0.1rem 1rem var(--lightneonblue),
-      0 -0.5rem 2rem var(--darkneonblue), 0 0.5rem 3rem var(--neonblue);
-  }
-  28%,
-  33% {
-    color: var(--lightneonblue);
-    text-shadow: none;
-  }
-  82%,
-  97% {
-    color: var(--neonblue);
-    text-shadow: none;
-  }
-}
-
-@keyframes blinkred {
-  0%,
-  22%,
-  36%,
-  75% {
-    color: var(--gift-red-light);
-    text-shadow: 0 0 0.6rem var(--gift-red-light), 0 0 1.5rem var(--gift-red),
-      -0.2rem 0.1rem 1rem var(--gift-red), 0.2rem 0.1rem 1rem var(--gift-red),
-      0 -0.5rem 2rem var(--gift-red-dark), 0 0.5rem 3rem var(--gift-red-bright);
-  }
-  28%,
-  33% {
-    color: var(--gift-red);
-    text-shadow: none;
-  }
-  82%,
-  97% {
-    color: var(--gift-red-bright);
-    text-shadow: none;
-  }
-}
-
-@keyframes blinkgreen {
-  0%,
-  22%,
-  36%,
-  75% {
-    color: var(--gift-green-light);
-    text-shadow: 0 0 0.6rem var(--gift-green-light), 0 0 1.5rem var(--gift-green),
-      -0.2rem 0.1rem 1rem var(--gift-green), 0.2rem 0.1rem 1rem var(--gift-green),
-      0 -0.5rem 2rem var(--gift-green-darker), 0 0.5rem 3rem var(--gift-green-dark);
-  }
-  28%,
-  33% {
-    color: var(--gift-green);
-    text-shadow: none;
-  }
-  82%,
-  97% {
-    color: var(--gift-green-dark);
-    text-shadow: none;
-  }
-}
-
-@keyframes shinepink {
-  0% {
-    color: var(--darkestneonpink);
-    text-shadow: none;
-  }
-  100% {
-    color: var(--lightestneonpink);
-    text-shadow: 0 0 0.6rem var(--lightestneonpink), 0 0 1.5rem var(--neonpink),
-      -0.2rem 0.1rem 1rem var(--lightneonpink), 0.2rem 0.1rem 1rem var(--lightneonpink),
-      0 -0.5rem 2rem var(--neonpink), 0 0.5rem 3rem var(--neonpink);
-  }
-}
-
-@keyframes shineblue {
-  0% {
-    color: var(--darkestneonblue);
-    text-shadow: none;
-  }
-  100% {
-    color: var(--lightestneonblue);
-    text-shadow: 0 0 0.6rem var(--lightestneonblue), 0 0 1.5rem var(--lightneonblue),
-      -0.2rem 0.1rem 1rem var(--lightneonblue), 0.2rem 0.1rem 1rem var(--lightneonblue),
-      0 -0.5rem 2rem var(--neonblue), 0 0.5rem 3rem var(--neonblue);
-  }
-}
-
-@keyframes shinered {
-  0% {
-    color: var(--gift-red-dark);
-    text-shadow: none;
-  }
-  100% {
-    color: var(--gift-red-light);
-    text-shadow: 0 0 0.6rem var(--gift-red-light), 0 0 1.5rem var(--gift-red-bright),
-      -0.2rem 0.1rem 1rem var(--lightneonpink), 0.2rem 0.1rem 1rem var(--gift-red),
-      0 -0.5rem 2rem var(--gift-red-bright), 0 0.5rem 3rem var(--gift-red-bright);
-  }
-}
-
-@keyframes shinegreen {
-  0% {
-    color: var(--gift-green-darker);
-    text-shadow: none;
-  }
-  100% {
-    color: var(--gift-green);
-    text-shadow: 0 0 0.6rem var(--gift-green-darker), 0 0 1.5rem var(--gift-green-dark),
-      -0.2rem 0.1rem 1rem var(--gift-green), 0.2rem 0.1rem 1rem var(--gift-green),
-      0 -0.5rem 2rem var(--gift-green-dark), 0 0.5rem 3rem var(--gift-green-dark);
-  }
-}
-
-@keyframes shinebluesmall {
-  0% {
-    color: var(--darkestneonblue);
-    text-shadow: none;
-  }
-  100% {
-    color: var(--lightestneonblue);
-    text-shadow: 0 0 0.15rem var(--lightestneonblue), 0 0 .75rem var(--lightneonblue),
-      -0.2rem 0.1rem .25rem var(--lightneonblue), 0.2rem 0.1rem .25rem var(--lightneonblue),
-      0 -0.5rem .5rem var(--darkneonblue), 0 0.5rem .75rem var(--neonblue);
-  }
-}
-
-@keyframes flicker {
-  from {
-    opacity: 1;
-  }
-
-  4% {
-    opacity: 0.9;
-  }
-
-  6% {
-    opacity: 0.85;
-  }
-
-  8% {
-    opacity: 0.95;
-  }
-
-  10% {
-    opacity: 0.9;
-  }
-
-  11% {
-    opacity: 0.922;
-  }
-
-  12% {
-    opacity: 0.9;
-  }
-
-  14% {
-    opacity: 0.95;
-  }
-
-  16% {
-    opacity: 0.98;
-  }
-
-  17% {
-    opacity: 0.9;
-  }
-
-  19% {
-    opacity: 0.93;
-  }
-
-  20% {
-    opacity: 0.99;
-  }
-
-  24% {
-    opacity: 1;
-  }
-
-  26% {
-    opacity: 0.94;
-  }
-
-  28% {
-    opacity: 0.98;
-  }
-
-  37% {
-    opacity: 0.93;
-  }
-
-  38% {
-    opacity: 0.5;
-  }
-
-  39% {
-    opacity: 0.96;
-  }
-
-  42% {
-    opacity: 1;
-  }
-
-  44% {
-    opacity: 0.97;
-  }
-
-  46% {
-    opacity: 0.94;
-  }
-
-  56% {
-    opacity: 0.9;
-  }
-
-  58% {
-    opacity: 0.9;
-  }
-
-  60% {
-    opacity: 0.99;
-  }
-
-  68% {
-    opacity: 1;
-  }
-
-  70% {
-    opacity: 0.9;
-  }
-
-  72% {
-    opacity: 0.95;
-  }
-
-  93% {
-    opacity: 0.93;
-  }
-
-  95% {
-    opacity: 0.95;
-  }
-
-  97% {
-    opacity: 0.93;
-  }
-
-  to {
-    opacity: 1;
-  }
 }
