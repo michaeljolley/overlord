@@ -71,3 +71,7 @@ Content-Type: application/json
       "userAccountId": "y1l6jvmxssl1qmkj97z8wphn"
     }
   }
+
+###
+
+GET http://localhost:3000/webhooks/credits
