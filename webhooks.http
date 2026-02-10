@@ -1,10 +1,25 @@
-
 POST http://localhost:3000/webhooks/sub
 Content-Type: application/json
 
 {
     "username": "cmjchrisjones",
     "profileImageUrl": "https://static-cdn.jtvnw.net/jtv_user_pictures/6763a6c9-741d-404b-8da1-1303bafbab5f-profile_image-70x70.png"
+}
+
+###
+
+POST http://localhost:3000/webhooks/chat
+Content-Type: application/json
+
+{
+    "username": "testuser",
+    "displayName": "TestUser",
+    "message": "Hello from the webhook!",
+    "profileImageUrl": "https://static-cdn.jtvnw.net/jtv_user_pictures/6763a6c9-741d-404b-8da1-1303bafbab5f-profile_image-70x70.png",
+    "mod": false,
+    "vip": true,
+    "highlighted": false,
+    "subscriber": true
 }
 
 ###
@@ -16,7 +31,6 @@ Content-Type: application/json
     "username": "cmjchrisjones",
     "viewers": 42
 }
-
 
 ###
 
@@ -31,15 +45,14 @@ Content-Type: application/json
 
 ###
 
-
 POST http://localhost:3000/webhooks/follow
 Content-Type: application/json
 
 {
     "username": "cmjchrisjones"
 }
-###
 
+###
 
 POST http://localhost:3000/webhooks/giftsub
 Content-Type: application/json
@@ -49,6 +62,20 @@ Content-Type: application/json
     "giftedTotal": 10
 }
 
+
+###
+
+GET http://localhost:3000/webhooks/credits
+
+
+###
+
+POST http://localhost:3000/webhooks/party
+Content-Type: application/json
+
+{
+    "username": "cmjchrisjones"
+}
 
 ###
 
@@ -71,7 +98,3 @@ Content-Type: application/json
       "userAccountId": "y1l6jvmxssl1qmkj97z8wphn"
     }
   }
-
-###
-
-GET http://localhost:3000/webhooks/credits

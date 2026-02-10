@@ -1,5 +1,6 @@
 import { FastifyInstance } from "fastify";
 import { audioWebhook } from "./audio.js";
+import { chatWebhook } from "./chat.js";
 import { cheerWebhook } from "./cheer.js";
 import { creditsWebhook, creditsPOSTWebhook } from "./credits.js";
 import { followWebhook } from "./follow.js";
@@ -13,6 +14,7 @@ import { tipWebhook } from "./tip.js";
 export function registerWebhooks(fastify: FastifyInstance, _: any, done: () => void) {
 
 	fastify.route(audioWebhook);
+	fastify.route(chatWebhook);
 	fastify.route(cheerWebhook);
 	fastify.route(creditsWebhook);
 	fastify.route(creditsPOSTWebhook);

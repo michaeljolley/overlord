@@ -60,17 +60,24 @@ body {
 /* ── Alert layout ──────────────────────────────────────────────────────── */
 .alert-block {
 	position: relative;
+	padding: 20px 28px;
+	background: rgba(10, 8, 18, 0.85);
+	backdrop-filter: blur(12px);
+	-webkit-backdrop-filter: blur(12px);
+	border-radius: 12px;
+	border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 /* ── Type label ────────────────────────────────────────────────────────── */
 .alert-type {
-	font-family: 'JetBrains Mono', monospace;
-	font-size: 12px;
-	font-weight: 500;
-	letter-spacing: 3px;
+	font-family: 'Poppins', sans-serif;
+	font-size: 14px;
+	font-weight: 600;
+	letter-spacing: 4px;
 	text-transform: uppercase;
 	color: var(--accent-a, var(--neonpink));
 	margin-bottom: 10px;
+	text-shadow: 0 0 10px var(--accent-a, var(--neonpink)), 0 0 20px var(--accent-a, var(--neonpink));
 }
 
 /* ── Accent line ───────────────────────────────────────────────────────── */
@@ -111,21 +118,42 @@ body {
 	opacity: 0.5;
 }
 
+/* ── Content row (avatar + username) ───────────────────────────────────── */
+.alert-content {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+}
+
+/* ── Avatar ────────────────────────────────────────────────────────────── */
+.alert-avatar {
+	width: 64px;
+	height: 64px;
+	border-radius: 50%;
+	background-size: cover;
+	background-position: center;
+	background-color: var(--midblue);
+	border: 3px solid var(--accent-a, var(--neonpink));
+	box-shadow: 0 0 12px var(--accent-a, var(--neonpink));
+	flex-shrink: 0;
+}
+
 /* ── Username ──────────────────────────────────────────────────────────── */
 .alert-username {
-	font-size: 54px;
-	font-weight: 800;
+	font-family: 'Poppins', sans-serif;
+	font-size: 52px;
+	font-weight: 700;
 	line-height: 1;
-	margin-bottom: 8px;
 	color: var(--name-color, var(--white));
 }
 
 /* ── Message ───────────────────────────────────────────────────────────── */
 .alert-message {
-	font-size: 20px;
+	font-size: 16px;
 	font-weight: 400;
-	color: rgba(255, 255, 255, 0.5);
+	color: rgba(255, 255, 255, 0.6);
 	letter-spacing: 0.5px;
+	text-align: right;
 }
 
 /* ── Ambient glow behind the whole block ───────────────────────────────── */
@@ -151,10 +179,14 @@ body {
    ═══════════════════════════════════════════════════════════════════════════ */
 
 .theme-follow {
-	--accent-a: var(--gray);
+	--accent-a: #d0d0d0;
 	--accent-b: var(--white);
 	--name-color: #e0e0e0;
 	--glow-color: rgba(200, 200, 200, 0.08);
+}
+
+.theme-follow .alert-type {
+	text-shadow: 0 0 12px rgba(255, 255, 255, 0.8), 0 0 24px rgba(255, 255, 255, 0.5);
 }
 
 .theme-sub {
@@ -172,10 +204,14 @@ body {
 }
 
 .theme-raid {
-	--accent-a: #64788c;
-	--accent-b: #c8d6e8;
+	--accent-a: #b8cce0;
+	--accent-b: #e0ecf8;
 	--name-color: #c8d6e8;
 	--glow-color: rgba(100, 140, 200, 0.08);
+}
+
+.theme-raid .alert-type {
+	text-shadow: 0 0 12px rgba(200, 220, 255, 0.8), 0 0 24px rgba(200, 220, 255, 0.5);
 }
 
 .theme-cheer {

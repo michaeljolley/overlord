@@ -5,51 +5,51 @@ const audioSrc = (name) => `/assets/audio/${name}.mp3`;
 const alertConfigs = {
 	'twitch:follow': (p) => ({
 		theme: 'follow',
-		label: 'New Follower',
+		label: 'Thanks for the follow',
 		username: p.username,
-		message: 'Welcome to the community!',
+		avatar: p.profileImageUrl,
 		audio: audioSrc('ohmy'),
 	}),
 	'twitch:sub': (p) => ({
 		theme: 'sub',
 		label: 'Subscription Acquired',
 		username: p.username,
-		message: 'Welcome to the club!',
+		avatar: p.profileImageUrl,
 		audio: audioSrc('hair'),
 	}),
 	'twitch:giftsub': (p) => ({
 		theme: 'giftsub',
 		label: `Gifted ${p.giftedTotal || 1} Sub${(p.giftedTotal || 1) > 1 ? 's' : ''}`,
 		username: p.username,
-		message: 'Welcome to the VIP club!',
+		avatar: p.profileImageUrl,
 		audio: audioSrc('hair'),
 	}),
 	'twitch:raid': (p) => ({
 		theme: 'raid',
-		label: 'Incoming Raid',
+		label: `Incoming raid with ${p.viewers || '???'} friends`,
 		username: p.username,
-		message: `entered the chat with their ${p.viewers || ''} friends`,
+		avatar: p.profileImageUrl,
 		audio: audioSrc('goodbadugly'),
 	}),
 	'twitch:cheer': (p) => ({
 		theme: 'cheer',
-		label: `${p.bits || '???'} Bits`,
+		label: `Thanks for the ${p.bits || '???'} bits`,
 		username: p.username,
-		message: 'is feeling generous!',
+		avatar: p.profileImageUrl,
 		audio: audioSrc('cheer'),
 	}),
 	'twitch:donation': (p) => ({
 		theme: 'donation',
 		label: 'Donation',
 		username: p.displayName || 'Someone',
-		message: `tipped the mods $${Math.round(p.grossAmountInCents / 100)}`,
+		avatar: p.profileImageUrl,
 		audio: audioSrc('donate'),
 	}),
 	'twitch:blazor': (p) => ({
 		theme: 'blazor',
 		label: 'Blazor!?',
 		username: p.username || 'Someone',
-		message: 'I hardly knew her',
+		avatar: p.profileImageUrl,
 		audio: audioSrc('metal-gear-alert'),
 	}),
 };
@@ -119,10 +119,12 @@ const app = createApp({
 				<div v-if="activeAlert" class="alert-block" :class="'theme-' + activeAlert.theme">
 					<div class="alert-type">{{ activeAlert.label }}</div>
 					<div class="alert-line"></div>
-					<div class="alert-username">
-						{{ activeAlert.username }}
+					<div class="alert-content">
+						<div v-if="activeAlert.avatar" class="alert-avatar" :style="{ backgroundImage: 'url(' + activeAlert.avatar + ')' }"></div>
+						<div class="alert-username">
+							{{ activeAlert.username }}
+						</div>
 					</div>
-					<div class="alert-message">{{ activeAlert.message }}</div>
 				</div>
 			</transition>
 		</div>
