@@ -7,6 +7,7 @@ export enum BotEvents {
   OnJoin = 'onJoin',
   OnPart = 'onPart',
   OnPointRedemption = 'onPointRedemption',
+	OnMessageDeletion = 'onMessageDeletion',
 
 	/* Audio Events */
 	OnAudioControl = 'stream:audio',

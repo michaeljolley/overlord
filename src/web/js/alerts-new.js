@@ -45,7 +45,7 @@ const alertConfigs = {
 		lines: [
 			{ text: ' ', color: 'pink' },
 			{ text: p.username, color: 'blue' },
-			{ text: `cheered  ${p.bits} bits!`, color: 'pink' },
+			{ text: `cheered  ${p.bits || '???'} bits!`, color: 'pink' },
 		],
 		audio: audioSrc('cheer'),
 	}),

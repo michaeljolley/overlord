@@ -82,7 +82,7 @@ const chat = createApp({
 			return this.messages.some((m) => m.flags.highlighted);
 		},
 	},
-	template: `<div class="chat-container" :class="{ fade: hasHighlight }">
+	template: `<div class="chat-container">
 	<transition-group name="msg" @enter="checkOverflow">
 		<chatMessage 
 			ref="chatMessage" 
@@ -134,7 +134,11 @@ chat.component('chatMessage', {
 			return 'viewer';
 		});
 
-		return { hideMe, bgImage, userRole, isNew };
+		const isSub = computed(() => 
+			onChatMessageEvent.flags.subscriber && userRole.value === 'viewer'
+		);
+
+		return { hideMe, bgImage, userRole, isNew, isSub };
 	},
 	computed: {
 		bounce() {
@@ -144,7 +148,7 @@ chat.component('chatMessage', {
 		},
 	},
 	template: `
-	<div class="message" :class="[userRole, bounce, { hide: getOuttaHere || hideMe, 'is-new': isNew }]">
+	<div class="message" :class="[userRole, bounce, { hide: getOuttaHere || hideMe, 'is-new': isNew, 'sub-sheen': isSub }]">
 		<div class="message-inner">
 			<div class="avatar-ring">
 				<div class="avatar" :style="{ backgroundImage: bgImage }"></div>
@@ -154,6 +158,7 @@ chat.component('chatMessage', {
 					<span class="username">{{ onChatMessageEvent.user.display_name }}</span>
 					<span class="role-badge" v-if="onChatMessageEvent.flags.mod">MOD</span>
 					<span class="role-badge vip-badge" v-if="onChatMessageEvent.flags.vip">VIP</span>
+					<span class="role-badge sub-badge" v-if="onChatMessageEvent.flags.subscriber">SUB</span>
 				</div>
 				<div class="text" v-html="onChatMessageEvent.sanitizedMessage"></div>
 			</div>

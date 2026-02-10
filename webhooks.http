@@ -9,6 +9,49 @@ Content-Type: application/json
 
 ###
 
+POST http://localhost:3000/webhooks/raid
+Content-Type: application/json
+
+{
+    "username": "cmjchrisjones",
+    "viewers": 42
+}
+
+
+###
+
+POST http://localhost:3000/webhooks/cheer
+Content-Type: application/json
+
+{
+    "username": "cmjchrisjones",
+    "bits": 42,
+    "message": "yo"
+}
+
+###
+
+
+POST http://localhost:3000/webhooks/follow
+Content-Type: application/json
+
+{
+    "username": "cmjchrisjones"
+}
+###
+
+
+POST http://localhost:3000/webhooks/giftsub
+Content-Type: application/json
+
+{
+    "username": "cmjchrisjones",
+    "giftedTotal": 10
+}
+
+
+###
+
 POST http://localhost:3000/webhooks/tip
 Content-Type: application/json
 

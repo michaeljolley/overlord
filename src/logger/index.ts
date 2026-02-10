@@ -43,6 +43,14 @@ export abstract class Logger {
 		EventBus.eventEmitter.on(BotEvents.OnCheer, async (payload: CheerWebhookBody) => {
 			await this.logEvent({ type: BotEvents.OnCheer, username: payload.username, message: payload.message, quantity: payload.bits });
 		});
+		
+		EventBus.eventEmitter.on(BotEvents.OnJoin, async (payload: { username: string }) => {
+			await this.logEvent({ type: BotEvents.OnJoin, username: payload.username});
+		});
+		
+		EventBus.eventEmitter.on(BotEvents.OnPart, async (payload: { username: string }) => {
+			await this.logEvent({ type: BotEvents.OnPart, username: payload.username });
+		});
 
 		EventBus.eventEmitter.on(BotEvents.OnTriggerCredits, async (payload: CreditsWebhookBody) => {
 			const credits = await this.getCredits(payload.streamDate);
@@ -77,12 +85,18 @@ export abstract class Logger {
 
 		const streamEvents = await Supabase.getStreamEvents(streamDate);
 
+		const excludedEventTypes = [
+			BotEvents.OnJoin.toString(),
+			BotEvents.OnPart.toString()
+		];
+
 		const types = streamEvents.reduce((acc: string[], event) => {
 			if (!acc.includes(event.eventType)) {
 				acc.push(event.eventType);
 			}
 			return acc;
-		}, []);
+		}, [])
+		.filter(type => !excludedEventTypes.includes(type));
 
 		for (const type of types) {
 			const logins = streamEvents

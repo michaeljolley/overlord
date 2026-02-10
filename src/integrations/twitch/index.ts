@@ -1,4 +1,4 @@
-import ComfyJS, { EmoteSet, OnCommandExtra, OnMessageExtra, OnMessageFlags, OnSubGiftExtra, SubMethods } from 'comfy.js'
+import ComfyJS, { EmoteSet, OnCommandExtra, OnJoinExtra, OnMessageDeletedExtra, OnMessageExtra, OnMessageFlags, OnPartExtra, OnSubGiftExtra, SubMethods } from 'comfy.js'
 import EventBus from "../../eventBus";
 import {
 	blog,
@@ -116,10 +116,10 @@ export default function twitchChat() {
 		user = user.toLocaleLowerCase();
 
     if (
-			// !self
-      // && 
+			!self
+      && 
 			user !== TWITCH_BOT_USERNAME.toLocaleLowerCase()
-      // && user !== TWITCH_CHANNEL.toLocaleLowerCase()
+      && user !== TWITCH_CHANNEL.toLocaleLowerCase()
 		) {
 
       let userInfo: StreamUser | null;
@@ -129,15 +129,7 @@ export default function twitchChat() {
       if (userInfo) {
         const processedChatMessage = processChat(message, flags, extra.messageEmotes);
         if (processedChatMessage.length > 0) {
-					// TESTING: Randomly set flags for testing overlay styles
-					const testFlags = { ...flags };
-					const rand = Math.random();
-					if (rand < 0.2) testFlags.mod = true;
-					else if (rand < 0.4) testFlags.vip = true;
-					else if (rand < 0.55) testFlags.highlighted = true;
-					// END TESTING
-
-					const onChatMessageEvent = new OnChatMessageEvent(userInfo, message, processedChatMessage, testFlags, self, extra, extra.id)
+					const onChatMessageEvent = new OnChatMessageEvent(userInfo, message, processedChatMessage, flags, self, extra, extra.id)
 
           emit(BotEvents.OnChatMessage, onChatMessageEvent)
 
@@ -244,6 +236,22 @@ export default function twitchChat() {
 			   emit(BotEvents.OnSubGifted, { username: recipientUser });
 	}
 
+	const onJoin = (user: string, self: boolean, extra: OnJoinExtra) => {
+		if (!self) {
+			emit(BotEvents.OnJoin, { username: user});
+		}
+	}
+	
+	const onPart = (user: string, self: boolean, extra: OnPartExtra) => {
+		if (!self) {
+			emit(BotEvents.OnPart, { username: user});
+		}
+	}
+
+	const onMessageDeleted = (id: string, extra: OnMessageDeletedExtra) => {
+		emit(BotEvents.OnMessageDeletion, { id });
+	}
+
 	type Emote = ReturnType<typeof generateEmote>
 
 	const onCommand = async (user: string, command: string, message: string, flags: OnMessageFlags, extra: OnCommandExtra) => {
@@ -274,4 +282,7 @@ export default function twitchChat() {
 	ComfyJS.onCommand = onCommand;
 	ComfyJS.onChat = onChat;
 	ComfyJS.onSubGift = onSubGift;
+	ComfyJS.onJoin = onJoin;
+	ComfyJS.onPart = onPart;
+	ComfyJS.onMessageDeleted = onMessageDeleted;
 }

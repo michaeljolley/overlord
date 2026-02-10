@@ -75,6 +75,18 @@ export function registerWebsocket(fastify: FastifyInstance, _: any, done: () => 
 		EventBus.eventEmitter.on(BotEvents.OnParty, (payload: any) => {
 			socket.send(JSON.stringify({ type: BotEvents.OnParty, payload }));
 		});
+
+		EventBus.eventEmitter.on(BotEvents.OnJoin, (payload: { username: string }) => {
+			socket.send(JSON.stringify({ type: BotEvents.OnJoin, payload }));
+		});
+
+		EventBus.eventEmitter.on(BotEvents.OnPart, (payload: { username: string }) => {
+			socket.send(JSON.stringify({ type: BotEvents.OnPart, payload }));
+		});
+		
+		EventBus.eventEmitter.on(BotEvents.OnMessageDeletion, (payload: { id: string }) => {
+			socket.send(JSON.stringify({ type: BotEvents.OnMessageDeletion, payload }));
+		});
 	});
 
 	done();
