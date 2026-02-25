@@ -1,0 +1,52 @@
+{
+  "agents": [
+    {
+      "persistent_name": "Flint",
+      "universe": "gi-joe",
+      "role": "Lead",
+      "created_at": "2026-02-25T05:09:00Z",
+      "legacy_named": false,
+      "status": "active"
+    },
+    {
+      "persistent_name": "Lady Jaye",
+      "universe": "gi-joe",
+      "role": "Backend Dev",
+      "created_at": "2026-02-25T05:09:00Z",
+      "legacy_named": false,
+      "status": "active"
+    },
+    {
+      "persistent_name": "Roadblock",
+      "universe": "gi-joe",
+      "role": "Frontend Dev",
+      "created_at": "2026-02-25T05:09:00Z",
+      "legacy_named": false,
+      "status": "active"
+    },
+    {
+      "persistent_name": "Breaker",
+      "universe": "gi-joe",
+      "role": "Tester",
+      "created_at": "2026-02-25T05:09:00Z",
+      "legacy_named": false,
+      "status": "active"
+    },
+    {
+      "persistent_name": "Stalker",
+      "universe": "gi-joe",
+      "role": "Scribe",
+      "created_at": "2026-02-25T05:09:00Z",
+      "legacy_named": false,
+      "status": "active"
+    },
+    {
+      "persistent_name": "Mainframe",
+      "universe": "gi-joe",
+      "role": "Work Monitor",
+      "created_at": "2026-02-25T05:09:00Z",
+      "legacy_named": false,
+      "status": "active"
+    }
+  ]
+}
