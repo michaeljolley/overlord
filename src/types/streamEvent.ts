@@ -1,3 +1,4 @@
+import { Platform } from './platform';
 
 export type StreamEvent = {
 	streamDate: string;
@@ -6,4 +7,5 @@ export type StreamEvent = {
 	eventType: string;
 	message?: string;
 	quantity?: number;
+	platform?: Platform;
 };

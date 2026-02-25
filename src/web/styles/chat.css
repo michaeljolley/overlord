@@ -211,6 +211,29 @@ span {
 	border-image-source: repeating-conic-gradient(from var(--angle), var(--neonpink) 0%, var(--neonblue) 50%, var(--neonpink) 100%);
 }
 
+.linkedin .panel {
+	border-image-source: repeating-conic-gradient(from var(--angle), var(--brand-linkedin) 0%, var(--brand-linkedin-light) 50%, var(--brand-linkedin) 100%);
+}
+
+.linkedin .bubble {
+	background: radial-gradient(ellipse at bottom left, rgba(10, 102, 194, 0.3), var(--transparent-black) 70%);
+}
+
+.linkedin .name > div {
+	background: var(--brand-linkedin);
+	background-clip: text;
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
+
+.linkedin span {
+	color: var(--brand-linkedin-light);
+}
+
+.linkedin .user {
+	border-image-source: repeating-conic-gradient(from var(--angle), var(--brand-linkedin) 0%, var(--brand-linkedin-light) 50%, var(--brand-linkedin) 100%);
+}
+
 .fade .message:not(.highlighted) .wrap {
   opacity: 0.6;
   animation: low 1s forwards;

@@ -50,6 +50,7 @@ jspm_packages/
 .env.test.local
 .env.production.local
 .env.local
+.linkedin-tokens.json
 
 # yarn v2
 .yarn/cache

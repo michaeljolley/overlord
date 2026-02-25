@@ -1,23 +1,6 @@
 import ComfyJS, { EmoteSet, OnCommandExtra, OnJoinExtra, OnMessageDeletedExtra, OnMessageExtra, OnMessageFlags, OnPartExtra, OnSubGiftExtra, SubMethods } from 'comfy.js'
 import EventBus from "../../eventBus";
-import {
-	blog,
-  bluesky,
-	discord,
-	github,
-	help,
-	instagram,
-	mute,
-  powertoys,
-  say,
-	shop,
-	tiktok,
-	twitter,
-	unmute,
-	uses,
-	youtube
-} from './commands';
-import { Command } from '../../types/command';
+import { handleCommand as handleSharedCommand } from '../../commands/registry.js';
 import { OnCommandEvent } from '../../types/onCommandEvent';
 import { StreamUser } from '../../types/streamUser';
 import { OnChatMessageEvent } from '../../types/onChatMessageEvent';
@@ -29,6 +12,7 @@ import { Announcement } from '../../types/announcement';
 import { blazor } from './triggers';
 import Supabase from '../supabase';
 import { Replacement } from '../../types/replacement';
+import { Platform } from '../../types/platform.js';
 
 const TWITCH_BOT_USERNAME = process.env.TWITCH_BOT_USERNAME!;
 const TWITCH_BOT_AUTH_TOKEN = process.env.TWITCH_BOT_AUTH_TOKEN;
@@ -36,26 +20,9 @@ const TWITCH_CHANNEL = process.env.TWITCH_CHANNEL!;
 
 export default function twitchChat() {
 
-	const commands: Record<string, { command: Command, public: boolean }> = {};
 	const triggers: { name: string, trigger: (onChatMessageEvent: OnChatMessageEvent) => void}[] = [];
 	let announcements: Announcement[] = [];
 	let replacements: Replacement[] = [];
-  
-	const loadCommands = () => {
-    commands['blog'] = { command: new Command('blog', blog), public: true };
-    commands['bluesky'] = { command: new Command('bluesky', bluesky), public: true };
-    commands['discord'] = { command: new Command('discord', discord), public: true };
-    commands['github'] = { command: new Command('github', github), public: true };
-    commands['instagram'] = { command: new Command('instagram', instagram), public: true };
-    commands['mute'] = { command: new Command('mute', mute), public: false };
-    commands['powertoys'] = { command: new Command('powertoys', powertoys), public: true };
-    commands['shop'] = { command: new Command('shop', shop), public: true };
-    commands['tiktok'] = { command: new Command('tiktok', tiktok), public: true };
-    commands['twitter'] = { command: new Command('twitter', twitter), public: true };
-    commands['unmute'] = { command: new Command('unmute', unmute), public: false };
-    commands['uses'] = { command: new Command('uses', uses), public: true };
-    commands['youtube'] = { command: new Command('youtube', youtube), public: true };
-	}
 
 	const loadTriggers = () => {
 		triggers.push({ name: 'blazor', trigger: blazor });
@@ -79,27 +46,8 @@ export default function twitchChat() {
     ComfyJS.Say(message, TWITCH_CHANNEL);
   }
 	
-  const getCommand = (commandName: string): Command | undefined => {
-		return commands[commandName]?.command;
-  }
-
 	const handleCommand = (onCommandEvent: OnCommandEvent) => {
-		const command: Command | undefined = getCommand(onCommandEvent.command);
-    if (command) {
-      command.command(onCommandEvent);
-      return;
-    }
-
-		if (onCommandEvent.command === 'help') {
-			help(onCommandEvent, commands);
-			return;
-		}
-
-    const announcement = announcements.find(a => a.command === onCommandEvent.command);
-    if (announcement) {
-      onCommandEvent.message = announcement.message!;
-      say(onCommandEvent);
-    }
+		handleSharedCommand(onCommandEvent, announcements);
 	}
 
 	const handleTriggers = (onChatMessageEvent: OnChatMessageEvent) => {
@@ -268,13 +216,14 @@ export default function twitchChat() {
 		handleChat(user, message, flags, self, extra);
   }
 
-	loadCommands();
 	loadTriggers();
   loadAnnouncements();
 	loadReplacements();
 
-	EventBus.eventEmitter.on(BotEvents.OnSay, (payload: { message: string }) => {
-		sendToChat(payload.message);
+	EventBus.eventEmitter.on(BotEvents.OnSay, (payload: { message: string, platform?: Platform, context?: any }) => {
+		if (!payload.platform || payload.platform === 'twitch') {
+			sendToChat(payload.message);
+		}
 	});
   EventBus.eventEmitter.on(BotEvents.LoadAnnouncements, loadAnnouncements);
 	

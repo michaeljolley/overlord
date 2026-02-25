@@ -1,56 +1,57 @@
-import Supabase from "../integrations/supabase";
-import { TwitchAPI } from "../integrations/twitchAPI";
-import { StreamUser } from "../types/streamUser"
+import Supabase from "../integrations/supabase/index.js";
+import { StreamUser } from "../types/streamUser";
+import { Platform } from "../types/platform";
+import { UserFetcher } from "../types/userFetcher";
 
-const UPDATE_USER_DATA_INTERVAL_IN_DAYS = 1; // Update user data every 1 day
+const UPDATE_USER_DATA_INTERVAL_IN_DAYS = 1;
 
 export abstract class UserStore {
 
 	static users: Record<string, StreamUser> = {};
+	static fetchers: Record<string, UserFetcher> = {};
 
-	public static getUser = async (login: string): Promise<StreamUser | null> => {
+	public static registerFetcher(platform: Platform, fetcher: UserFetcher): void {
+		this.fetchers[platform] = fetcher;
+	}
+
+	public static getUser = async (login: string, platform: Platform = 'twitch'): Promise<StreamUser | null> => {
 		let user: StreamUser | null = null;
+		const cacheKey = `${platform}:${login}`;
 
-		// Local cache of users
-		user = this.users[login];
+		user = this.users[cacheKey];
 
-		// If not in local cache, check Supabase
-		// This is to avoid hitting the Twitch API too often
 		if (!user) {
-			user = await Supabase.getUser(login);
+			user = await Supabase.getUser(login, platform);
 			
-			// Add user to local cache
 			if (user) {
-				this.users[login] = user;
+				this.users[cacheKey] = user;
 			}
 		}
 
-		// If not in local cache or Supabase or if it needs to be updated,
-		// fetch from Twitch API
 		if (!user ||
 				!user.lastUpdated || 
 				user.lastUpdated < new Date(Date.now() - 1000 * 60 * 60 * (24 * UPDATE_USER_DATA_INTERVAL_IN_DAYS))
 		) {
-			user = await TwitchAPI.getUser(login);
+			const fetcher = this.fetchers[platform];
+			if (fetcher) {
+				user = await fetcher.getUser(login);
 
-			// If we received a user from Twitch API, update the local cache 
-			// and Supabase
-			if (user) {
-				user.lastUpdated = new Date();
-
-				this.users[login] = user;
-				await Supabase.addUser(user);
+				if (user) {
+					user.lastUpdated = new Date();
+					this.users[cacheKey] = user;
+					await Supabase.addUser(user);
+				}
 			}
 		}
 
 		return user;
 	}
 
-	public static getUsersByLogins = async (logins: string[]): Promise<StreamUser[]> => {
+	public static getUsersByLogins = async (logins: string[], platform: Platform = 'twitch'): Promise<StreamUser[]> => {
 		const users: StreamUser[] = [];
 		
 		for (const login of logins) {
-			const user = await this.getUser(login);
+			const user = await this.getUser(login, platform);
 			if (user) {
 				users.push(user);
 			}

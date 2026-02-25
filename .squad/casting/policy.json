@@ -1,0 +1,6 @@
+{
+  "universe_allowlist": ["gi-joe"],
+  "max_agents_per_universe": 25,
+  "allow_overflow": true,
+  "overflow_strategy": "diegetic_expansion"
+}
