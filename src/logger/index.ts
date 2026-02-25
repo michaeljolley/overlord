@@ -4,6 +4,7 @@ import Supabase from "../integrations/supabase";
 import { UserStore } from "../stores/userStore";
 import { CreditRoll } from "../types/creditRoll";
 import { OnChatMessageEvent } from "../types/onChatMessageEvent";
+import { Platform } from "../types/platform";
 import { StreamEvent } from "../types/streamEvent";
 import { CheerWebhookBody } from "../webhooks/cheer";
 import { CreditsWebhookBody } from "../webhooks/credits";
@@ -17,7 +18,7 @@ export abstract class Logger {
 	public static init() {
 		
 		EventBus.eventEmitter.on(BotEvents.OnChatMessage, async (payload: OnChatMessageEvent) => {
-			await this.logEvent({ type: BotEvents.OnChatMessage, username: payload.user.login, message: payload.message });
+			await this.logEvent({ type: BotEvents.OnChatMessage, username: payload.user.login, message: payload.message, platform: payload.source });
 		});
 
 		EventBus.eventEmitter.on(BotEvents.OnFollow, async (payload: FollowWebhookBody) => {
@@ -60,10 +61,10 @@ export abstract class Logger {
 
 	private static async logEvent(event: UserWebhookEvent) : Promise<void> {
 		try {
-			const { type, username, message, quantity } = event;
+			const { type, username, message, quantity, platform } = event;
 
 			// Ensure user exists in cache/db
-			await UserStore.getUser(username);
+			await UserStore.getUser(username, platform);
 
 			let streamEvent: StreamEvent = {
 				streamDate: new Date().toISOString().split("T")[0],
@@ -71,7 +72,8 @@ export abstract class Logger {
 				created_at: new Date(),
 				eventType: type,
 				message,
-				quantity
+				quantity,
+				platform: platform || 'twitch'
 			};
 			
 			await Supabase.addStreamEvent(streamEvent);
@@ -127,4 +129,5 @@ interface UserWebhookEvent {
 	username: string;
 	message?: string;
 	quantity?: number;
+	platform?: Platform;
 }

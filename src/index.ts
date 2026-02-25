@@ -3,6 +3,7 @@ import FastifyStatic from "@fastify/static";
 import FastifyWebSocket from "@fastify/websocket";
 import { registerWebhooks } from "./webhooks/index.js";
 import { registerWebsocket } from "./websocket/index.js";
+import { registerAdminRoutes } from "./admin/linkedin.js";
 import twitchChat from "./integrations/twitch/index.js";
 import { TwitchAPI } from "./integrations/twitchAPI/index.js";
 import cron from "./cron/index.js";
@@ -30,6 +31,7 @@ fastify.register(FastifyStatic, {
 });
 
 fastify.register(registerWebhooks, { prefix: "/webhooks" });
+fastify.register(registerAdminRoutes, { prefix: "/admin" });
 
 fastify.listen({ port, host }, err => {
 	if (err) {
@@ -43,8 +45,11 @@ TwitchAPI.init().then(() => {
 	
 	loadCommands();
 	
-	if (LinkedInAPI.isConfigured()) {
-		LinkedInAPI.init();
+	// Always attempt LinkedIn init — tokens may come from .linkedin-tokens.json
+	// (persisted by the admin page OAuth flow) even without env vars
+	const linkedInReady = LinkedInAPI.init();
+	
+	if (linkedInReady) {
 		UserStore.registerFetcher('linkedin', LinkedInAPI);
 		
 		EventBus.eventEmitter.on(BotEvents.OnSay, async (payload: { message: string, platform?: string, context?: { postUrn?: string, commentUrn?: string } }) => {
@@ -66,7 +71,7 @@ TwitchAPI.init().then(() => {
 		LiveDetector.start();
 		console.log('LinkedIn integration initialized');
 	} else {
-		console.log('LinkedIn credentials not configured — skipping LinkedIn integration');
+		console.log('LinkedIn not fully configured — visit /admin/linkedin to connect your apps');
 	}
 	
 	Logger.init();
