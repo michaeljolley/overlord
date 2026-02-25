@@ -125,7 +125,7 @@ chat.component('chatMessage', {
 		},
 	},
 	template: `
-	<div class="message" :class="{ shake, hide: getOuttaHere || hideMe, highlighted: onChatMessageEvent.flags.highlighted, mod: onChatMessageEvent.flags.mod, vip: onChatMessageEvent.flags.vip }" >
+	<div class="message" :class="{ shake, hide: getOuttaHere || hideMe, highlighted: onChatMessageEvent.flags.highlighted, mod: onChatMessageEvent.flags.mod, vip: onChatMessageEvent.flags.vip, linkedin: onChatMessageEvent.source === 'linkedin' }" >
 		<div class="wrap">
 			<div class="panel">
 				<div class="bubble">

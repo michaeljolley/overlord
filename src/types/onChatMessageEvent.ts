@@ -1,5 +1,6 @@
 import { OnMessageExtra, OnMessageFlags } from "comfy.js";
 import { StreamUser } from "./streamUser";
+import { Platform } from "./platform";
 
 export class OnChatMessageEvent  {
   constructor(
@@ -9,7 +10,8 @@ export class OnChatMessageEvent  {
     public flags: OnMessageFlags,
     public self: boolean,
     public extra: OnMessageExtra,
-    public id: string
+    public id: string,
+    public source: Platform = 'twitch',
   ) { 
   }
 }

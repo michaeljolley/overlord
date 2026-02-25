@@ -2,6 +2,7 @@ import { createClient } from '@supabase/supabase-js';
 import { StreamEvent } from '../../types/streamEvent';
 import { StreamUser } from '../../types/streamUser';
 import { Replacement } from '../../types/replacement';
+import { Platform } from '../../types/platform';
 
 const SUPABASE_URL = process.env.SUPABASE_URL || "";
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || "";
@@ -40,11 +41,12 @@ export default abstract class Supabase {
 			return replacements as Replacement[];
 		}
 
-		static async getUser(login: string) : Promise<StreamUser | null> {
+		static async getUser(login: string, platform: Platform = 'twitch') : Promise<StreamUser | null> {
 			const { data: users, error } = await supabaseClient
 				.from('streamUsers')
 				.select('*')
-				.eq('login', login);
+				.eq('login', login)
+				.eq('platform', platform);
 
 
 			if (error) {
@@ -57,7 +59,7 @@ export default abstract class Supabase {
 		static async addUser(user: StreamUser) : Promise<StreamUser | null> {
 			const { data: users, error } = await supabaseClient
 				.from('streamUsers')
-				.upsert(user)
+				.upsert(user, { onConflict: 'login,platform' })
 				.select();
 				
 			if (error) {
