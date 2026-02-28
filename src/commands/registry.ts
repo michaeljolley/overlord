@@ -1,5 +1,7 @@
 import { Command } from '../types/command.js';
 import { OnCommandEvent } from '../types/onCommandEvent.js';
+import { BotEvents } from '../botEvents.js';
+import EventBus from '../eventBus.js';
 import { blog, bluesky, discord, github, help, instagram, mute, powertoys, say, shop, tiktok, twitter, unmute, uses, youtube } from '../integrations/twitch/commands/index.js';
 
 const commands: Record<string, { command: Command, public: boolean }> = {};
@@ -32,11 +34,13 @@ export function handleCommand(onCommandEvent: OnCommandEvent, announcements?: an
   const command = getCommand(onCommandEvent.command);
   if (command) {
     command.command(onCommandEvent);
+    EventBus.eventEmitter.emit(BotEvents.OnCommand, { username: onCommandEvent.user, command: onCommandEvent.command, message: onCommandEvent.message });
     return;
   }
 
   if (onCommandEvent.command === 'help') {
     help(onCommandEvent, commands);
+    EventBus.eventEmitter.emit(BotEvents.OnCommand, { username: onCommandEvent.user, command: onCommandEvent.command, message: onCommandEvent.message });
     return;
   }
 
@@ -45,6 +49,7 @@ export function handleCommand(onCommandEvent: OnCommandEvent, announcements?: an
     if (announcement) {
       onCommandEvent.message = announcement.message!;
       say(onCommandEvent);
+      EventBus.eventEmitter.emit(BotEvents.OnCommand, { username: onCommandEvent.user, command: onCommandEvent.command, message: onCommandEvent.message });
     }
   }
 }

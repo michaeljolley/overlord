@@ -53,6 +53,10 @@ export abstract class Logger {
 			await this.logEvent({ type: BotEvents.OnPart, username: payload.username });
 		});
 
+		EventBus.eventEmitter.on(BotEvents.OnCommand, async (payload: { username: string, command: string, message?: string }) => {
+			await this.logEvent({ type: BotEvents.OnCommand, username: payload.username, message: `!${payload.command}${payload.message ? ' ' + payload.message : ''}` });
+		});
+
 		EventBus.eventEmitter.on(BotEvents.OnTriggerCredits, async (payload: CreditsWebhookBody) => {
 			const credits = await this.getCredits(payload.streamDate);
 			EventBus.eventEmitter.emit(BotEvents.OnCreditRoll, { credits });
